@@ -1,0 +1,43 @@
+# --- Third-party source material: NEVER commit (see docs/DECISIONS.md D14) ---
+# These are copyrighted works we quote and cite but do not have the right to
+# redistribute. The citation trail lives in docs/content/SOURCES.md instead.
+*.pdf
+*.jpg
+*.jpeg
+*.png
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.svg
+
+# Prior art kept locally as a design reference, not part of the site
+factory-walkthrough-th.html
+
+# --- Node / Next ---
+node_modules/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.turbo/
+
+# --- Env & secrets ---
+.env
+.env.*
+!.env.example
+.vercel
+
+# --- Test output ---
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp

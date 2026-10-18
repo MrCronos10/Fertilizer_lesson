@@ -1,0 +1,375 @@
+# Tasks
+
+**Awaiting approval. No code until the owner approves this list.**
+
+Worked one at a time in dependency order. Branch per task: `task/T-XXX-short-name`.
+Definition of done for every task is in `docs/DECISIONS.md` D17 — it is not repeated below.
+`Reviewer: yes` means a fresh subagent that did not write the code reviews it (D17).
+
+**Phases:** P0 foundation · P1 content pipeline · P2 Chapter 1 vertical slice (D2 Phase A) ·
+P3 breadth and interactives (D2 Phase B) · P4 hardening.
+
+---
+
+## P0 — Foundation
+
+### T-001: Repo baseline, licenses, README
+- Status: todo
+- Depends on: —
+- Goal: Commit the planning docs to a clean public repo with licenses in place and the source PDFs provably excluded.
+- Acceptance criteria:
+  - [ ] `.gitignore` excludes all `*.pdf`, `*.jpg`, `*.jpeg` and `factory-walkthrough-th.html`; `git status` shows none of them as untracked
+  - [ ] `LICENSE` (MIT, code) and `LICENSE-CONTENT` (CC BY 4.0) present
+  - [ ] `README.md` states what the project is, in Thai and English, and links PRD/DECISIONS/TASKS
+  - [ ] Remote `origin` set to `https://github.com/MrCronos10/Fertilizer_lesson.git`, `main` pushed
+  - [ ] `git log` shows one clean initial commit; no PDF blob in history (`git rev-list --objects --all | grep -i pdf` is empty)
+- Test plan: Manual — `git status`, the grep above, and confirm the pushed GitHub tree contains no binaries.
+- Notes: Repo is currently public, empty, 0 bytes. Git is already initialized locally with `.gitignore` written. **Push needs owner confirmation** (public, visible to others).
+
+### T-002: Next.js scaffold with strict TS, lint, Vitest, Playwright/WebKit
+- Status: todo
+- Depends on: T-001
+- Goal: An empty but fully wired Next.js App Router app whose whole check suite runs green.
+- Acceptance criteria:
+  - [ ] Next.js App Router, TypeScript `strict: true`, no `any` in app code
+  - [ ] ESLint configured and passing; `npm run typecheck`, `lint`, `test`, `build` all defined and green
+  - [ ] Vitest runs with one trivial passing test
+  - [ ] Playwright installed with the **WebKit** engine only, and three named viewport projects: `ipad-portrait` (768×1024), `ipad-landscape` (1366×1024), `mac-desktop` (1440×900)
+  - [ ] One smoke e2e test loads `/` and asserts zero console errors in all three projects
+- Test plan: Run the full suite locally; confirm Playwright actually launches WebKit (not Chromium) via `--list`.
+- Notes: Chromium is deliberately not installed — WebKit is the reference engine (D13, PRD §6).
+
+### T-003: Vercel project, preview deploys, analytics
+- Status: todo
+- Depends on: T-002
+- Goal: Every pushed branch produces a preview URL openable on the iPad; analytics live.
+- Acceptance criteria:
+  - [ ] Vercel project linked to the GitHub repo; `main` auto-deploys to production
+  - [ ] Pushing a branch produces a preview URL that loads without authentication
+  - [ ] `@vercel/analytics` mounted; a page view registers in the dashboard
+  - [ ] No environment variables or secrets required to build
+- Test plan: Push a throwaway branch, open the preview URL on a real iPad over cellular (not LAN), confirm it loads.
+- Notes: Deliberately early — every later 3D/touch task depends on this preview URL as its iPad gate (D4, D17). Public repo means previews need no auth (D14).
+
+### T-004: Design system port from the prior art
+- Status: todo
+- Depends on: T-002
+- Goal: Port the `factory-walkthrough-th.html` visual language into tokens and base styles, with subset Thai fonts.
+- Acceptance criteria:
+  - [ ] CSS custom properties for the palette: cream `#F3F1E8`, ink `#1B2A22`, brand green `#1F5E45`, accent `#F2B632`
+  - [ ] Light/dark via `prefers-color-scheme` plus a `data-theme` override, as in the prior art
+  - [ ] Noto Sans Thai (headings) and Sarabun (body) self-hosted, **subset to Thai + Latin, each ≤ 60 KB woff2**
+  - [ ] `100dvh` used throughout (not `100vh`, and not the prior art's `svh`)
+  - [ ] `env(safe-area-inset-*)` respected on all four edges
+  - [ ] Base tap target ≥ 44×44pt; `:focus-visible` styling present; `prefers-reduced-motion` honoured
+- Test plan: Screenshot a type-specimen page in all three WebKit viewports, light and dark. Verify Thai tone marks and vowel stacking render correctly at every heading and body size. Check the font files' byte size in the build output.
+- Notes: Reviewer: yes (accessibility). Prior art fixes to carry: `svh`→`dvh`, and it had no WebGL fallback or progress storage (D12a).
+
+---
+
+## P1 — Content pipeline
+
+### T-005: Extract Thai prose to MDX with page citations
+- Status: todo
+- Depends on: T-001
+- Goal: Source pages 2–6 become per-chapter MDX with a page citation on every claim and documented cleanup.
+- Acceptance criteria:
+  - [ ] `content/th/ch01..ch07.mdx` with frontmatter: title, goal ID, source pages, citation list
+  - [ ] Spurious intra-word spaces collapsed (`พ . ร . บ .` → `พ.ร.บ.`); digits and units normalized
+  - [ ] `docs/content/SOURCES.md` lists every cleanup rule applied, and maps each extraction to its source file and page
+  - [ ] Zero rewording: a diff against the raw extraction shows only whitespace, digit, and unit changes
+  - [ ] Awkward phrasing collected in `docs/content/THAI-REVIEW.md` for the owner — not silently fixed
+  - [ ] The 6 Thai quiz questions (p6–7) captured verbatim
+- Test plan: Unit test asserting every MDX file has non-empty `sourcePages` frontmatter. Manual: owner spot-checks THAI-REVIEW.md and three random paragraphs against the PDF.
+- Notes: Reviewer: yes (content accuracy). D19 governs cleanup limits. Khmer (p7–10) is skipped — it does not extract reliably and v1 is Thai-only.
+
+### T-006: Extract the 9 table schemas to locale-neutral JSON
+- Status: todo
+- Depends on: T-005
+- Goal: Every number in the source lives in typed JSON, stored once, with its citation and country tag.
+- Acceptance criteria:
+  - [ ] JSON + TS types for all nine schemas: nutrient groups (p2, 3 rows), deficiency symptoms (p3, 10), organic fertilizer NPK (p3, 5), straight fertilizers (p4, 7), compound grades→use (p5, 6), soil conditioners with lime equivalence (p5, 4), Cambodian rice by soil group (p11, 9), other crops (p12–13, 10), glossary (p14, 20)
+  - [ ] Numbers are locale-neutral; only labels are per-locale (D18)
+  - [ ] Every row carries `sourcePage` and `country` (`TH` | `KH`)
+  - [ ] The p11 table is tagged `KH` and a test asserts no `KH` row is reachable from any v1 UI query
+  - [ ] Ranges stored as `{min, max}`, never as strings like `"25–50"`
+  - [ ] All nutrient values explicitly oxide-form (`n`, `p2o5`, `k2o`) — no bare `p` or `k` keys anywhere
+- Test plan: Unit tests on row counts per table (3/10/5/7/6/4/9/10/20), on `sourcePage` presence, on the KH exclusion, and a type-level check that no elemental key exists.
+- Notes: Reviewer: yes (content accuracy). Row counts come from the source inventory and are the cheapest possible guard against a dropped row.
+
+### T-007: Bibliography and source tiering
+- Status: todo
+- Depends on: T-006
+- Goal: Build the bibliography the source lacks and tier all 38 cited domains.
+- Acceptance criteria:
+  - [ ] `content/sources.json`: each of the 38 domains with its tier (`official` | `research` | `commercial`) and resolved URL where possible
+  - [ ] The source's 67 inline links mapped to entries; unresolvable markers recorded as such, not guessed
+  - [ ] Every Rate in T-006 resolves to at least one source entry
+  - [ ] Rates backed only by `commercial` are flagged `actionable: false`
+  - [ ] A test asserts no `actionable: false` Rate is returned by the calculator or crop-matcher data queries
+- Test plan: Unit tests for the actionable-exclusion rule and for total-coverage (no Rate without a source).
+- Notes: Reviewer: yes (content accuracy). The source admits sugarcane, mango, and tapped-rubber rates come from product labels or secondary summaries — expect those to land `commercial` (D9).
+
+### T-008: Propose corpus additions for the G4 and G5 gaps
+- Status: todo
+- Depends on: T-007
+- Goal: A reviewable list of official-source additions to fill the calculation and basal/top-dressing gaps.
+- Acceptance criteria:
+  - [ ] `docs/content/ADDITIONS.md`: each entry has the exact claim, the official URL (doa.go.th / ldd.go.th / ricethailand.go.th only), the feature needing it, and an unticked checkbox
+  - [ ] Replacement candidates proposed for every `commercial`-only Rate from T-007
+  - [ ] Nothing written into `content/` — this task produces only the proposal list
+- Test plan: Manual — owner reads the list. A test asserts no `content/` file references an unticked Addition.
+- Notes: **Stop-and-ask gate (D8).** Task ends awaiting owner ticks; the ticked items become their own follow-up task.
+
+### T-009: Import the p14 glossary into CONTEXT.md
+- Status: todo
+- Depends on: T-006
+- Goal: Replace the provisional ⏳ glossary terms with the source's own authoritative wording.
+- Acceptance criteria:
+  - [ ] All 20 p14 rows reconciled into `CONTEXT.md`; every ⏳ marker resolved to ✅ or corrected
+  - [ ] Any conflict between a provisional term and the source's wording is called out explicitly, source wins
+  - [ ] `CONTEXT.md` still contains no implementation details
+- Test plan: Manual read-through against the source page.
+- Notes: Reviewer: yes (content accuracy). Thai/Khmer/English/Chinese columns exist; keep Thai + English, park the rest in the glossary JSON.
+
+---
+
+## P2 — Chapter 1 vertical slice
+
+### T-010: App shell, `/th` routing, chapter layout
+- Status: todo
+- Depends on: T-004, T-005
+- Goal: Navigable shell with a locale segment and a reusable chapter layout.
+- Acceptance criteria:
+  - [ ] Route structure `/[locale]/...`; `/` redirects to `/th`
+  - [ ] Chapter list and chapter route render from MDX frontmatter — no hard-coded Thai strings in components
+  - [ ] Navigation works by keyboard on Mac and by touch on iPad; no hover-only affordance anywhere
+  - [ ] Layout correct at iPad portrait, iPad landscape, and Mac desktop, with safe areas respected
+  - [ ] Text routes ship ≤ 180 KB gzipped JS
+- Test plan: e2e in all three WebKit viewports: navigate every chapter link, assert no console errors, assert `/`→`/th` redirect. Screenshots at all three sizes. Check bundle size in build output.
+- Notes: No i18n library (D18). Phones must not break even though they are not a target.
+
+### T-011: Citation UI, ที่มาของข้อมูล section, soil-test note
+- Status: todo
+- Depends on: T-007, T-010
+- Goal: The reusable components that make every number traceable on screen.
+- Acceptance criteria:
+  - [ ] An inline citation component linking a claim to its source entry and showing its tier badge
+  - [ ] A `ที่มาของข้อมูล` section rendered at the end of every chapter, reachable in one tap from anywhere in the chapter
+  - [ ] Every displayed Rate carries the visible soil-test / starting-point note
+  - [ ] `commercial`-tier citations are visually distinct from `official` / `research`
+  - [ ] Tier badges are not colour-only (they carry text or shape), and are announced by VoiceOver
+- Test plan: e2e asserting every chapter route contains a `ที่มาของข้อมูล` heading and at least one citation. Contrast check on badges in light and dark. VoiceOver spot-check on iPad.
+- Notes: Reviewer: yes (accessibility + content accuracy). This component is the PRD's §7 integrity rules made visible.
+
+### T-012: Chapter 1 — what fertilizer is, N/P/K, nutrient groups (G1)
+- Status: todo
+- Depends on: T-011
+- Goal: The first chapter complete, cited, and readable with JavaScript disabled.
+- Acceptance criteria:
+  - [ ] Chapter 1 prose renders from `ch01.mdx`; the p2 nutrient-group table (3 rows) renders from JSON
+  - [ ] Full lesson text present in the server-rendered HTML (verifiable with JS disabled)
+  - [ ] `nums` block listing the chapter's figures with citations, per the inherited pattern
+  - [ ] Thai tone marks correct at every size in both themes
+- Test plan: e2e in all three viewports; screenshot comparison; load with JS disabled and assert the lesson text is present. Owner reads the chapter on an iPad.
+- Notes: Reviewer: yes (content accuracy).
+
+### T-013: Calculator logic (pure, no UI)
+- Status: todo
+- Depends on: T-006
+- Goal: A tested pure function: target nutrient + grade → kg of product, with the worked arithmetic.
+- Acceptance criteria:
+  - [ ] `kg product = target nutrient × 100 ÷ %nutrient`, oxide-only, matching the source's form
+  - [ ] Reproduces the source's worked example exactly: N 10 kg/rai from urea 46-0-0 → ≈ 22 kg
+  - [ ] Reproduces the source's bag example: 50 kg of 16-20-0 contains 8 kg N and 10 kg P₂O₅
+  - [ ] Rai ↔ hectare conversion using the source's constants (1 ไร่ = 1,600 m², 1 ha = 6.25 ไร่)
+  - [ ] Returns the intermediate steps for display, not just the answer
+  - [ ] Rejects a 0% nutrient grade rather than dividing by zero; rejects negative targets
+  - [ ] **No elemental↔oxide conversion exists in the code at all**
+  - [ ] One unit test per crop row in the source table, asserting the function agrees with the published rate
+- Test plan: Vitest, including the two source examples as exact-value tests, the division-by-zero and negative cases, and the per-crop suite.
+- Notes: Reviewer: yes (calculator). This is the highest-consequence code in the project — a bug here hands a farmer a wrong dose (D10).
+
+### T-014: Calculator UI
+- Status: todo
+- Depends on: T-013, T-011
+- Goal: A touch-friendly calculator that shows its working and its sources.
+- Acceptance criteria:
+  - [ ] Inputs for target nutrient (kg/rai) and grade; grade selectable from the source's published list as well as free entry
+  - [ ] The worked arithmetic is displayed, not just the result
+  - [ ] All controls ≥ 44×44pt; numeric keypad triggered on iPad; fully keyboard-operable on Mac
+  - [ ] Invalid input produces a clear Thai message, never a crash or `NaN`
+  - [ ] Result carries the soil-test note and its citation
+  - [ ] Announced correctly by VoiceOver, including the result updating
+- Test plan: e2e in all three viewports covering a valid calculation, a zero-nutrient grade, and a negative target. VoiceOver check on iPad. Screenshots both themes.
+- Notes: Reviewer: yes (accessibility).
+
+### T-015: NPK bag reader (2D)
+- Status: todo
+- Depends on: T-014
+- Goal: A legible 2D bag label whose three numbers are individually tappable.
+- Acceptance criteria:
+  - [ ] Each of the three numbers is a ≥ 44×44pt tap target explaining N, P₂O₅, or K₂O
+  - [ ] Explanations come from the source, with citations
+  - [ ] Works by tap on iPad and click/keyboard on Mac; no hover-only reveal
+  - [ ] Label text is real DOM/SVG text — selectable, zoomable, and VoiceOver-readable
+  - [ ] Legible at iPad portrait width without horizontal scrolling
+- Test plan: e2e tapping each number in all three viewports; keyboard tab-through on Mac; screenshots both themes.
+- Notes: Deliberately 2D, not 3D — WebGL text on iPad is blurry, unselectable, invisible to VoiceOver, and untestable (D3).
+
+### T-016: Phase A gate — owner review on a real iPad
+- Status: todo
+- Depends on: T-012, T-015
+- Goal: Confirm the vertical slice is genuinely good on real hardware before building breadth.
+- Acceptance criteria:
+  - [ ] Owner has opened the preview on a real iPad in both orientations and confirmed Chapter 1, the calculator, and the bag reader
+  - [ ] Thai register confirmed acceptable by the owner (D6)
+  - [ ] Any issues found are logged as new tasks before P3 starts
+- Test plan: Manual, owner-driven.
+- Notes: **Stop-and-ask gate.** No P3 work starts until this passes.
+
+---
+
+## P3 — Breadth and interactives
+
+### T-017: 3D foundation — R3F island, one-context discipline, WebGL fallback
+- Status: todo
+- Depends on: T-016
+- Goal: The 3D substrate: a client island that never leaks a WebGL context and degrades gracefully.
+- Acceptance criteria:
+  - [ ] React Three Fiber island loaded only on routes that need it; three.js absent from all other route bundles
+  - [ ] DPR capped at 2
+  - [ ] **Exactly one WebGL context alive at a time**, explicitly disposed on unmount/route change — verified, not assumed
+  - [ ] When WebGL is unavailable, a static fallback renders and the lesson text remains fully readable
+  - [ ] `prefers-reduced-motion` disables idle animation
+  - [ ] 3D route ≤ 600 KB gzipped total
+- Test plan: e2e navigating in and out of the 3D route repeatedly, asserting context count stays at 1 and memory does not climb. A test with WebGL disabled asserting the fallback and the text. Bundle-size assertion on both 3D and non-3D routes.
+- Notes: Reviewer: yes. iPad Safari silently reloads pages under memory pressure — the disposal rule is the single most important line in the performance budget (D16). The prior art never disposed.
+
+### T-018: Deficiency explorer (3D)
+- Status: todo
+- Depends on: T-017
+- Goal: A rotatable procedural plant where tapping old vs young leaves teaches the mobility rule.
+- Acceptance criteria:
+  - [ ] Procedural geometry only — no glTF, no textures, no external assets
+  - [ ] One-finger rotate, pinch zoom, two-finger pan on iPad; drag, scroll/pinch zoom, click on Mac
+  - [ ] Old-leaf and young-leaf regions separately selectable, each ≥ 44×44pt in screen space
+  - [ ] Each selection shows the symptom and nutrient from the p3 10-row table, with citation
+  - [ ] The mobility rule (mobile → old leaves, immobile → young leaves) is stated explicitly
+  - [ ] All 10 symptom rows reachable
+  - [ ] A non-3D equivalent (the table plus text) is available and VoiceOver-navigable
+  - [ ] Sustains 60 fps on iPad 9th-gen or newer
+- Test plan: e2e selecting both leaf classes and asserting the correct symptom text, in all three viewports. Manual touch-gesture check on a real iPad plus an fps reading. Screenshots both themes.
+- Notes: Reviewer: yes (accessibility + content accuracy). Best-backed interactive in the project (D15). The 3D is for the camera; the text alternative is not optional.
+
+### T-019: Chapters 2–3 — deficiency and fertilizer types (G2, G3)
+- Status: todo
+- Depends on: T-012, T-018
+- Goal: The two strongest chapters, with their four source tables rendered and cited.
+- Acceptance criteria:
+  - [ ] Deficiency chapter renders the p3 symptom table (10 rows) and links to the explorer
+  - [ ] Types chapter renders organic NPK (5), straight fertilizers (7), compound grades (6), and soil conditioners with lime equivalence (4)
+  - [ ] All requested types present: urea, AS, DAP, TSP, rock phosphate, KCl, K₂SO₄, compound, slow-release, foliar, lime, marl, dolomite, gypsum
+  - [ ] Tables readable at iPad portrait width without horizontal scroll
+  - [ ] Every row cited; tier badges shown
+- Test plan: e2e asserting row counts per table and the presence of each named fertilizer type. Screenshots at all three sizes.
+- Notes: Reviewer: yes (content accuracy).
+
+### T-020: Crop matcher (G6)
+- Status: todo
+- Depends on: T-019
+- Goal: Pick one of 8 crops, see type, rate, and timing with citation and tier.
+- Acceptance criteria:
+  - [ ] All 8 crops selectable: rice, corn, cassava, sugarcane, rubber, mango, durian, vegetables
+  - [ ] Data from the p12–13 table (10 rows); rates shown as ranges with the soil-test note
+  - [ ] `commercial`-tier-only rates shown as descriptive text, not as actionable numbers
+  - [ ] No `KH`-tagged row is reachable
+  - [ ] Keyboard and touch operable; no hover-only reveal
+- Test plan: e2e cycling all 8 crops, asserting the rate matches the JSON and that the KH table is unreachable. Unit test on the tier-filtering query.
+- Notes: Reviewer: yes (content accuracy). Mango's rate is per-tree (1–2 kg/tree), not per-rai — the UI must not assume every rate shares a unit.
+
+### T-021: Quiz with `localStorage` progress (G7 review)
+- Status: todo
+- Depends on: T-019
+- Goal: The 6 verbatim source questions, with progress surviving a reload.
+- Acceptance criteria:
+  - [ ] All 6 Thai questions from p6–7 verbatim; no invented questions
+  - [ ] Progress persists across reload via `localStorage`; no accounts, no network calls
+  - [ ] Every `localStorage` read and write wrapped so private browsing or blocked storage cannot throw
+  - [ ] Works fully with storage unavailable, just without persistence
+  - [ ] Keyboard and touch operable; results announced by VoiceOver
+- Test plan: e2e answering, reloading, and asserting persistence; a second run with storage blocked asserting no crash. All three viewports.
+- Notes: Reviewer: yes (accessibility). No new questions without going through the D8 gate.
+
+### T-022: Basal vs top dressing — static annotated diagram (G5)
+- Status: todo
+- Depends on: T-019
+- Goal: An honest labelled diagram of ปุ๋ยรองพื้น vs ปุ๋ยแต่งหน้า.
+- Acceptance criteria:
+  - [ ] Static SVG diagram, no time slider, no animation
+  - [ ] Both terms defined from the source (§2.7, p5) with citation
+  - [ ] Thai rates shown where the source gives them (basal 20–25 kg/rai; urea top-dress 5–10 kg/rai) with soil-test note
+  - [ ] Diagram text is real SVG text, VoiceOver-readable, with a text alternative
+- Test plan: Screenshots all three viewports and both themes; VoiceOver read-through.
+- Notes: Deliberately demoted from the original scrubbable timeline — four lines of source support a picture, not an animation (D15). Cambodian rice timing detail stays excluded (D11).
+
+### T-023: Chapters 4 and 7 — safe use, storage, mistakes, environment (G7)
+- Status: todo
+- Depends on: T-019
+- Goal: The safety chapter complete, including the 4R framing and the 6 common mistakes.
+- Acceptance criteria:
+  - [ ] 4R (right source, rate, time, place) presented from the source
+  - [ ] All 6 common mistakes present; storage and safety guidance present; eutrophication caution present
+  - [ ] Every claim cited
+- Test plan: e2e asserting 6 mistake entries and the 4R section; screenshots.
+- Notes: Reviewer: yes (content accuracy).
+
+---
+
+## P4 — Hardening
+
+### T-024: Enforce the performance budget in CI
+- Status: todo
+- Depends on: T-023
+- Goal: The budget becomes a build failure rather than an aspiration.
+- Acceptance criteria:
+  - [ ] CI fails when a text route exceeds 180 KB gzipped JS or a 3D route exceeds 600 KB
+  - [ ] Font files asserted ≤ 60 KB woff2 each
+  - [ ] Lighthouse run in CI: performance ≥ 90, accessibility = 100
+  - [ ] LCP < 2.0 s on a throttled 4G profile for text routes
+  - [ ] Measured page weight for every route recorded in the task notes
+- Test plan: Deliberately exceed a budget on a scratch branch and confirm CI fails.
+- Notes: D16. Report the final page weights to the owner.
+
+### T-025: Accessibility audit
+- Status: todo
+- Depends on: T-023
+- Goal: Full keyboard and VoiceOver usability across every route and interactive.
+- Acceptance criteria:
+  - [ ] Every interactive reachable and operable by keyboard alone on Mac
+  - [ ] VoiceOver labels on all controls and both 3D scenes, each with a text alternative
+  - [ ] Contrast passes in light and dark for all text and all tier badges
+  - [ ] No information conveyed by colour alone
+  - [ ] `prefers-reduced-motion` honoured everywhere
+  - [ ] Axe reports zero violations on every route
+- Test plan: Automated axe sweep over all routes, plus manual VoiceOver pass on a real iPad and keyboard-only pass on Mac.
+- Notes: Reviewer: yes (accessibility).
+
+### T-026: Phone layouts must not break
+- Status: todo
+- Depends on: T-023
+- Goal: Confirm phones degrade acceptably even though they are not a v1 target.
+- Acceptance criteria:
+  - [ ] No horizontal page scroll at 390 px wide on any route
+  - [ ] All tables remain readable (scroll container or reflow, owner's choice per table)
+  - [ ] 3D scenes either work or show the static fallback — never a broken canvas
+- Test plan: WebKit at 390×844; screenshot every route.
+- Notes: PRD §4 non-goal, but "must not break" is still a criterion.
+
+---
+
+## Open follow-ups (created on demand, not yet scheduled)
+
+- Approved entries from `docs/content/ADDITIONS.md` become one task each (gated by T-008).
+- Issues found at the T-016 iPad gate become tasks before P3 begins.
+- Items in `docs/BACKLOG.md` are out of v1 by decision, not by omission.

@@ -1,0 +1,41 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+This license applies to the EDUCATIONAL CONTENT in this repository: the Thai
+lesson text, the structured agronomic data, the glossary, and the planning
+documents in docs/. The source code is licensed separately under the MIT
+License (see LICENSE).
+
+You are free to share and adapt this content for any purpose, including
+commercially, provided you give appropriate credit, link to the license, and
+indicate if changes were made.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+
+IMPORTANT — THIRD-PARTY SOURCE MATERIAL IS NOT COVERED BY THIS LICENSE
+
+This repository quotes and cites third-party works that are NOT ours to
+relicense or redistribute. Those source files (PDFs and images) are
+deliberately excluded from version control; see .gitignore and
+docs/DECISIONS.md (D14).
+
+Works quoted under this project's citation practice include, but are not
+limited to:
+
+  - A beginner fertilizer pamphlet in Thai and Khmer (NPK basics, fertilizer
+    types, crop guidance), which cites approximately 38 further sources.
+  - อานัฐ ตันโช, "หลักการผลิตปุ๋ยอินทรีย์คุณภาพสูงระดับอุตสาหกรรม",
+    วารสารดินและปุ๋ย ปีที่ 37 (2558), Maejo University.
+  - An NSTDA/NAC2018 infographic on ปุ๋ยหมักแบบไม่พลิกกลับกอง, attributed to
+    ผศ.ดร.ธีระพงษ์ สว่างปัญญางกูร, Maejo University.
+
+Copyright in those works remains with their respective holders. Quotation and
+citation here is ordinary scholarly and educational use; it is not a grant of
+any rights in the underlying works. Each quotation's origin file and page is
+recorded in docs/content/SOURCES.md.
+
+Agronomic rates reproduced in this project are STARTING POINTS drawn from
+published sources, not prescriptions. A soil test is recommended before
+applying fertilizer. No warranty is made as to agronomic accuracy or fitness
+for any particular field, crop, or soil.
