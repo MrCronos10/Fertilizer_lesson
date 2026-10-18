@@ -1,5 +1,88 @@
-/* Minimal baseline only. The design system (tokens, fonts, light/dark, safe areas)
-   is ported from the prior art in T-004. */
+@import "./fonts.css";
+
+/* Design system ported from the owner's factory-walkthrough-th.html (D12a).
+   Token names and values are carried over verbatim so the two sites read as
+   siblings. Two deliberate corrections to the prior art, per the brief:
+   `dvh` replaces `svh`, and the dark palette is also exposed via
+   [data-theme] so the theme can be chosen explicitly, not only inferred. */
+
+:root {
+  /* Surfaces & text */
+  --bg: #f3f1e8;
+  --ink: #1b2a22;
+  --muted: #55645b;
+  --panel: rgba(255, 255, 252, 0.94);
+  /* Darker than the prior art's 0.18: --panel sits within ~1.1:1 of --bg on a
+     flat page, so the border is the only thing separating a panel or a
+     secondary button from the background. At 0.55 it clears WCAG 1.4.11
+     (3.44:1); at 0.18 it was 1.42:1. The prior art could afford the lighter
+     line because its panels floated over a 3-D canvas. */
+  --line: rgba(27, 42, 34, 0.55);
+  --soft: #e6e9dc;
+
+  /* Brand & accent */
+  --brand: #1f5e45;
+  --brand-ink: #ffffff;
+  --accent: #f2b632;
+  --accent-ink: #1b2a22;
+
+  /* Focus ring. Not --accent: gold on cream is 1.61:1, far under the 3:1
+     that WCAG 1.4.11 requires of a focus indicator. Green reaches 6.76:1
+     on light; on dark, gold is already 9.86:1 and stays. */
+  --ring: #1f5e45;
+
+  /* Cautions — used for the soil-test note and safety content */
+  --warn: #8a4b12;
+  --warn-bg: #fbefd2;
+
+  /* Type. --font-ui ships weight 700 only; at any other weight it falls
+     through to Sarabun by design. */
+  --font-ui: "Noto Sans Thai", "Sarabun", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Sarabun", "Noto Sans Thai", system-ui, sans-serif;
+
+  /* Minimum comfortable touch target (iPadOS HIG). Never shrink this. */
+  --tap: 44px;
+
+  /* Spacing & shape */
+  --gutter: 16px;
+  --radius: 10px;
+
+  color-scheme: light;
+}
+
+/* Dark by preference, unless the user has explicitly chosen light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1914;
+    --ink: #edefe6;
+    --muted: #a9b8ae;
+    --panel: rgba(20, 34, 28, 0.94);
+    --line: rgba(237, 239, 230, 0.45);
+    --soft: #1b2e25;
+    --brand: #7fd1a8;
+    --brand-ink: #0e1914;
+    --warn: #f2c87a;
+    --warn-bg: #3a2d12;
+    --ring: #f2b632;
+    color-scheme: dark;
+  }
+}
+
+/* Explicit override, independent of system preference. */
+:root[data-theme="dark"] {
+  --bg: #0e1914;
+  --ink: #edefe6;
+  --muted: #a9b8ae;
+  --panel: rgba(20, 34, 28, 0.94);
+  --line: rgba(237, 239, 230, 0.45);
+  --soft: #1b2e25;
+  --brand: #7fd1a8;
+  --brand-ink: #0e1914;
+  --warn: #f2c87a;
+  --warn-bg: #3a2d12;
+  --ring: #f2b632;
+  color-scheme: dark;
+}
 
 *,
 *::before,
@@ -13,15 +96,126 @@ html {
 
 body {
   margin: 0;
+  /* dvh, not vh or svh: Safari's dynamic toolbar changes the viewport, and
+     vh/svh leave either a gap or a clipped page as it collapses. */
   min-height: 100dvh;
-  font-family: system-ui, sans-serif;
-  line-height: 1.6;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
 }
 
-main {
-  padding: 1.5rem;
-  padding-left: max(1.5rem, env(safe-area-inset-left));
-  padding-right: max(1.5rem, env(safe-area-inset-right));
+/* Safe areas on all four edges — iPad landscape puts the home indicator
+   along the bottom and the camera housing to one side. */
+.page {
+  padding: calc(var(--gutter) + env(safe-area-inset-top, 0px))
+    calc(var(--gutter) + env(safe-area-inset-right, 0px))
+    calc(var(--gutter) + env(safe-area-inset-bottom, 0px))
+    calc(var(--gutter) + env(safe-area-inset-left, 0px));
+}
+
+/* The `.as-h*` classes carry heading *appearance* without heading semantics,
+   so a type specimen can show the scale without inventing extra h1s. */
+h1,
+h2,
+h3,
+.as-h1,
+.as-h2,
+.as-h3,
+.ui {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  /* 1.4, not the prior art's 1.3: at h1 sizes a Thai upper-vowel + tone-mark
+     stack (ปุ๋ย, ที่) overshoots a 1.3 line box and collides with the line
+     above when a heading wraps. */
+  line-height: 1.4;
+}
+
+h1,
+.as-h1 {
+  font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+}
+h2,
+.as-h2 {
+  font-size: clamp(1.35rem, 1.1rem + 1.2vw, 1.75rem);
+}
+h3,
+.as-h3 {
+  font-size: 1.15rem;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/* Thai needs more leading than Latin: stacked vowels and tone marks sit well
+   above and below the baseline and collide at typical Latin line-heights. */
+p,
+li {
+  line-height: 1.75;
+  max-width: 62ch;
+}
+
+strong,
+.num {
+  font-weight: 600;
+}
+
+a {
+  color: var(--brand);
+  text-underline-offset: 0.2em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+button.primary {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* Visible focus for keyboard users on Mac; never removed. */
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--gutter);
+}
+
+/* The soil-test / starting-point note that accompanies every rate (PRD §7.6). */
+.note {
+  background: var(--warn-bg);
+  color: var(--warn);
+  border-left: 4px solid currentcolor;
+  border-radius: var(--radius);
+  padding: 0.75rem var(--gutter);
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
 }
 
 @media (prefers-reduced-motion: reduce) {

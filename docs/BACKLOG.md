@@ -68,6 +68,31 @@ default flow.
 
 ---
 
+## Carried forward from the T-004 design-system review
+
+### `overflow-x: hidden` on `body`
+Ported verbatim from the prior art, where it was appropriate for a full-bleed 3-D canvas. On a
+scrolling content site it **masks** horizontal-overflow bugs instead of surfacing them, and it
+breaks `position: sticky` on descendants. Revisit when building the chapter shell (T-010), which
+is the first place a sticky header or table-of-contents would want it gone.
+
+### No `--danger` / error token in the palette
+The prior art had no error state because nothing in it could fail. The fertilizer calculator
+(T-014) needs one for invalid input — a negative target, a 0% nutrient grade. `--warn` is the
+caution/soil-test colour and should not be overloaded for errors. Add the token when T-014 needs
+it, and extend `lib/contrast.test.ts` to cover it in both themes.
+
+### macOS Safari does not Tab through all controls by default
+Verified in WebKit: pressing Tab moves focus to nothing unless "Press Tab to highlight each item
+on a webpage" is enabled in Safari's Advanced settings. This is Safari's default, not a bug in our
+markup, but it means **automated keyboard-traversal testing cannot cover macOS Safari users**. The
+focus-ring style itself is asserted; full keyboard traversal has to be verified by hand in T-025.
+
+### `--font-ui` ships weight 700 only
+`.ui` elements at weight 400 or 600 silently fall through to Sarabun. Fine today, since every
+`--font-ui` use is a heading. Ship Noto Sans Thai 400 if a non-bold UI face is ever needed — note
+it would cost two more font files against the D16 budget.
+
 ## Platform & engineering
 
 ### Phone-first design
