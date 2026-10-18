@@ -28,17 +28,24 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 - **Verified 2026-10-18:** commit `e0a3999`, 1,060 lines across 9 files, pushed to `main`. `git rev-list --objects --all` grep for pdf/jpg/jpeg returns nothing; the remote tree API confirms exactly 9 text blobs and no binaries. `LICENSE-CONTENT` also records the quoted third-party works and the no-warranty / soil-test caveat. Committed directly to `main` rather than a `task/` branch — there was no `main` to branch from yet; every later task uses a branch per D5.
 
 ### T-002: Next.js scaffold with strict TS, lint, Vitest, Playwright/WebKit
-- Status: todo
+- Status: **done**
 - Depends on: T-001
 - Goal: An empty but fully wired Next.js App Router app whose whole check suite runs green.
 - Acceptance criteria:
-  - [ ] Next.js App Router, TypeScript `strict: true`, no `any` in app code
-  - [ ] ESLint configured and passing; `npm run typecheck`, `lint`, `test`, `build` all defined and green
-  - [ ] Vitest runs with one trivial passing test
-  - [ ] Playwright installed with the **WebKit** engine only, and three named viewport projects: `ipad-portrait` (768×1024), `ipad-landscape` (1366×1024), `mac-desktop` (1440×900)
-  - [ ] One smoke e2e test loads `/` and asserts zero console errors in all three projects
+  - [x] Next.js App Router, TypeScript `strict: true`, no `any` in app code
+  - [x] ESLint configured and passing; `npm run typecheck`, `lint`, `test`, `build` all defined and green
+  - [x] Vitest runs with one trivial passing test
+  - [x] Playwright installed with the **WebKit** engine only, and three named viewport projects: `ipad-portrait` (768×1024), `ipad-landscape` (1366×1024), `mac-desktop` (1440×900)
+  - [x] One smoke e2e test loads `/` and asserts zero console errors in all three projects
 - Test plan: Run the full suite locally; confirm Playwright actually launches WebKit (not Chromium) via `--list`.
 - Notes: Chromium is deliberately not installed — WebKit is the reference engine (D13, PRD §6).
+- **Verified 2026-10-18:** Next 16.4.2 / React 19.3.0 / TS 5 / ESLint 9 / Vitest 5.0.5 / Playwright 1.64.1. `typecheck`, `lint`, `test` (3 passing) and `build` all green; `test:e2e` 9 passing across all three WebKit viewports. Build output shows `○ (Static) prerendered as static content` for `/`.
+  - **Added a guard, not just a test:** `runs on WebKit` asserts `browserName === "webkit"`, so a Chromium project added later fails rather than silently passing while telling us nothing about Safari.
+  - **Followed create-next-app's tested pins** (ESLint 9, TS 5) rather than the latest published ESLint 10 / TS 7, which `eslint-config-next@16.4.2` is not tested against.
+  - **`@types/node` bumped `^20` → `^26`:** Vitest 5 requires `>=22` and the runtime here is Node 26. Resolved the real peer conflict rather than using `--legacy-peer-deps`.
+  - **`vitest.config.ts` → `.mts`:** silences Vite's native-config-loader warning without flipping the whole package to `"type": "module"`, which would change Next's module resolution.
+  - **Accepted risk — 5 high npm audit findings, all dev-only.** Chain is `eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces` (GHSA-vfj7-8cjw-p6xm, glob-pattern DoS). The advisory covers `braces *` — **no patched version exists**, so an override cannot clear it (tried `fast-glob@^3.3.3`, no effect, reverted). npm's only offered fix downgrades `eslint-config-next` to 14.2.35, breaking the Next 16 toolchain. Exposure is the linter parsing our own repo at dev time; nothing ships to users. Re-check when upstream drops `fast-glob`.
+  - **D13 amended → D13a:** dropped `output: 'export'`; plain `next build` on Vercel already prerenders static HTML and keeps `next.config` redirects available for `/` → `/th` in T-010.
 
 ### T-003: Vercel project, preview deploys, analytics
 - Status: todo

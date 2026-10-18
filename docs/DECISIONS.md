@@ -127,7 +127,16 @@ makes the WebGL-unavailable fallback free, since lesson content is in the HTML w
 loads or not. A Vite SPA ships a blank `<div>` to crawlers and to anyone on a slow iPad. Next's
 route-based code splitting also keeps three.js off the five routes that don't need it, the single
 biggest win available for the 60 fps target.
-**Cost accepted:** more config than Vite; `output: 'export'` constrains Next features unused here.
+**Cost accepted:** more config than Vite.
+
+#### D13a — Amendment (T-002): no `output: 'export'`
+The original decision said "statically exported". In implementation that turned out to be the
+wrong mechanism for the same goal. Plain `next build` on Vercel already prerenders every content
+route as static HTML — the build output confirms `○ (Static) prerendered as static content` — so we
+get the SEO and no-JS-fallback benefits D13 was actually after. `output: 'export'` would additionally
+cost us `next.config` redirects (needed for `/` → `/th` in D18) and image optimization, in exchange
+for portability to non-Vercel static hosts that D4 already decided against.
+**Net:** same guarantees, fewer constraints. Revisit only if we leave Vercel.
 
 ### D18 — `/th` URL prefix from day one; no i18n library
 **Decision:** Locale as a Next App Router dynamic segment, `/` redirects to `/th`. Content in plain
