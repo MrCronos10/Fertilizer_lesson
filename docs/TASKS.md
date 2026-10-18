@@ -14,17 +14,18 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 ## P0 — Foundation
 
 ### T-001: Repo baseline, licenses, README
-- Status: todo
+- Status: **done**
 - Depends on: —
 - Goal: Commit the planning docs to a clean public repo with licenses in place and the source PDFs provably excluded.
 - Acceptance criteria:
-  - [ ] `.gitignore` excludes all `*.pdf`, `*.jpg`, `*.jpeg` and `factory-walkthrough-th.html`; `git status` shows none of them as untracked
-  - [ ] `LICENSE` (MIT, code) and `LICENSE-CONTENT` (CC BY 4.0) present
-  - [ ] `README.md` states what the project is, in Thai and English, and links PRD/DECISIONS/TASKS
-  - [ ] Remote `origin` set to `https://github.com/MrCronos10/Fertilizer_lesson.git`, `main` pushed
-  - [ ] `git log` shows one clean initial commit; no PDF blob in history (`git rev-list --objects --all | grep -i pdf` is empty)
+  - [x] `.gitignore` excludes all `*.pdf`, `*.jpg`, `*.jpeg` and `factory-walkthrough-th.html`; `git status` shows none of them as untracked
+  - [x] `LICENSE` (MIT, code) and `LICENSE-CONTENT` (CC BY 4.0) present
+  - [x] `README.md` states what the project is, in Thai and English, and links PRD/DECISIONS/TASKS
+  - [x] Remote `origin` set to `https://github.com/MrCronos10/Fertilizer_lesson.git`, `main` pushed
+  - [x] `git log` shows one clean initial commit; no PDF blob in history (`git rev-list --objects --all | grep -i pdf` is empty)
 - Test plan: Manual — `git status`, the grep above, and confirm the pushed GitHub tree contains no binaries.
 - Notes: Repo is currently public, empty, 0 bytes. Git is already initialized locally with `.gitignore` written. **Push needs owner confirmation** (public, visible to others).
+- **Verified 2026-10-18:** commit `e0a3999`, 1,060 lines across 9 files, pushed to `main`. `git rev-list --objects --all` grep for pdf/jpg/jpeg returns nothing; the remote tree API confirms exactly 9 text blobs and no binaries. `LICENSE-CONTENT` also records the quoted third-party works and the no-warranty / soil-test caveat. Committed directly to `main` rather than a `task/` branch — there was no `main` to branch from yet; every later task uses a branch per D5.
 
 ### T-002: Next.js scaffold with strict TS, lint, Vitest, Playwright/WebKit
 - Status: todo
