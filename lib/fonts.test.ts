@@ -42,6 +42,23 @@ describe("font budget", () => {
     }
   });
 
+  it("declares each Thai face after its Latin counterpart", () => {
+    // The Latin range U+2000-206F contains U+200C-200D (ZWNJ/ZWJ), which Thai
+    // shaping needs. Where two faces in one family cover a codepoint the last
+    // declaration wins, so Thai must come last or those codepoints silently
+    // resolve out of the Latin file.
+    const css = readFileSync(FONT_CSS, "utf8");
+    const order = [...css.matchAll(/url\("\/fonts\/([^"]+)\.woff2"\)/g)].map((m) => m[1]);
+
+    for (const face of ["noto-sans-thai-700", "sarabun-400", "sarabun-600"]) {
+      const latin = order.indexOf(`${face}-latin`);
+      const thai = order.indexOf(`${face}-thai`);
+      expect(latin, `${face}-latin missing`).toBeGreaterThanOrEqual(0);
+      expect(thai, `${face}-thai missing`).toBeGreaterThanOrEqual(0);
+      expect(thai, `${face}: Thai must be declared after Latin`).toBeGreaterThan(latin);
+    }
+  });
+
   it("keeps ZWNJ/ZWJ and the dotted-circle carrier in the Thai range", () => {
     const css = readFileSync(FONT_CSS, "utf8");
     const thaiRanges = [...css.matchAll(/unicode-range: ([^;]*U\+0E01-0E5B[^;]*);/g)].map(

@@ -12,7 +12,12 @@
   --ink: #1b2a22;
   --muted: #55645b;
   --panel: rgba(255, 255, 252, 0.94);
-  --line: rgba(27, 42, 34, 0.18);
+  /* Darker than the prior art's 0.18: --panel sits within ~1.1:1 of --bg on a
+     flat page, so the border is the only thing separating a panel or a
+     secondary button from the background. At 0.55 it clears WCAG 1.4.11
+     (3.44:1); at 0.18 it was 1.42:1. The prior art could afford the lighter
+     line because its panels floated over a 3-D canvas. */
+  --line: rgba(27, 42, 34, 0.55);
   --soft: #e6e9dc;
 
   /* Brand & accent */
@@ -21,11 +26,17 @@
   --accent: #f2b632;
   --accent-ink: #1b2a22;
 
+  /* Focus ring. Not --accent: gold on cream is 1.61:1, far under the 3:1
+     that WCAG 1.4.11 requires of a focus indicator. Green reaches 6.76:1
+     on light; on dark, gold is already 9.86:1 and stays. */
+  --ring: #1f5e45;
+
   /* Cautions — used for the soil-test note and safety content */
   --warn: #8a4b12;
   --warn-bg: #fbefd2;
 
-  /* Type */
+  /* Type. --font-ui ships weight 700 only; at any other weight it falls
+     through to Sarabun by design. */
   --font-ui: "Noto Sans Thai", "Sarabun", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-body: "Sarabun", "Noto Sans Thai", system-ui, sans-serif;
 
@@ -46,12 +57,13 @@
     --ink: #edefe6;
     --muted: #a9b8ae;
     --panel: rgba(20, 34, 28, 0.94);
-    --line: rgba(237, 239, 230, 0.2);
+    --line: rgba(237, 239, 230, 0.45);
     --soft: #1b2e25;
     --brand: #7fd1a8;
     --brand-ink: #0e1914;
     --warn: #f2c87a;
     --warn-bg: #3a2d12;
+    --ring: #f2b632;
     color-scheme: dark;
   }
 }
@@ -62,12 +74,13 @@
   --ink: #edefe6;
   --muted: #a9b8ae;
   --panel: rgba(20, 34, 28, 0.94);
-  --line: rgba(237, 239, 230, 0.2);
+  --line: rgba(237, 239, 230, 0.45);
   --soft: #1b2e25;
   --brand: #7fd1a8;
   --brand-ink: #0e1914;
   --warn: #f2c87a;
   --warn-bg: #3a2d12;
+  --ring: #f2b632;
   color-scheme: dark;
 }
 
@@ -114,7 +127,10 @@ h3,
 .ui {
   font-family: var(--font-ui);
   font-weight: 700;
-  line-height: 1.3;
+  /* 1.4, not the prior art's 1.3: at h1 sizes a Thai upper-vowel + tone-mark
+     stack (ปุ๋ย, ที่) overshoots a 1.3 line box and collides with the line
+     above when a heading wraps. */
+  line-height: 1.4;
 }
 
 h1,
@@ -177,7 +193,7 @@ button.primary {
 
 /* Visible focus for keyboard users on Mac; never removed. */
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--ring);
   outline-offset: 2px;
 }
 

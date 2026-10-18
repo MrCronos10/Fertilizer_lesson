@@ -70,18 +70,32 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   Until both are done, each task's iPad check needs a manual `vercel deploy --prod`, which also means previews overwrite production — acceptable while the site is a scaffold, not acceptable once real content ships.
 
 ### T-004: Design system port from the prior art
-- Status: todo
+- Status: **done**
 - Depends on: T-002
 - Goal: Port the `factory-walkthrough-th.html` visual language into tokens and base styles, with subset Thai fonts.
 - Acceptance criteria:
-  - [ ] CSS custom properties for the palette: cream `#F3F1E8`, ink `#1B2A22`, brand green `#1F5E45`, accent `#F2B632`
-  - [ ] Light/dark via `prefers-color-scheme` plus a `data-theme` override, as in the prior art
-  - [ ] Noto Sans Thai (headings) and Sarabun (body) self-hosted, **subset to Thai + Latin, each ≤ 60 KB woff2**
-  - [ ] `100dvh` used throughout (not `100vh`, and not the prior art's `svh`)
-  - [ ] `env(safe-area-inset-*)` respected on all four edges
-  - [ ] Base tap target ≥ 44×44pt; `:focus-visible` styling present; `prefers-reduced-motion` honoured
+  - [x] CSS custom properties for the palette: cream `#F3F1E8`, ink `#1B2A22`, brand green `#1F5E45`, accent `#F2B632`
+  - [x] Light/dark via `prefers-color-scheme` plus a `data-theme` override, as in the prior art
+  - [x] Noto Sans Thai (headings) and Sarabun (body) self-hosted, **subset to Thai + Latin, each ≤ 60 KB woff2**
+  - [x] `100dvh` used throughout (not `100vh`, and not the prior art's `svh`)
+  - [x] `env(safe-area-inset-*)` respected on all four edges
+  - [x] Base tap target ≥ 44×44pt; `:focus-visible` styling present; `prefers-reduced-motion` honoured
 - Test plan: Screenshot a type-specimen page in all three WebKit viewports, light and dark. Verify Thai tone marks and vowel stacking render correctly at every heading and body size. Check the font files' byte size in the build output.
 - Notes: Reviewer: yes (accessibility). Prior art fixes to carry: `svh`→`dvh`, and it had no WebGL fallback or progress storage (D12a).
+- **Verified 2026-10-19:** 34 unit tests + 45 WebKit e2e tests green across all three viewports; clean `npm run check` with every route prerendered static. Specimen page at `/specimen` (noindex). All 12 tokens transcribed verbatim from the prior art and independently re-verified by the reviewer. Fonts: 6 subsets, 72 KB total, largest 11.4 KB vs the 60 KB/file budget. Thai rendering confirmed by reading the screenshots, not only by assertions — ปุ๋ย, น้ำ, ผู้, เปื้อน stack correctly in both themes, as do Thai numerals and P₂O₅/K₂O subscripts.
+- **Defects found and fixed during the task (not test-only):**
+  - Specimen page had two `<h1>`s. Added `.as-h1/.as-h2/.as-h3` appearance-only classes so the type scale can be shown with one real `h1`.
+  - A local production build 404'd on `/_vercel/insights/script.js`. Analytics is now gated on `process.env.VERCEL`, plus a real `favicon.ico` — Safari requests it regardless of `<link rel="icon">`.
+- **Reviewer findings fixed (fresh subagent, accessibility focus):**
+  1. **Focus ring failed WCAG 1.4.11 at 1.61:1** — `--accent` gold on cream. Introduced a `--ring` token: green `#1F5E45` (6.76:1) on light, gold retained on dark (9.86:1). The prior art had this bug; it ported faithfully and was caught here.
+  2. **`--line` at 0.18 alpha was 1.42:1** — `--panel` sits within ~1.1:1 of `--bg`, so the border was the only thing separating a panel or secondary button from the page, and it was invisible. Raised to 0.55 light / 0.45 dark (3.44:1 / 4.02:1). The prior art could afford a faint line because its panels floated over a 3-D canvas.
+  3. **ZWNJ/ZWJ were resolving from the Latin face.** The Latin range `U+2000-206F` contains `U+200C-200D`, and the last matching `@font-face` wins — so declaring Thai first silently defeated the point. Reordered Latin-first/Thai-last, with a test asserting the order.
+  4. **The "real glyphs" test was vacuous.** Measuring a bounding box passes with a Thonburi fallback or a row of tofu. Replaced with `document.fonts.check()` per face plus an independent width-versus-fallback cross-check.
+  5. **The focus-ring test was also vacuous** — `outlineWidth` reports `3px` even on elements with `outline-style: none` (verified on `<body>`). Now asserts `outlineStyle` and `outlineColor`.
+  6. **Heading `line-height` 1.3 → 1.4** — Thai upper vowel + tone stacks overshoot a 1.3 line box and collide on wrapped headings.
+  7. **Added the two missing criteria tests** — safe-area padding on all four edges, and `prefers-reduced-motion`. Strengthened the `dvh` check to scan all rules rather than only `min-height`, and added `lib/contrast.test.ts`, which computes WCAG ratios from the tokens so a palette change fails before it reaches a screenshot.
+  8. Also fixed: `color-scheme: light dark` (prevented a white flash on dark devices), preloading `sarabun-600-thai` (carries the soil-test note and primary CTA, where fallback metrics cause visible reflow), theme toggle rebuilt on native radios with `lang="en"` (VoiceOver was reading English labels with a Thai voice), `letter-spacing` removed from the combining-mark row (WebKit inserts space between base and mark, detaching tone marks), `h3`→`h2` heading order, and centred specimen content.
+- **Deferred, recorded in `docs/BACKLOG.md`:** `overflow-x: hidden` on `body`, no `--danger` token yet, and macOS Safari's Tab-navigation default.
 
 ---
 

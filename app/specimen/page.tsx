@@ -43,7 +43,7 @@ const TONE_MARK_CASES = [
 
 export default function Specimen() {
   return (
-    <main className="page" style={{ display: "grid", gap: "2rem", maxWidth: "70ch" }}>
+    <main className="page" style={{ display: "grid", gap: "2rem", maxWidth: "70ch", margin: "0 auto" }}>
       <header style={{ display: "grid", gap: "1rem" }}>
         <h1>ตัวอย่างแบบอักษรและสี</h1>
         <p className="muted" lang="en">
@@ -81,8 +81,17 @@ export default function Specimen() {
             <span key={word}>{word}</span>
           ))}
         </div>
-        <p data-testid="dotted-circle" style={{ fontSize: "1.75rem", letterSpacing: "0.15em" }}>
-          ◌ุ ◌ู ◌่ ◌้ ◌๊ ◌๋ ◌ั ◌ิ ◌ี ◌ึ ◌ื
+        {/* Each cluster gets its own span and the gap comes from flex, never
+            letter-spacing: in WebKit, letter-spacing inserts space between a
+            base character and its combining mark, visually detaching the tone
+            mark — the exact defect this section exists to detect. */}
+        <p
+          data-testid="dotted-circle"
+          style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1rem", fontSize: "1.75rem" }}
+        >
+          {["◌ุ", "◌ู", "◌่", "◌้", "◌๊", "◌๋", "◌ั", "◌ิ", "◌ี", "◌ึ", "◌ื"].map((mark) => (
+            <span key={mark}>{mark}</span>
+          ))}
         </p>
         <p className="muted" lang="en">
           Above: U+25CC dotted circle as a mark carrier — included in the Thai
@@ -127,7 +136,9 @@ export default function Specimen() {
       <section style={{ display: "grid", gap: "0.75rem" }}>
         <h2>ปุ่มและพื้นที่กดสัมผัส</h2>
         <p lang="en" className="muted">
-          Every control is at least 44×44pt. Tab to one to see the focus ring.
+          Every control is at least 44×44pt. Focus one to see the ring — note that
+          macOS Safari only tabs through form fields unless &ldquo;Press Tab to
+          highlight each item&rdquo; is enabled in its Advanced settings.
         </p>
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
           <button type="button" className="primary" data-testid="btn-primary">
@@ -147,7 +158,7 @@ export default function Specimen() {
       </section>
 
       <section className="panel" style={{ display: "grid", gap: "0.5rem" }}>
-        <h3>พื้นผิวยกระดับ</h3>
+        <h2>พื้นผิวยกระดับ</h2>
         <p className="muted">
           ใช้สำหรับตารางข้อมูลและกล่องแสดงผลการคำนวณ
         </p>

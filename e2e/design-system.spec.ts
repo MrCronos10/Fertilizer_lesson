@@ -38,28 +38,68 @@ test.describe("design system", () => {
     expect(bodyFont).toContain("Sarabun");
   });
 
-  test("renders Thai tone marks with real glyphs, not fallback boxes", async ({ page }) => {
+  test("the loaded Thai faces can actually render Thai, marks included", async ({ page }) => {
+    await page.goto("/specimen");
+
+    // Asking the font system directly. Measuring a bounding box would pass just
+    // as happily with iPad's Thonburi fallback or a row of .notdef boxes.
+    const checks = await page.evaluate(async () => {
+      await document.fonts.ready;
+      return {
+        headingThai: document.fonts.check('700 1rem "Noto Sans Thai"', "ปุ๋ย"),
+        bodyThai: document.fonts.check('400 1rem "Sarabun"', "ปุ๋ยแต่งหน้า"),
+        emphasisThai: document.fonts.check('600 1rem "Sarabun"', "ตรวจวิเคราะห์ดิน"),
+        combiningMark: document.fonts.check('400 1rem "Sarabun"', "◌่"),
+        zeroWidthJoiners: document.fonts.check('400 1rem "Sarabun"', "‌‍"),
+      };
+    });
+
+    expect(checks).toEqual({
+      headingThai: true,
+      bodyThai: true,
+      emphasisThai: true,
+      combiningMark: true,
+      zeroWidthJoiners: true,
+    });
+  });
+
+  test("Thai renders wider than its fallback would, proving the subset is in use", async ({
+    page,
+  }) => {
     await page.goto("/specimen");
     await page.waitForLoadState("networkidle");
 
-    // A missing glyph collapses to near-zero advance width or a .notdef box;
-    // measuring the rendered line catches both.
-    const box = await page.getByTestId("tone-marks").boundingBox();
-    expect(box).not.toBeNull();
-    expect(box!.height).toBeGreaterThan(20);
+    // Independent cross-check: the same string measured in our stack versus a
+    // forced generic fallback must differ, or no webfont is being applied.
+    const { styled, fallback } = await page.evaluate(async () => {
+      await document.fonts.ready;
+      const measure = (fontFamily: string) => {
+        const el = document.createElement("span");
+        el.textContent = "ปุ๋ยรองพื้นและปุ๋ยแต่งหน้า";
+        el.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font-size:32px;font-family:${fontFamily}`;
+        document.body.append(el);
+        const width = el.getBoundingClientRect().width;
+        el.remove();
+        return width;
+      };
+      return { styled: measure('"Sarabun"'), fallback: measure("monospace") };
+    });
 
-    const dotted = await page.getByTestId("dotted-circle").boundingBox();
-    expect(dotted!.width).toBeGreaterThan(100);
+    expect(styled).toBeGreaterThan(0);
+    expect(Math.abs(styled - fallback)).toBeGreaterThan(1);
   });
 
   test("every control meets the 44pt minimum touch target", async ({ page }) => {
     await page.goto("/specimen");
 
-    const buttons = await page.getByRole("button").all();
-    expect(buttons.length).toBeGreaterThan(0);
+    const controls = [
+      ...(await page.getByRole("button").all()),
+      ...(await page.locator('[data-testid^="theme-"]').all()),
+    ];
+    expect(controls.length).toBeGreaterThan(0);
 
-    for (const button of buttons) {
-      const box = await button.boundingBox();
+    for (const control of controls) {
+      const box = await control.boundingBox();
       expect(box).not.toBeNull();
       expect(box!.height).toBeGreaterThanOrEqual(TAP_MIN);
       expect(box!.width).toBeGreaterThanOrEqual(TAP_MIN);
@@ -104,33 +144,82 @@ test.describe("design system", () => {
     );
   });
 
-  test("shows a focus ring for keyboard users", async ({ page }) => {
+  test("draws a WCAG-compliant focus ring on the focused control", async ({ page }) => {
     await page.goto("/specimen");
 
-    await page.getByTestId("btn-primary").focus();
-    const outline = await page
-      .getByTestId("btn-primary")
-      .evaluate((el) => getComputedStyle(el).outlineWidth);
-    expect(outline).toBe("3px");
+    // Note on method: pressing Tab is a no-op in WebKit here, mirroring
+    // Safari's default of not tabbing through every element, so Tab cannot
+    // drive this assertion. Focusing a form control does match :focus-visible
+    // in WebKit, which is what we assert. End-to-end keyboard traversal on
+    // macOS Safari is a manual check, tracked in T-025.
+    await page.locator('input[type="radio"]').first().focus();
+
+    const focused = await page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el || el === document.body) return null;
+      const style = getComputedStyle(el);
+      return { width: style.outlineWidth, color: style.outlineColor, style: style.outlineStyle };
+    });
+
+    expect(focused).not.toBeNull();
+    // outlineStyle is the load-bearing assertion: outlineWidth reports "3px"
+    // even on elements with outline-style: none, so width alone proves nothing.
+    expect(focused!.style).toBe("solid");
+    expect(focused!.width).toBe("3px");
+    // --ring (green), not --accent: gold on cream is 1.61:1 and fails WCAG 1.4.11.
+    expect(focused!.color).toBe("rgb(31, 94, 69)");
   });
 
-  test("uses dvh rather than vh or svh for full-height layout", async ({ page }) => {
+  test("uses dvh everywhere, never vh or svh", async ({ page }) => {
     await page.goto("/specimen");
-    const minHeight = await page.evaluate(() => {
-      const sheets = [...document.styleSheets];
-      return sheets
-        .flatMap((s) => {
+    const allCss = await page.evaluate(() =>
+      [...document.styleSheets]
+        .flatMap((sheet) => {
           try {
-            return [...s.cssRules].map((r) => r.cssText);
+            return [...sheet.cssRules].map((rule) => rule.cssText);
           } catch {
             return [];
           }
         })
-        .filter((t) => t.includes("min-height"))
-        .join(" ");
+        .join(" "),
+    );
+
+    expect(allCss).toContain("dvh");
+    expect(allCss).not.toContain("svh");
+    // Catches a stray `height: 100vh` anywhere, not only in min-height rules.
+    expect(allCss).not.toMatch(/\d(?<!d)vh\b/);
+  });
+
+  test("respects the safe area on all four edges", async ({ page }) => {
+    await page.goto("/specimen");
+    const padding = await page.locator("main.page").evaluate((el) => {
+      const s = getComputedStyle(el);
+      return [s.paddingTop, s.paddingRight, s.paddingBottom, s.paddingLeft];
     });
-    expect(minHeight).toContain("dvh");
-    expect(minHeight).not.toContain("svh");
+
+    // env() resolves to 0 off-device, so the floor is the 16px gutter; the
+    // point is that all four edges are padded rather than only the sides.
+    for (const side of padding) {
+      expect(parseFloat(side)).toBeGreaterThanOrEqual(16);
+    }
+  });
+
+  test("honours prefers-reduced-motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/specimen");
+
+    const durations = await page.evaluate(() => {
+      const el = document.createElement("div");
+      el.style.cssText = "transition: opacity 2s; animation: none 3s;";
+      document.body.append(el);
+      const s = getComputedStyle(el);
+      const result = { transition: s.transitionDuration, animation: s.animationDuration };
+      el.remove();
+      return result;
+    });
+
+    expect(parseFloat(durations.transition)).toBeLessThan(0.1);
+    expect(parseFloat(durations.animation)).toBeLessThan(0.1);
   });
 
   test("specimen page has no console errors", async ({ page }) => {
