@@ -48,16 +48,26 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **D13 amended → D13a:** dropped `output: 'export'`; plain `next build` on Vercel already prerenders static HTML and keeps `next.config` redirects available for `/` → `/th` in T-010.
 
 ### T-003: Vercel project, preview deploys, analytics
-- Status: todo
+- Status: **blocked** — two owner actions needed, see below
 - Depends on: T-002
 - Goal: Every pushed branch produces a preview URL openable on the iPad; analytics live.
 - Acceptance criteria:
-  - [ ] Vercel project linked to the GitHub repo; `main` auto-deploys to production
-  - [ ] Pushing a branch produces a preview URL that loads without authentication
-  - [ ] `@vercel/analytics` mounted; a page view registers in the dashboard
-  - [ ] No environment variables or secrets required to build
+  - [x] Vercel project created and linked locally (`fertilizer-lesson`, org `kuypavthai-4289s-projects`)
+  - [ ] **Blocked:** Vercel project connected to the GitHub repo; `main` auto-deploys to production
+  - [ ] **Blocked:** pushing a branch produces a preview URL that loads without authentication
+  - [x] `@vercel/analytics` mounted; a page view fires
+  - [x] No environment variables or secrets required to build
 - Test plan: Push a throwaway branch, open the preview URL on a real iPad over cellular (not LAN), confirm it loads.
 - Notes: Deliberately early — every later 3D/touch task depends on this preview URL as its iPad gate (D4, D17). Public repo means previews need no auth (D14).
+- **Progress 2026-10-18 — production is live and public:**
+  - **https://fertilizer-lesson.vercel.app** → HTTP 200, `x-vercel-cache: HIT`, `<title>เรียนรู้เรื่องปุ๋ย</title>`, `lang="th"`, Thai text present in the static HTML (confirming the D13a no-JS fallback).
+  - Analytics verified by driving the deployed site in WebKit: `window.va` is a function and `window.vaq` holds `[["pageview",{"route":"/","path":"/"}]]`. The script loads from an obfuscated path (`/<hash>/script.js`), not `/_vercel/insights/script.js` — grepping for "insights" gives a false negative.
+  - Deployed via CLI, not git. Long-lived deployment URLs and the `*-kuypavthai-4289s-projects.vercel.app` alias both return 302 to Vercel SSO; only the short `fertilizer-lesson.vercel.app` alias is public.
+  - `.env.local` (holds `VERCEL_OIDC_TOKEN`) and `.vercel/` are both git-ignored; verified before committing.
+- **BLOCKED ON OWNER (two one-time dashboard actions):**
+  1. **Connect GitHub to the Vercel account.** `vercel link` failed with *"You need to add a Login Connection to your GitHub account first. (400)"*. Until then `vercel git connect` cannot run, so pushes do not auto-deploy and every deploy is a manual CLI call. Fix: Vercel → Account Settings → Authentication → connect GitHub.
+  2. **Turn off Deployment Protection for previews.** Default Standard Protection puts every preview behind Vercel SSO, which defeats the per-task iPad gate in D17. Fix: Project → Settings → Deployment Protection → disable Vercel Authentication for Preview (the repo and site are public anyway, per D14).
+  Until both are done, each task's iPad check needs a manual `vercel deploy --prod`, which also means previews overwrite production — acceptable while the site is a scaffold, not acceptable once real content ships.
 
 ### T-004: Design system port from the prior art
 - Status: todo
