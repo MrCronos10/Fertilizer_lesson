@@ -1,0 +1,104 @@
+{
+  "id": "organic-fertilizer-npk",
+  "sourcePages": [
+    3
+  ],
+  "rowCount": 5,
+  "rows": [
+    {
+      "id": "cow-manure",
+      "sourcePage": 3,
+      "country": "TH",
+      "citations": [
+        "doa"
+      ],
+      "npk": {
+        "n": 1.1,
+        "p2o5": 0.4,
+        "k2o": 1.6
+      },
+      "labels": {
+        "th": {
+          "name": "มูลวัว (ปุ๋ยคอก)",
+          "note": "ปลอดภัย ช่วยให้ดินร่วน ใช้ได้ทุกพืช โดยเฉพาะในดินทราย"
+        }
+      }
+    },
+    {
+      "id": "chicken-manure",
+      "sourcePage": 3,
+      "country": "TH",
+      "citations": [
+        "doa"
+      ],
+      "npk": {
+        "n": 2.42,
+        "p2o5": 6.29,
+        "k2o": 2.11
+      },
+      "labels": {
+        "th": {
+          "name": "มูลไก่",
+          "note": "ธาตุอาหารสูง ต้องหมักก่อนใช้ ใช้กับผักและไม้ผล"
+        }
+      }
+    },
+    {
+      "id": "compost",
+      "sourcePage": 3,
+      "country": "TH",
+      "citations": [
+        "doa"
+      ],
+      "npk": {
+        "n": 1.5,
+        "p2o5": 0.4,
+        "k2o": 1.0
+      },
+      "labels": {
+        "th": {
+          "name": "ปุ๋ยหมัก (Compost)",
+          "note": "ปรับโครงสร้างดิน ใช้กับผักและดินเสื่อม"
+        }
+      }
+    },
+    {
+      "id": "green-manure-sunn-hemp",
+      "sourcePage": 3,
+      "country": "TH",
+      "citations": [
+        "doa"
+      ],
+      "npk": {
+        "n": 1.98,
+        "p2o5": 0.3,
+        "k2o": 2.41
+      },
+      "labels": {
+        "th": {
+          "name": "ปุ๋ยพืชสด (ปอเทือง)",
+          "note": "ไถกลบตอนออกดอก ใช้ในนาและไร่"
+        }
+      }
+    },
+    {
+      "id": "rice-straw",
+      "sourcePage": 3,
+      "country": "TH",
+      "citations": [
+        "doa"
+      ],
+      "npk": {
+        "n": 0.59,
+        "p2o5": 0.08,
+        "k2o": 1.72
+      },
+      "labels": {
+        "th": {
+          "name": "ฟางข้าว (ไถกลบ ห้ามเผา)",
+          "note": "คืนโพแทสเซียมให้ดิน"
+        }
+      }
+    }
+  ]
+}

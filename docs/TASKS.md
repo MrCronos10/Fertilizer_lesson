@@ -131,18 +131,37 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   Nothing was silently reworded; each needs a ✅ or ✍️ before T-010 renders this content.
 
 ### T-006: Extract the 9 table schemas to locale-neutral JSON
-- Status: todo
+- Status: done
 - Depends on: T-005
 - Goal: Every number in the source lives in typed JSON, stored once, with its citation and country tag.
 - Acceptance criteria:
-  - [ ] JSON + TS types for all nine schemas: nutrient groups (p2, 3 rows), deficiency symptoms (p3, 10), organic fertilizer NPK (p3, 5), straight fertilizers (p4, 7), compound grades→use (p5, 6), soil conditioners with lime equivalence (p5, 4), Cambodian rice by soil group (p11, 9), other crops (p12–13, 10), glossary (p14, 20)
-  - [ ] Numbers are locale-neutral; only labels are per-locale (D18)
-  - [ ] Every row carries `sourcePage` and `country` (`TH` | `KH`)
-  - [ ] The p11 table is tagged `KH` and a test asserts no `KH` row is reachable from any v1 UI query
-  - [ ] Ranges stored as `{min, max}`, never as strings like `"25–50"`
-  - [ ] All nutrient values explicitly oxide-form (`n`, `p2o5`, `k2o`) — no bare `p` or `k` keys anywhere
+  - [x] JSON + TS types for all nine schemas: nutrient groups (p2, 3 rows), deficiency symptoms (p3, 10), organic fertilizer NPK (p3, 5), straight fertilizers (p4, 7), compound grades→use (p5, 6), soil conditioners with lime equivalence (p5, 4), Cambodian rice by soil group (p11, 9), other crops (p12–13, 10), glossary (p14, 20)
+  - [x] Numbers are locale-neutral; only labels are per-locale (D18)
+  - [x] Every row carries `sourcePage` and `country` (`TH` | `KH`)
+  - [x] The p11 table is tagged `KH` and a test asserts no `KH` row is reachable from any v1 UI query
+  - [x] Ranges stored as `{min, max}`, never as strings like `"25–50"`
+  - [x] All nutrient values explicitly oxide-form (`n`, `p2o5`, `k2o`) — no bare `p` or `k` keys anywhere
 - Test plan: Unit tests on row counts per table (3/10/5/7/6/4/9/10/20), on `sourcePage` presence, on the KH exclusion, and a type-level check that no elemental key exists.
 - Notes: Reviewer: yes (content accuracy). Row counts come from the source inventory and are the cheapest possible guard against a dropped row.
+- **Verified:** 262 unit tests, 45 WebKit e2e, clean `npm run check`. A fresh reviewer checked all ~190 numbers
+  cell by cell against the rendered pages and found **no digit wrong, transposed, dropped or on the wrong row**.
+  - It also proved the first version of the tests was largely vacuous: seven corrupting mutations passed all 72
+    of them, including two deficiency symptoms swapped between rows and a rate changed from 20–25 kg/rai to
+    200–250 kg/ha. Whole-page containment cannot catch a permutation. The checks are now **anchored** — a row's
+    fields must appear together, in order, within the raw lines it was printed on. Nine mutations (the original
+    seven plus an invented guidance entry and a string-typed supply figure) are now each verified to fail.
+  - `NpkKgPerHa` was a type alias, i.e. documentation, not enforcement. It now has distinct field names
+    (`nKg`/`p2o5Kg`/`k2oKg`), so a kg/ha supply figure cannot reach `formatGrade` — a compile error, not a
+    convention. A runtime check also rejects any percentage triple summing above 100%.
+  - `cropsFor` returned the unfiltered row beside the filtered arrays, putting `crop.row.topDressing` one
+    property access from `crop.topDressing`. The row type now omits both arrays.
+  - Added `lib/data/validate.ts`: the `as Table<…>` casts accept a deleted field or a string where an object
+    belongs with no `tsc` complaint, so the shapes are enforced at runtime in the test suite instead.
+  - Every row now carries `country`, with `NEUTRAL` for rows that are not country-specific, so the criterion is
+    met literally rather than waived for the six country-neutral tables.
+- **Open for the owner:** the vegetable row ships **no rate a Thai grower can act on**. The source's only
+  number for it is Cambodian survey data (CDRI Working Paper 91), and its advice is tagged `UNSTATED` rather
+  than `TH` because the source gives it no country. Filling that gap from an official Thai source is T-008.
 
 ### T-007: Bibliography and source tiering
 - Status: todo

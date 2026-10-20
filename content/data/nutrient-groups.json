@@ -1,0 +1,62 @@
+{
+  "id": "nutrient-groups",
+  "sourcePages": [
+    2
+  ],
+  "rowCount": 3,
+  "rows": [
+    {
+      "id": "macronutrients",
+      "sourcePage": 2,
+      "country": "NEUTRAL",
+      "elements": [
+        "N",
+        "P",
+        "K"
+      ],
+      "labels": {
+        "th": {
+          "group": "ธาตุอาหารหลัก (Macronutrients)",
+          "role": "N = ใบเขียว โตเร็ว; P = ราก ดอก เมล็ด; K = ผลโต หวาน ต้นแข็ง ทนโรค"
+        }
+      }
+    },
+    {
+      "id": "secondary",
+      "sourcePage": 2,
+      "country": "NEUTRAL",
+      "elements": [
+        "Ca",
+        "Mg",
+        "S"
+      ],
+      "labels": {
+        "th": {
+          "group": "ธาตุอาหารรอง (Secondary)",
+          "role": "Ca = ผนังเซลล์ ปลายราก; Mg = ใจกลางคลอโรฟิลล์; S = โปรตีน กลิ่นรส"
+        }
+      }
+    },
+    {
+      "id": "micronutrients",
+      "sourcePage": 2,
+      "country": "NEUTRAL",
+      "elements": [
+        "Fe",
+        "Zn",
+        "B",
+        "Mn",
+        "Cu",
+        "Mo",
+        "Cl",
+        "Ni"
+      ],
+      "labels": {
+        "th": {
+          "group": "จุลธาตุ (Micronutrients)",
+          "role": "ใช้น้อยมากแต่ขาดไม่ได้ เช่น B ช่วยผสมเกสร"
+        }
+      }
+    }
+  ]
+}

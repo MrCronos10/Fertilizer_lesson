@@ -1,0 +1,71 @@
+{
+  "id": "soil-conditioners",
+  "sourcePages": [
+    5
+  ],
+  "rowCount": 4,
+  "rows": [
+    {
+      "id": "marl",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "citations": [
+        "ku"
+      ],
+      "limeEquivalence": 1.25,
+      "labels": {
+        "th": {
+          "name": "ปูนมาร์ล (Marl)",
+          "purpose": "แก้ดินกรด",
+          "equivalence": "1.25 เท่า"
+        }
+      }
+    },
+    {
+      "id": "dolomite",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "citations": [
+        "ku"
+      ],
+      "limeEquivalence": 0.92,
+      "labels": {
+        "th": {
+          "name": "โดโลไมท์ (Dolomite)",
+          "purpose": "แก้ดินกรด และให้ Mg",
+          "equivalence": "0.92 เท่า"
+        }
+      }
+    },
+    {
+      "id": "slaked-lime",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "citations": [
+        "ku",
+        "bansuanporpeang"
+      ],
+      "limeEquivalence": 0.74,
+      "labels": {
+        "th": {
+          "name": "ปูนขาว (Slaked lime)",
+          "purpose": "แก้ดินกรดได้เร็ว ห้ามใส่พร้อมยูเรีย",
+          "equivalence": "0.74 เท่า"
+        }
+      }
+    },
+    {
+      "id": "gypsum",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "limeEquivalence": null,
+      "labels": {
+        "th": {
+          "name": "ยิปซัม (Gypsum)",
+          "purpose": "ให้ Ca และ S โดยไม่เปลี่ยน pH",
+          "equivalence": "–"
+        }
+      }
+    }
+  ]
+}

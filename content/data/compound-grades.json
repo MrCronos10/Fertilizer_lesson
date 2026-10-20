@@ -1,0 +1,155 @@
+{
+  "id": "compound-grades",
+  "sourcePages": [
+    5
+  ],
+  "rowCount": 6,
+  "rows": [
+    {
+      "id": "balanced",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "grades": [
+        {
+          "n": 15,
+          "p2o5": 15,
+          "k2o": 15
+        },
+        {
+          "n": 16,
+          "p2o5": 16,
+          "k2o": 16
+        }
+      ],
+      "labels": {
+        "th": {
+          "useFor": "ผัก ไม้ผลช่วงบำรุงต้น ข้าวโพด อ้อย มันสำปะหลัง"
+        }
+      }
+    },
+    {
+      "id": "rice-basal-clay",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "grades": [
+        {
+          "n": 16,
+          "p2o5": 20,
+          "k2o": 0
+        },
+        {
+          "n": 18,
+          "p2o5": 22,
+          "k2o": 0
+        },
+        {
+          "n": 20,
+          "p2o5": 20,
+          "k2o": 0
+        }
+      ],
+      "labels": {
+        "th": {
+          "useFor": "รองพื้นข้าวในดินเหนียว"
+        }
+      }
+    },
+    {
+      "id": "rice-basal-sandy",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "grades": [
+        {
+          "n": 16,
+          "p2o5": 16,
+          "k2o": 8
+        },
+        {
+          "n": 18,
+          "p2o5": 12,
+          "k2o": 6
+        },
+        {
+          "n": 16,
+          "p2o5": 8,
+          "k2o": 8
+        }
+      ],
+      "labels": {
+        "th": {
+          "useFor": "รองพื้นข้าวในดินทราย"
+        }
+      }
+    },
+    {
+      "id": "high-potassium",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "grades": [
+        {
+          "n": 15,
+          "p2o5": 7,
+          "k2o": 18
+        },
+        {
+          "n": 13,
+          "p2o5": 13,
+          "k2o": 21
+        }
+      ],
+      "labels": {
+        "th": {
+          "useFor": "มันสำปะหลัง อ้อย ยางเปิดกรีด"
+        }
+      }
+    },
+    {
+      "id": "rubber-immature",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "grades": [
+        {
+          "n": 20,
+          "p2o5": 8,
+          "k2o": 20
+        },
+        {
+          "n": 20,
+          "p2o5": 10,
+          "k2o": 12
+        }
+      ],
+      "labels": {
+        "th": {
+          "useFor": "ยางพาราก่อนเปิดกรีด"
+        }
+      }
+    },
+    {
+      "id": "pre-flowering",
+      "sourcePage": 5,
+      "country": "NEUTRAL",
+      "citations": [
+        "sotus",
+        "tratruamkaset"
+      ],
+      "grades": [
+        {
+          "n": 8,
+          "p2o5": 24,
+          "k2o": 24
+        },
+        {
+          "n": 12,
+          "p2o5": 24,
+          "k2o": 12
+        }
+      ],
+      "labels": {
+        "th": {
+          "useFor": "ไม้ผลก่อนออกดอก"
+        }
+      }
+    }
+  ]
+}

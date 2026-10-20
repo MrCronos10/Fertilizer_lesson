@@ -1,0 +1,538 @@
+{
+  "id": "other-crops",
+  "sourcePages": [
+    12,
+    13
+  ],
+  "rowCount": 10,
+  "note": "The shared crop table. Rows carry a country, and so does each individual piece of guidance: two rows mix Thai rates with Cambodian or regional ones in the same cell, and only the Thai guidance may reach a Thai UI. `text` is the source's own wording, verbatim.",
+  "rows": [
+    {
+      "id": "rice-clay",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": {
+          "crop": "ข้าว ดินเหนียว"
+        }
+      },
+      "sourceNote": "TAS 4401-2008; Rice Dept.",
+      "basal": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 16,
+              "p2o5": 20,
+              "k2o": 0
+            },
+            {
+              "n": 18,
+              "p2o5": 22,
+              "k2o": 0
+            },
+            {
+              "n": 20,
+              "p2o5": 20,
+              "k2o": 0
+            }
+          ],
+          "rate": {
+            "min": 20,
+            "max": 25
+          },
+          "unit": "kg/rai",
+          "text": "16-20-0, 18-22-0 or 20-20-0, 20–25 kg/rai"
+        }
+      ],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 46,
+              "p2o5": 0,
+              "k2o": 0
+            }
+          ],
+          "rate": {
+            "min": 5,
+            "max": 10
+          },
+          "unit": "kg/rai",
+          "text": "Urea 5–10 kg/rai"
+        }
+      ]
+    },
+    {
+      "id": "rice-sandy",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "fao"
+      ],
+      "labels": {
+        "th": {
+          "crop": "ข้าว ดินทราย"
+        }
+      },
+      "sourceNote": "TAS 4401-2008",
+      "basal": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 16,
+              "p2o5": 16,
+              "k2o": 8
+            },
+            {
+              "n": 18,
+              "p2o5": 12,
+              "k2o": 6
+            },
+            {
+              "n": 16,
+              "p2o5": 8,
+              "k2o": 8
+            }
+          ],
+          "rate": {
+            "min": 20,
+            "max": 25
+          },
+          "unit": "kg/rai",
+          "text": "16-16-8, 18-12-6 or 16-8-8, 20–25 kg/rai"
+        }
+      ],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 46,
+              "p2o5": 0,
+              "k2o": 0
+            }
+          ],
+          "rate": {
+            "min": 5,
+            "max": 10
+          },
+          "unit": "kg/rai",
+          "text": "Urea 5–10 kg/rai"
+        }
+      ]
+    },
+    {
+      "id": "maize",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "doa",
+        "ricethailand"
+      ],
+      "labels": {
+        "th": {
+          "crop": "ข้าวโพด"
+        }
+      },
+      "sourceNote": "Rice Dept.; DOA Region 5",
+      "basal": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            },
+            {
+              "n": 16,
+              "p2o5": 16,
+              "k2o": 8
+            },
+            {
+              "n": 16,
+              "p2o5": 8,
+              "k2o": 8
+            },
+            {
+              "n": 20,
+              "p2o5": 10,
+              "k2o": 5
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "15-15-15, 16-16-8, 16-8-8 or 20-10-5 by soil test"
+        }
+      ],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [],
+          "rate": null,
+          "unit": null,
+          "text": "Split; 2nd dose at 20–25 days or ~30 cm tall"
+        }
+      ]
+    },
+    {
+      "id": "cassava",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "cgiar"
+      ],
+      "labels": {
+        "th": {
+          "crop": "มันสำปะหลัง"
+        }
+      },
+      "sourceNote": "Nakhon Sawan FCRC; OAE; CIAT (2014)",
+      "basal": [
+        {
+          "scope": "TH",
+          "grades": [],
+          "rate": {
+            "value": 100
+          },
+          "unit": "kg/rai",
+          "text": "Dolomite 100 kg/rai if pH < 5"
+        }
+      ],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": {
+            "min": 25,
+            "max": 50
+          },
+          "unit": "kg/rai",
+          "text": "TH: 15-15-15 at 25–50 kg/rai at 30–45 days, 20 cm from plant."
+        },
+        {
+          "scope": "KH",
+          "grades": [
+            {
+              "n": 46,
+              "p2o5": 0,
+              "k2o": 0
+            },
+            {
+              "n": 18,
+              "p2o5": 46,
+              "k2o": 0
+            },
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "KH: farmers use urea, DAP and 15-15-15 at 2 and 3–4 months."
+        },
+        {
+          "scope": "REGIONAL",
+          "grades": [
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": {
+            "min": 500,
+            "max": 600
+          },
+          "unit": "kg/ha",
+          "text": "CIAT regional guidance: ~500–600 kg/ha of 15-15-15"
+        }
+      ],
+      "citationsMore": 3
+    },
+    {
+      "id": "sugarcane",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "yara"
+      ],
+      "labels": {
+        "th": {
+          "crop": "อ้อย"
+        }
+      },
+      "sourceNote": "Registered product label (TH)",
+      "basal": [],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": {
+            "min": 60,
+            "max": 100
+          },
+          "unit": "kg/rai/yr",
+          "text": "15-15-15 at 60–100 kg/rai/yr in 2 equal splits, ~1 month after planting and 30–60 days later"
+        }
+      ]
+    },
+    {
+      "id": "rubber-immature",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "naikham",
+        "apkgroup"
+      ],
+      "labels": {
+        "th": {
+          "crop": "ยางก่อนเปิดกรีด"
+        }
+      },
+      "sourceNote": "RAOT / Rubber Research Institute",
+      "basal": [
+        {
+          "scope": "TH",
+          "grades": [],
+          "rate": null,
+          "unit": null,
+          "text": "Organic fertilizer + rock phosphate in the planting hole"
+        }
+      ],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 20,
+              "p2o5": 8,
+              "k2o": 20
+            },
+            {
+              "n": 20,
+              "p2o5": 10,
+              "k2o": 12
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "20-8-20 (old zones) or 20-10-12 (new zones), early and late rainy season"
+        }
+      ]
+    },
+    {
+      "id": "rubber-tapped",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "tci-thaijo"
+      ],
+      "labels": {
+        "th": {
+          "crop": "ยางเปิดกรีด"
+        }
+      },
+      "sourceNote": "YRU journal review",
+      "basal": [],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 30,
+              "p2o5": 5,
+              "k2o": 18
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "High-N/K formula, e.g. 30-5-18"
+        }
+      ]
+    },
+    {
+      "id": "mango",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "rakbankerd"
+      ],
+      "labels": {
+        "th": {
+          "crop": "มะม่วง"
+        }
+      },
+      "sourceNote": "Thai mango guide (DOA-based)",
+      "basal": [],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": {
+            "min": 1,
+            "max": 2
+          },
+          "unit": "kg/tree",
+          "text": "After harvest: 15-15-15 at 1–2 kg/tree + 10–20 kg organic fertilizer."
+        },
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 12,
+              "p2o5": 24,
+              "k2o": 12
+            },
+            {
+              "n": 8,
+              "p2o5": 24,
+              "k2o": 24
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "2–3 months before flowering: 12-24-12 or 8-24-24"
+        }
+      ]
+    },
+    {
+      "id": "durian",
+      "sourcePage": 12,
+      "country": "NEUTRAL",
+      "citations": [
+        "doa",
+        "doae"
+      ],
+      "labels": {
+        "th": {
+          "crop": "ทุเรียน"
+        }
+      },
+      "sourceNote": "DOAE; DOA",
+      "basal": [],
+      "topDressing": [
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            },
+            {
+              "n": 16,
+              "p2o5": 16,
+              "k2o": 16
+            }
+          ],
+          "rate": {
+            "min": 1,
+            "max": 3
+          },
+          "unit": "kg/tree",
+          "text": "After harvest: 15-15-15 or 16-16-16 at 1–3 kg/tree + 20–50 kg manure."
+        },
+        {
+          "scope": "TH",
+          "grades": [
+            {
+              "n": 8,
+              "p2o5": 24,
+              "k2o": 24
+            }
+          ],
+          "rate": {
+            "value": 1
+          },
+          "unit": "kg/tree",
+          "text": "Fruit stage: 8-24-24 ~1 kg/tree"
+        }
+      ]
+    },
+    {
+      "id": "vegetables",
+      "sourcePage": 13,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": {
+          "crop": "ผัก"
+        }
+      },
+      "sourceNote": "CDRI Working Paper 91 (CSES 2007–2011 data)",
+      "basal": [
+        {
+          "scope": "UNSTATED",
+          "grades": [
+            {
+              "n": 18,
+              "p2o5": 46,
+              "k2o": 0
+            },
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "Manure or compost + a little DAP / 15-15-15"
+        }
+      ],
+      "topDressing": [
+        {
+          "scope": "UNSTATED",
+          "grades": [
+            {
+              "n": 46,
+              "p2o5": 0,
+              "k2o": 0
+            },
+            {
+              "n": 15,
+              "p2o5": 15,
+              "k2o": 15
+            }
+          ],
+          "rate": null,
+          "unit": null,
+          "text": "Urea or 15-15-15, small and frequent doses"
+        },
+        {
+          "scope": "KH",
+          "grades": [],
+          "rate": {
+            "min": 190,
+            "max": 330
+          },
+          "unit": "kg/ha",
+          "text": "vegetable growers apply around 190–330 kg fertilizer/ha"
+        }
+      ]
+    }
+  ]
+}

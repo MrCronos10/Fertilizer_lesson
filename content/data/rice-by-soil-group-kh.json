@@ -1,0 +1,222 @@
+{
+  "id": "rice-by-soil-group-kh",
+  "sourcePages": [
+    11
+  ],
+  "rowCount": 9,
+  "note": "Cambodian wet-season rice by soil group. IRRI Rice Knowledge Bank, modified from CARDI; kg/ha, upper limits. Every row is country KH and is excluded from all v1 (Thai) UI queries — see lib/data/index.ts. Soil-group names are given in the source's own Latin transliteration; the Khmer script column is omitted for the same reason as the glossary's.",
+  "rows": [
+    {
+      "id": "prey-khmer",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 50,
+        "dap": 25,
+        "kcl": 25
+      },
+      "labels": {
+        "en": {
+          "soil": "Prey Khmer"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 28,
+        "p2o5Kg": 12,
+        "k2oKg": 15
+      },
+      "rateNote": null
+    },
+    {
+      "id": "prateah-lang",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 87.5,
+        "dap": 50,
+        "kcl": 50
+      },
+      "labels": {
+        "en": {
+          "soil": "Prateah Lang"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 50,
+        "p2o5Kg": 23,
+        "k2oKg": 30
+      },
+      "rateNote": null
+    },
+    {
+      "id": "bakan-orung",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 100,
+        "dap": 50,
+        "kcl": 0
+      },
+      "labels": {
+        "en": {
+          "soil": "Bakan/Orung"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 55,
+        "p2o5Kg": 23,
+        "k2oKg": 0
+      },
+      "rateNote": null
+    },
+    {
+      "id": "toul-samroung",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 150,
+        "dap": 75,
+        "kcl": 0
+      },
+      "labels": {
+        "en": {
+          "soil": "Toul Samroung"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 83,
+        "p2o5Kg": 35,
+        "k2oKg": 0
+      },
+      "rateNote": null
+    },
+    {
+      "id": "kompong-siem",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 125,
+        "dap": 0,
+        "kcl": 0
+      },
+      "labels": {
+        "en": {
+          "soil": "Kompong Siem"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 58,
+        "p2o5Kg": 0,
+        "k2oKg": 0
+      },
+      "rateNote": null
+    },
+    {
+      "id": "koktrap",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 125,
+        "dap": 75,
+        "kcl": 0
+      },
+      "labels": {
+        "en": {
+          "soil": "Koktrap"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 71,
+        "p2o5Kg": 35,
+        "k2oKg": 0
+      },
+      "rateNote": null
+    },
+    {
+      "id": "kbal-po",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 175,
+        "dap": 0,
+        "kcl": 0
+      },
+      "labels": {
+        "en": {
+          "soil": "Kbal Po"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 81,
+        "p2o5Kg": 0,
+        "k2oKg": 0
+      },
+      "rateNote": null
+    },
+    {
+      "id": "krakor",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 225,
+        "dap": 50,
+        "kcl": 0
+      },
+      "labels": {
+        "en": {
+          "soil": "Krakor"
+        }
+      },
+      "suppliesNpkKgPerHa": {
+        "nKg": 118,
+        "p2o5Kg": 23,
+        "k2oKg": 0
+      },
+      "rateNote": null
+    },
+    {
+      "id": "unknown",
+      "sourcePage": 11,
+      "country": "KH",
+      "citations": [
+        "irri"
+      ],
+      "perHectare": {
+        "urea": 50,
+        "dap": 25,
+        "kcl": 25
+      },
+      "labels": {
+        "en": {
+          "soil": "Unknown"
+        }
+      },
+      "suppliesNpkKgPerHa": null,
+      "rateNote": "double if low drought/flood risk"
+    }
+  ]
+}
