@@ -1,0 +1,71 @@
+{
+  "$comment": [
+    "Which lines of the raw extraction each chapter's prose was built from.",
+    "This is what makes the zero-rewording check a diff rather than a search:",
+    "the test rebuilds the expected text stream from these spans and asserts",
+    "equality with the shipped MDX, so a deleted sentence, a truncated clause",
+    "or a reordered paragraph fails just as loudly as a changed number.",
+    "Spans are [page, firstLine, lastLine], 1-based and inclusive, and must be",
+    "listed in the order the chapter uses them. Lines left out of every span",
+    "are table rows (deferred to T-006), citation-marker footers, Khmer, or",
+    "English front matter — see SOURCES.md for why each one is excluded."
+  ],
+  "chapters": {
+    "ch01": {
+      "spans": [
+        [2, 2, 5],
+        [2, 16, 17],
+        [3, 12, 13]
+      ],
+      "omit": ["⚠"],
+      "omitWhy": "R10: the warning glyph became a <Callout type=\"warn\"> wrapper."
+    },
+    "ch02": {
+      "spans": [
+        [3, 14, 15],
+        [3, 22, 26],
+        [4, 1, 8],
+        [4, 35, 36],
+        [5, 8, 20],
+        [5, 26, 28]
+      ],
+      "omit": [],
+      "omitWhy": ""
+    },
+    "ch03": {
+      "spans": [[6, 1, 6]],
+      "omit": [],
+      "omitWhy": ""
+    },
+    "ch04": {
+      "spans": [[6, 7, 25]],
+      "omit": [],
+      "omitWhy": ""
+    },
+    "ch07": {
+      "spans": [
+        [6, 26, 35],
+        [7, 1, 5]
+      ],
+      "omit": [],
+      "omitWhy": ""
+    }
+  },
+  "excludedProse": [
+    {
+      "where": "p02 line 1",
+      "text": "ภาคที่ 1 — ฉบับภาษาไทย",
+      "why": "The bilingual edition's part divider ('Part 1 — Thai edition'). The site is Thai-only, so the divider has no referent and would read as a dangling heading."
+    },
+    {
+      "where": "p11 heading line, p14 heading line",
+      "text": "ជំពូកទី ៥ / … / តារាងផ្គូផ្គងជីនិងដំណាំ (shared)",
+      "why": "The Khmer halves of the two shared-table chapter headings, and the '(shared)' suffix that marks them as printed once for both editions. Both are artefacts of the print layout; ch05/ch06 keep the Thai half only."
+    },
+    {
+      "where": "p12 sub-heading",
+      "text": "5.2 พืชอื่น ๆ",
+      "why": "The second crop table's sub-heading. Its sibling 5.1 is captioned in English and Khmer only, so shipping 5.2 alone would produce a lone numbered heading. Deferred to T-006, which owns both tables and their captions."
+    }
+  ]
+}
