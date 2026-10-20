@@ -1,0 +1,147 @@
+{
+  "id": "straight-fertilizers",
+  "sourcePages": [
+    4
+  ],
+  "rowCount": 7,
+  "rows": [
+    {
+      "id": "urea",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "citations": [
+        "phys"
+      ],
+      "grade": {
+        "n": 46,
+        "p2o5": 0,
+        "k2o": 0
+      },
+      "sulphurPercent": null,
+      "labels": {
+        "th": {
+          "name": "ยูเรีย (Urea, 氮肥)",
+          "grade": "46-0-0",
+          "character": "N สูงสุดและถูกที่สุดต่อหน่วย N ถ้าไม่กลบจะระเหยได้มาก",
+          "useFor": "ปุ๋ยแต่งหน้าข้าว ข้าวโพด อ้อย ผักกินใบ"
+        }
+      }
+    },
+    {
+      "id": "ammonium-sulfate",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "grade": {
+        "n": 21,
+        "p2o5": 0,
+        "k2o": 0
+      },
+      "sulphurPercent": 24,
+      "labels": {
+        "th": {
+          "name": "แอมโมเนียมซัลเฟต",
+          "grade": "21-0-0 (+S 24%)",
+          "character": "มีกำมะถันด้วย ทำให้ดินเป็นกรด",
+          "useFor": "ดินขาด S ดินด่าง"
+        }
+      }
+    },
+    {
+      "id": "dap",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "grade": {
+        "n": 18,
+        "p2o5": 46,
+        "k2o": 0
+      },
+      "sulphurPercent": null,
+      "labels": {
+        "th": {
+          "name": "DAP (磷肥)",
+          "grade": "18-46-0",
+          "character": "ให้ N และ P",
+          "useFor": "ปุ๋ยรองพื้น (นิยมในกัมพูชา)"
+        }
+      }
+    },
+    {
+      "id": "tsp",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "grade": {
+        "n": 0,
+        "p2o5": 46,
+        "k2o": 0
+      },
+      "sulphurPercent": null,
+      "labels": {
+        "th": {
+          "name": "TSP",
+          "grade": "0-46-0",
+          "character": "P สูง",
+          "useFor": "ปุ๋ยรองพื้น/รองก้นหลุม"
+        }
+      }
+    },
+    {
+      "id": "rock-phosphate",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "grade": null,
+      "sulphurPercent": null,
+      "labels": {
+        "th": {
+          "name": "หินฟอสเฟต",
+          "grade": "P ละลายช้า",
+          "character": "เหมาะกับดินกรด",
+          "useFor": "รองก้นหลุมยางพารา ไม้ยืนต้น"
+        }
+      }
+    },
+    {
+      "id": "kcl",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "citations": [
+        "nutrien-ekonomics"
+      ],
+      "grade": {
+        "n": 0,
+        "p2o5": 0,
+        "k2o": 60
+      },
+      "sulphurPercent": null,
+      "labels": {
+        "th": {
+          "name": "KCl (MOP, 钾肥)",
+          "grade": "0-0-60",
+          "character": "ถูกกว่า SOP ประมาณ 40–50% ต่อหน่วย K₂O แต่มีคลอไรด์",
+          "useFor": "ข้าว ข้าวโพด อ้อย มันสำปะหลัง ยางพารา"
+        }
+      }
+    },
+    {
+      "id": "sop",
+      "sourcePage": 4,
+      "country": "NEUTRAL",
+      "citations": [
+        "nutrien-ekonomics"
+      ],
+      "grade": {
+        "n": 0,
+        "p2o5": 0,
+        "k2o": 50
+      },
+      "sulphurPercent": null,
+      "labels": {
+        "th": {
+          "name": "K₂SO₄ (SOP)",
+          "grade": "0-0-50 (+S)",
+          "character": "ไม่มีคลอไรด์ ดัชนีความเค็มต่ำ (46 เทียบกับ 116 ของ KCl)",
+          "useFor": "ยาสูบ มันฝรั่ง ไม้ผลคุณภาพสูง"
+        }
+      }
+    }
+  ]
+}

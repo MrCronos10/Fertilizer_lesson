@@ -1,0 +1,210 @@
+{
+  "id": "glossary",
+  "sourcePages": [
+    14
+  ],
+  "rowCount": 20,
+  "note": "The source prints ไทย / ខ្មែរ / English / 中文. The Khmer column is omitted: that text layer loses subscript consonants and vowel signs, and transcribing it by eye from a page image is not verifiable. T-009 reconciles these terms into CONTEXT.md.",
+  "rows": [
+    {
+      "id": "fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ย",
+        "en": "Fertilizer",
+        "zh": "肥料"
+      }
+    },
+    {
+      "id": "chemical-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยเคมี",
+        "en": "Chemical fertilizer",
+        "zh": "化肥"
+      }
+    },
+    {
+      "id": "organic-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยอินทรีย์",
+        "en": "Organic fertilizer",
+        "zh": "有机肥"
+      }
+    },
+    {
+      "id": "nitrogen-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยไนโตรเจน",
+        "en": "Nitrogen fertilizer",
+        "zh": "氮肥"
+      }
+    },
+    {
+      "id": "phosphate-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยฟอสเฟต",
+        "en": "Phosphate fertilizer",
+        "zh": "磷肥"
+      }
+    },
+    {
+      "id": "potash-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยโพแทช",
+        "en": "Potash fertilizer",
+        "zh": "钾肥"
+      }
+    },
+    {
+      "id": "compound-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยสูตรผสม",
+        "en": "Compound fertilizer",
+        "zh": "复合肥"
+      }
+    },
+    {
+      "id": "applying-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "การใส่ปุ๋ย",
+        "en": "Applying fertilizer",
+        "zh": "施肥"
+      }
+    },
+    {
+      "id": "basal-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยรองพื้น",
+        "en": "Basal fertilizer",
+        "zh": "基肥"
+      }
+    },
+    {
+      "id": "top-dressing",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยแต่งหน้า",
+        "en": "Top dressing",
+        "zh": "追肥"
+      }
+    },
+    {
+      "id": "manure",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยคอก",
+        "en": "Manure",
+        "zh": "粪肥"
+      }
+    },
+    {
+      "id": "compost",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยหมัก",
+        "en": "Compost",
+        "zh": "堆肥"
+      }
+    },
+    {
+      "id": "bio-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยชีวภาพ",
+        "en": "Bio-fertilizer",
+        "zh": "生物肥"
+      }
+    },
+    {
+      "id": "urea",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ยูเรีย",
+        "en": "Urea",
+        "zh": "尿素"
+      }
+    },
+    {
+      "id": "dap",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ไดแอมโมเนียมฟอสเฟต",
+        "en": "DAP",
+        "zh": "磷酸二铵"
+      }
+    },
+    {
+      "id": "slow-release-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยละลายช้า",
+        "en": "Slow-release fertilizer",
+        "zh": "缓释肥"
+      }
+    },
+    {
+      "id": "foliar-fertilizer",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยทางใบ",
+        "en": "Foliar fertilizer",
+        "zh": "叶面肥"
+      }
+    },
+    {
+      "id": "lime-dolomite",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปูน / โดโลไมท์",
+        "en": "Lime / Dolomite",
+        "zh": "石灰 / 白云石"
+      }
+    },
+    {
+      "id": "micronutrient",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "จุลธาตุ",
+        "en": "Micronutrient",
+        "zh": "微量元素"
+      }
+    },
+    {
+      "id": "fertilizer-burn",
+      "sourcePage": 14,
+      "country": "NEUTRAL",
+      "labels": {
+        "th": "ปุ๋ยไหม้",
+        "en": "Fertilizer burn",
+        "zh": "肥害"
+      }
+    }
+  ]
+}

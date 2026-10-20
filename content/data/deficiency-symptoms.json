@@ -1,0 +1,151 @@
+{
+  "id": "deficiency-symptoms",
+  "sourcePages": [
+    3
+  ],
+  "rowCount": 10,
+  "rows": [
+    {
+      "id": "n",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "N"
+      ],
+      "mobility": "mobile",
+      "labels": {
+        "th": {
+          "symptom": "ใบแก่เหลืองซีดทั้งใบ ต้นแคระ"
+        }
+      }
+    },
+    {
+      "id": "p",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "P"
+      ],
+      "mobility": "mobile",
+      "labels": {
+        "th": {
+          "symptom": "ใบเขียวเข้มอมม่วง โตช้า"
+        }
+      }
+    },
+    {
+      "id": "k",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "K"
+      ],
+      "mobility": "mobile",
+      "labels": {
+        "th": {
+          "symptom": "ขอบและปลายใบแก่เหลืองแล้วไหม้ ผลเล็ก"
+        }
+      }
+    },
+    {
+      "id": "mg",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "Mg"
+      ],
+      "mobility": "mobile",
+      "labels": {
+        "th": {
+          "symptom": "ใบแก่เหลืองระหว่างเส้นใบ"
+        }
+      }
+    },
+    {
+      "id": "s",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "S"
+      ],
+      "mobility": "immobile",
+      "labels": {
+        "th": {
+          "symptom": "ใบอ่อนเหลืองทั้งใบ"
+        }
+      }
+    },
+    {
+      "id": "ca",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "Ca"
+      ],
+      "mobility": "immobile",
+      "labels": {
+        "th": {
+          "symptom": "ยอดตาย ผลเน่าที่ก้น"
+        }
+      }
+    },
+    {
+      "id": "fe-mn",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "Fe",
+        "Mn"
+      ],
+      "mobility": "immobile",
+      "labels": {
+        "th": {
+          "symptom": "ใบอ่อนเหลือง เส้นใบเขียวเป็นร่างแห"
+        }
+      }
+    },
+    {
+      "id": "zn",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "Zn"
+      ],
+      "mobility": null,
+      "labels": {
+        "th": {
+          "symptom": "ใบเล็ก ข้อสั้น ยอดเป็นกระจุก"
+        }
+      }
+    },
+    {
+      "id": "b",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "B"
+      ],
+      "mobility": "immobile",
+      "labels": {
+        "th": {
+          "symptom": "ยอดบิด ดอกร่วง ติดผลน้อย"
+        }
+      }
+    },
+    {
+      "id": "cu-mo",
+      "sourcePage": 3,
+      "country": "NEUTRAL",
+      "elements": [
+        "Cu",
+        "Mo"
+      ],
+      "mobility": null,
+      "labels": {
+        "th": {
+          "symptom": "ใบอ่อนซีดเหี่ยว (Cu); ใบแก่เหลือง พืชตระกูลถั่ว/กะหล่ำไวต่อการขาด (Mo)"
+        }
+      }
+    }
+  ]
+}

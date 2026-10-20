@@ -81,6 +81,10 @@ cannot quietly go slack.
 | R13 | Ordered-list numbering dropped, because markdown renumbers it.                                                                                | `1. N บำรุงใบ…` → `1. N บำรุงใบ…` (marker regenerated) |
 | R14 | The quiz's `→` separator dropped, each item split into the `q` and `a` fields of `ch07` frontmatter. Question and answer text unchanged.        | `46-0-0 มีธาตุอะไร? → N อย่างเดียว`             |
 | R15 | Three pieces of source prose deliberately not shipped. Each is listed with its reason in `manifest.json` → `excludedProse`, and a test fails if any loses its justification. | the `ภาคที่ 1` part divider; the Khmer halves of the two shared-table headings; `5.2 พืชอื่น ๆ` |
+| R16 | **(T-006)** Chinese glossary terms NFKC-normalised. The PDF's CJK font emits some glyphs as Kangxi radicals rather than unified ideographs; NFKC maps one onto the other deterministically. Applied to CJK only — NFKC can reorder Thai combining marks. | `⽣物肥` (U+2F63) → `生物肥` (U+751F) |
+| R17 | **(T-006)** Table rows split into typed JSON fields. Numbers are parsed out of the source's strings (`"20–25 kg/rai"` → `{min:20,max:25}` + `unit`). In the crop table the source's own wording is kept verbatim alongside in a `text` field and checked against the page; the other tables keep their Thai labels verbatim instead. | — |
+| R18 | **(T-006)** Page furniture dropped when comparing a table against its page: the per-page citation footer, orphaned link fragments, and a column header repeated as a running header on a continuation page (p13 repeats p12's). | — |
+| R19 | **(T-006)** One crop cell is split by the p12/p13 page break with other columns printed in between. The split is declared in the test, which also asserts the declared fragments rebuild the stored wording exactly. | the vegetable row's basal cell |
 
 Digits were **not** converted: the source uses Arabic numerals throughout its Thai
 edition and so does the site. Units were not converted either — `กก./ไร่` stays
@@ -138,5 +142,79 @@ does not have to be rewritten when they arrive.
 | `other-crops`            | 12–13       | 10   | `ch05.mdx`  |
 | `glossary`               | 14          | 20   | `ch06.mdx`  |
 
-Row counts are the ones recorded in the T-006 acceptance criteria. Extracting the rows
-themselves is T-006; T-005 only reserved their positions.
+Row counts are the ones recorded in the T-006 acceptance criteria and are asserted in
+`lib/data/data.test.ts` against constants that are written out there rather than read
+from the files, so a dropped row cannot hide by also updating the file's `rowCount`.
+
+## Units, and the two places they can kill you (T-006)
+
+**Oxide, never elemental.** The second and third numbers of a grade are percent P₂O₅
+and percent K₂O. Elemental P is ~2.29× smaller and elemental K ~1.20× smaller, so a
+field named `p` holding a P₂O₅ figure is a 2.3× error that looks entirely plausible.
+There is no `p` or `k` key anywhere in `lib/data/types.ts`, and a test walks every key
+of every JSON file looking for one.
+
+**Percent is not kilograms.** `Npk` is a percentage grade with fields `n`/`p2o5`/`k2o`;
+`NpkKgPerHa` is an absolute amount with fields `nKg`/`p2o5Kg`/`k2oKg`. The field names
+differ so the two are **not assignable to each other** — `formatGrade` takes `Npk`, and
+handing it a kg/ha figure is a compile error. A first version used a type alias, which
+a review correctly called documentation rather than enforcement: aliases are
+structurally identical and TypeScript sees no difference. The p11 table prints
+`118-23-0` meaning 118 kg N per hectare; rendering that as a bag grade would tell a
+grower to buy a fertilizer that cannot exist. A runtime check also rejects any
+percentage triple summing above 100%.
+
+## Country tagging (T-006)
+
+Every row carries a `country` of `TH`, `KH` or **`NEUTRAL`**. `NEUTRAL` means the row
+is not country-specific — plant chemistry, a bag grade, a glossary term — rather than
+that its country is unknown; six of the nine tables are neutral throughout, and the
+shared crop table is neutral at row level because the source prints it once for both
+editions.
+
+Provenance therefore lives one level down. Every piece of `Guidance` in the crop table
+carries a `scope`:
+
+| scope | meaning |
+| --- | --- |
+| `TH` / `KH` | the source attributes it to that country, e.g. the cassava cell's literal `TH:` and `KH:` prefixes |
+| `REGIONAL` | the source presents it as regional (CIAT) |
+| `UNSTATED` | the source gives no country at all |
+
+`UNSTATED` exists because of one row. p13 gives the vegetable row a single citation —
+CDRI Working Paper 91, a Cambodian socio-economic survey — and prints no `(TH)` marker,
+unlike the two rice rows. An earlier version tagged that row's advice `TH`, which a
+review rightly called out as asserting a Thai provenance the source never gives.
+
+`lib/data/index.ts` applies the filter in the query functions, and `cropsFor` returns a
+row with `basal` and `topDressing` **removed** from it, so there is no unfiltered array
+sitting one property access from the filtered one. The unfiltered tables are exported
+as `RAW_TABLES`, named so that a component reaching past the queries is visible in
+review.
+
+One consequence is visible and intended: **the vegetable row has no rate a Thai grower
+can act on**, because the source has none. That gap is what T-008 proposes to fill from
+an official source.
+
+## How the numbers are held to the source (T-006)
+
+Row counts and internal consistency are not enough. A first version of
+`lib/data/data.test.ts` checked those and whether each Thai label appeared *somewhere
+on its page* — and a review proved seven corrupting mutations passed all of it,
+including two deficiency symptoms swapped between rows and a rate changed from
+20–25 kg/rai to 200–250 kg/ha. Whole-page containment cannot catch a permutation,
+because every string is still on the page.
+
+The checks are now **anchored**: a row's fields must appear together, in order, within
+the raw lines that row was printed on. Six tables are pinned line by line; p4 and p12
+wrap their cells too badly for that, so straight fertilizers are pinned through their
+printed grade string and crop guidance through its own verbatim wording, with every
+parsed number required to be recoverable from that wording.
+
+Nine deliberately corrupted variants are checked to fail, including an invented
+guidance entry appended to a crop row and a kg/ha supply replaced by a string.
+
+`lib/data/validate.ts` does the structural checking the `as Table<…>` casts cannot: the
+casts accept a deleted field or a string where an object belongs, and `tsc` reports
+nothing. The test suite runs `assertTables()` so the shapes are enforced somewhere
+real.
