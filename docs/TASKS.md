@@ -102,18 +102,33 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 ## P1 — Content pipeline
 
 ### T-005: Extract Thai prose to MDX with page citations
-- Status: todo
+- Status: done
 - Depends on: T-001
 - Goal: Source pages 2–6 become per-chapter MDX with a page citation on every claim and documented cleanup.
 - Acceptance criteria:
-  - [ ] `content/th/ch01..ch07.mdx` with frontmatter: title, goal ID, source pages, citation list
-  - [ ] Spurious intra-word spaces collapsed (`พ . ร . บ .` → `พ.ร.บ.`); digits and units normalized
-  - [ ] `docs/content/SOURCES.md` lists every cleanup rule applied, and maps each extraction to its source file and page
-  - [ ] Zero rewording: a diff against the raw extraction shows only whitespace, digit, and unit changes
-  - [ ] Awkward phrasing collected in `docs/content/THAI-REVIEW.md` for the owner — not silently fixed
-  - [ ] The 6 Thai quiz questions (p6–7) captured verbatim
+  - [x] `content/th/ch01..ch07.mdx` with frontmatter: title, goal ID, source pages, citation list
+  - [x] Spurious intra-word spaces collapsed (`พ . ร . บ .` → `พ.ร.บ.`); digits and units normalized
+  - [x] `docs/content/SOURCES.md` lists every cleanup rule applied, and maps each extraction to its source file and page
+  - [x] Zero rewording: a diff against the raw extraction shows only whitespace, digit, and unit changes
+  - [x] Awkward phrasing collected in `docs/content/THAI-REVIEW.md` for the owner — not silently fixed
+  - [x] The 6 Thai quiz questions (p6–7) captured verbatim
 - Test plan: Unit test asserting every MDX file has non-empty `sourcePages` frontmatter. Manual: owner spot-checks THAI-REVIEW.md and three random paragraphs against the PDF.
 - Notes: Reviewer: yes (content accuracy). D19 governs cleanup limits. Khmer (p7–10) is skipped — it does not extract reliably and v1 is Thai-only.
+- **Verified:** 78 unit tests (44 of them new, in `lib/content.test.ts`), 45 WebKit e2e, clean `npm run check`.
+  - Raw extraction committed to `docs/content/raw/p*.txt` as the audit baseline; `manifest.json` records
+    which lines of which page each chapter was built from.
+  - The zero-rewording criterion is enforced as an **equality diff**, not a search: the test rebuilds each
+    chapter's expected text from the manifest lines and asserts it equals the shipped MDX with whitespace
+    removed. Six deliberately corrupted variants (changed number, number moved to its own line, truncated
+    clause, deleted paragraph, reordered bullets, invented sentence) are asserted to fail it, so the guard
+    cannot go slack. An earlier containment-based version of this test passed all six and was replaced.
+  - Formatting the text layer loses — bold runs and inline citation-pill anchors — was read off the pages
+    rendered at 2× through CoreGraphics, so `<Cite>` sits exactly where the source prints its pill.
+  - Three pieces of source prose are deliberately not shipped; each is justified in `manifest.json` →
+    `excludedProse`, and a test fails if one loses its reason.
+  - Added `yaml@2.8.1` (zero transitive deps) to parse and validate chapter frontmatter.
+- **Open for the owner:** `docs/content/THAI-REVIEW.md` lists 7 phrasing flags and 4 content divergences.
+  Nothing was silently reworded; each needs a ✅ or ✍️ before T-010 renders this content.
 
 ### T-006: Extract the 9 table schemas to locale-neutral JSON
 - Status: todo

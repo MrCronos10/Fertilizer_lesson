@@ -1,0 +1,62 @@
+# Thai phrasing flagged for the owner
+
+The extraction rule is that agronomic meaning is never changed under cover of style
+editing (D19), so nothing in this list has been touched in `content/th/`. These are
+places where the source's Thai is clumsy, regional, or reads like a translation, and
+where a beginner might stumble. Each one is a question for you, not a proposed edit.
+
+Decide each with ✅ (leave as the source has it) or ✍️ (reword — and say how).
+
+**An approved reword is never applied by editing `docs/content/raw/`.** That directory
+is the only surviving evidence of what the PDF actually said; editing it to make a
+reword pass would destroy the audit trail and silently re-bless every future change to
+the same line. An approved reword is recorded as an explicit, justified exception in
+`docs/content/raw/manifest.json`, alongside the three entries already in
+`excludedProse`, so the deviation stays visible in the diff forever.
+
+## Reads like English, not Thai
+
+| #   | Where               | Source text                             | Why it is flagged                                                                                                                                                      |
+| --- | ------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `ch04` สิ่งแวดล้อม   | `สาหร่ายบลูม`                            | A transliteration of "algal bloom". Thai normally says `สาหร่ายสะพรั่ง` or, colloquially, `น้ำเขียว`. A home gardener is unlikely to recognise `บลูม`.                        |
+| 2   | `ch02` 2.2 ข้อดี     | `ออกฤทธิ์เร็ว`                            | `ออกฤทธิ์` is pharmacological — it is what a drug or a poison does. For fertilizer, `ให้ผลเร็ว` or `พืชตอบสนองเร็ว` is the ordinary phrasing.                                  |
+| 3   | `ch02` 2.5          | `ข้อดีคือใส่ครั้งเดียว N สูญเสียน้อย`        | Three clauses stacked with no connective. Grammatical, but reads as notes rather than prose.                                                                             |
+
+## Terminology that may not land with beginners
+
+| #   | Where             | Source text          | Why it is flagged                                                                                                                                                       |
+| --- | ----------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 4   | `ch02` 2.3 heading | `ปุ๋ยแม่ปุ๋ย N-P-K`     | Redundant. The standard term is just `แม่ปุ๋ย`. `ปุ๋ยแม่ปุ๋ย` reads as "fertilizer mother-fertilizer".                                                                       |
+| 5   | `ch04` ความปลอดภัย | `เก็บปุ๋ยในที่แห้งบนแคร่` | `แคร่` is a raised bamboo or wooden platform — regional, and not obviously the same idea as a pallet to a reader outside the farming north-east.                           |
+| 6   | `ch02` 2.1          | `สารเร่ง พด.`         | An LDD product code with no expansion anywhere in the book. A beginner has no way to decode `พด.`, and unlike `แคร่` there is not even a guessable everyday meaning.        |
+| 7   | `ch04` ความผิดพลาด  | `เอกสาร MSU Extension EB0209` | A bare untranslated English document ID and unexpanded acronym, carrying the single most actionable number in the chapter (N loss of 30–44%). The reader most likely to act on it is the least likely to parse it. |
+
+## Content divergences worth your eye
+
+These are not phrasing problems. They are places where the source is internally
+inconsistent or where a category is represented by a single example, which matters more
+for the data extraction in T-006 than for the prose.
+
+| #   | Where                  | What                                                                                                                                                                                 |
+| --- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 8   | `ch01` nutrient groups | The Thai micronutrient row lists `Fe, Zn, B, Mn, Cu, Mo, Cl, Ni`; the Khmer edition of the same table (p7) omits `Cl` and `Ni`. The Thai edition is what v1 ships; flagging the divergence. |
+| 9   | `ch01` mobility rule   | The Thai immobile list is `(Fe, Ca, B, S, Mn)`; the Khmer edition omits `Mn`. Same resolution — Thai wins — but the deficiency explorer (T-019) is built on this rule, so it should be deliberate. |
+| 10  | `ch02` organic table   | `ปุ๋ยพืชสด (ปอเทือง)` gives one species, sunn hemp, as the NPK figure for the whole green-manure category. The number is the source's; the generalisation is the source's too.            |
+| 11  | `ch02` 2.8             | `ปูนขาว … ห้ามใส่พร้อมยูเรีย` is stated without a reason. It is correct (ammonia volatilisation), but a beginner reading a bare prohibition is likely to ignore it.                         |
+
+## Not flagged, and why
+
+For the record, these were considered and left alone:
+
+- `ฝนใกล้ตก` (`ch02` 2.6) — colloquial, but unambiguous and natural.
+- `ยอดเป็นกระจุก` (`ch01` Zn row) — the standard Thai description of rosetting.
+- `กระสอบ` for a fertilizer bag (`ch03`) — correct and universal.
+- Arabic rather than Thai numerals throughout — the source's own choice, and the one
+  a reader comparing the page against a real bag label needs.
+
+## Deferred to the T-006 table review
+
+- `หน้าที่ (จำง่าย)` — the third column header of the `nutrient-groups` table. Clipped:
+  it means "function, in an easy-to-remember form", but as a two-word parenthetical it
+  is ambiguous about what exactly is easy to remember. The table rows are not extracted
+  yet, so this belongs to T-006's review rather than this one.
