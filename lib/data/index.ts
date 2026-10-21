@@ -151,7 +151,22 @@ export interface CropMatch {
   readonly topDressing: readonly Guidance[];
 }
 
+/**
+ * Crops for the crop matcher: guidance the audience may see **and** may act
+ * on. Non-actionable guidance (commercial-only backing, no country
+ * attribution) is dropped here, so no caller can surface it as a number by
+ * forgetting to check a flag. Use `cropsForReading` for descriptive text.
+ */
 export function cropsFor(locale: string): readonly CropMatch[] {
+  return cropsForReading(locale).map((crop) => ({
+    ...crop,
+    basal: crop.basal.filter((g) => g.actionable),
+    topDressing: crop.topDressing.filter((g) => g.actionable),
+  }));
+}
+
+/** Everything the audience may *read* about a crop, actionable or not (D9). */
+export function cropsForReading(locale: string): readonly CropMatch[] {
   const audience = audienceFor(locale);
   return visibleToAudience(RAW_TABLES["other-crops"].rows, audience).map((row) => {
     const { basal, topDressing, ...rest } = row;

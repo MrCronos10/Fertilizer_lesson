@@ -63,11 +63,18 @@ ones show it in **young** leaves first. This is the spine of the deficiency chap
 best-supported idea in the source (p3, 10-row symptom table).
 
 ### Source Tier
-The authority band assigned to each cited domain: government / research / international
-(doa.go.th, ldd.go.th, ricethailand.go.th, irri.org, fao) versus commercial / blog (retail sites,
-blogspot, wordpress, product-label photographs). The source cites 38 domains with no bibliography
-and mixes the two freely, so we assign tiers ourselves and display them. A Rate backed only by a
-low tier is shown as descriptive text, never as an actionable number.
+The authority band assigned to each cited domain, one of three: **official** (a government or
+intergovernmental body — doa.go.th, ldd.go.th, ricethailand.go.th, FAO), **research** (a university,
+research institute or peer-reviewed journal — irri.org, CIAT, Kasetsart), or **commercial** (everything
+else: company, retailer, blog, news, or an inventor's claim). The source's 67 inline links name 37
+domains with no bibliography and mixes the tiers freely, so we assign them ourselves and display them.
+
+### Actionable
+A Rate is *actionable* when it may feed the calculator or the crop matcher: it is attributed to a
+country the site serves, and at least one source behind it is not merely **commercial**. Anything else
+is shown as descriptive text only. This is a strongest-link rule — one official or research source is
+enough — and not a count: three commercial
+sources do not add up to one official one.
 
 ### Addition
 A proposed fact that is *not* in the source pamphlet, recorded in `docs/content/ADDITIONS.md` with

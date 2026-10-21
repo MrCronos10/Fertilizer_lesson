@@ -1,0 +1,288 @@
+{
+  "domains": {
+    "apkgroup": {
+      "name": "apkgroup.net",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "bansuanporpeang": {
+      "name": "bansuanporpeang.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "blogspot": {
+      "name": "nsfcrc-news.blogspot.com",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Blog; names Nakhon Sawan FCRC in its subdomain but is not a government domain"
+    },
+    "cambridge": {
+      "name": "Experimental Agriculture, Cambridge University Press",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "Peer-reviewed journal"
+    },
+    "cgiar": {
+      "name": "CIAT library (CGIAR)",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "International agricultural research centre; ciat-library.ciat.cgiar.org"
+    },
+    "decachem": {
+      "name": "Decachem",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; a /potassium-sulphate-premium-choice page suggests a product page."
+    },
+    "doa": {
+      "name": "Department of Agriculture (Thailand)",
+      "tier": "official",
+      "basis": "domain",
+      "rationale": "Thai government agency; doa.go.th"
+    },
+    "doae": {
+      "name": "Department of Agricultural Extension (Thailand)",
+      "tier": "official",
+      "basis": "domain",
+      "rationale": "Thai government agency; doae.go.th"
+    },
+    "fao": {
+      "name": "FAO, FAOLEX legislation database",
+      "tier": "official",
+      "basis": "domain",
+      "rationale": "FAOLEX hosts this document, which was read in full: it is TAS 4401-2008, the Thai Agricultural Standard for Good Agricultural Practices for Rice, issued by the National Bureau of Agricultural Commodity and Food Standards, Ministry of Agriculture and Cooperatives (unofficial English translation)"
+    },
+    "forwardplant": {
+      "name": "forwardplant.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "garden": {
+      "name": "garden.org",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "groworganic": {
+      "name": "groworganic.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; /blogs/ path suggests a retailer blog."
+    },
+    "growplants": {
+      "name": "growplants.org",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "irri": {
+      "name": "International Rice Research Institute, Rice Knowledge Bank",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "International research institute; irri.org"
+    },
+    "khaosod": {
+      "name": "Khaosod",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Thai news site (khaosod.co.th); reports on agriculture but is not a primary agronomic source"
+    },
+    "kpluss": {
+      "name": "K+S",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Fertilizer manufacturer"
+    },
+    "ku": {
+      "name": "Kasetsart University",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "Kasetsart University host (ku.ac.th); the host decides the tier, the poster format is read from the URL path"
+    },
+    "ldd": {
+      "name": "Land Development Department (Thailand)",
+      "tier": "official",
+      "basis": "domain",
+      "rationale": "Thai government agency; ldd.go.th"
+    },
+    "mdpi": {
+      "name": "Agronomy, MDPI",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "Peer-reviewed journal"
+    },
+    "montana": {
+      "name": "Montana State University Extension",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "Montana State University host (montana.edu); the host decides the tier, the extension format is read from the URL path"
+    },
+    "naikham": {
+      "name": "naikham.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; blog format inferred from the dated URL path."
+    },
+    "nutrien-ekonomics": {
+      "name": "Nutrien Ekonomics",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Fertilizer company publication"
+    },
+    "oae": {
+      "name": "Office of Agricultural Economics (Thailand)",
+      "tier": "official",
+      "basis": "domain",
+      "rationale": "Thai government agency; oae.go.th"
+    },
+    "phys": {
+      "name": "Phys.org",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Science news aggregator, not a primary source"
+    },
+    "raithep": {
+      "name": "raithep.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "rakbankerd": {
+      "name": "rakbankerd.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "ricethailand": {
+      "name": "Rice Department, Rice Knowledge Bank (Thailand)",
+      "tier": "official",
+      "basis": "domain",
+      "rationale": "Thai government agency; rkb.ricethailand.go.th"
+    },
+    "sotus": {
+      "name": "garden.sotus.co.th",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; 'company gardening page' is inferred from the host name."
+    },
+    "tci-thaijo": {
+      "name": "Thai Journals Online (YRU journal)",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Thai Journals Online is a hosting platform for thousands of journals of any quality; the cell calls this only a 'YRU journal review' and the URL path is yru_human, a humanities journal. Treated as commercial until the article itself is checked."
+    },
+    "thmeythmey25": {
+      "name": "thmeythmey25.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL only."
+    },
+    "tratruamkaset": {
+      "name": "tratruamkaset.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; publisher type inferred from the URL path only."
+    },
+    "uga": {
+      "name": "University of Georgia, CAES",
+      "tier": "research",
+      "basis": "domain",
+      "rationale": "University of Georgia host (uga.edu); the host decides the tier, the extension format is read from the URL path"
+    },
+    "uspto": {
+      "name": "US Patent and Trademark Office",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "A patent records an inventor's claim, not independent agronomic evidence"
+    },
+    "vietnamplus": {
+      "name": "VietnamPlus",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "News agency site"
+    },
+    "wordpress": {
+      "name": "choukhmer.wordpress.com",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Personal blog hosted on wordpress.com; not a primary agronomic source"
+    },
+    "yara": {
+      "name": "Yara Thailand",
+      "tier": "commercial",
+      "basis": "domain",
+      "rationale": "Fertilizer manufacturer; product datasheet"
+    },
+    "yvpgroup": {
+      "name": "yvpgroup.com",
+      "tier": "commercial",
+      "basis": "inferred-from-url",
+      "rationale": "Not a government, university or journal domain; a /product/ path suggests a product page."
+    }
+  },
+  "namedOnly": [
+    {
+      "id": "tas-4401-2008",
+      "name": "TAS 4401-2008 (Thai Agricultural Standard, rice)",
+      "tier": "official",
+      "url": null,
+      "citedFor": [
+        "rice-clay"
+      ],
+      "note": "Named in the p12 source cell with no link or pill.",
+      "liftsActionability": true
+    },
+    {
+      "id": "rice-dept",
+      "name": "Rice Department",
+      "tier": "official",
+      "url": null,
+      "citedFor": [
+        "rice-clay"
+      ],
+      "note": "Named in the p12 source cell with no link or pill.",
+      "liftsActionability": true
+    },
+    {
+      "id": "cdri-wp91",
+      "name": "CDRI Working Paper 91 (CSES 2007-2011 data)",
+      "tier": "research",
+      "url": null,
+      "citedFor": [
+        "vegetables"
+      ],
+      "note": "Cambodian survey; named on p12-13 with no link or pill.",
+      "liftsActionability": true
+    },
+    {
+      "id": "nakhon-sawan-fcrc",
+      "name": "Nakhon Sawan Field Crops Research Center",
+      "tier": "official",
+      "url": null,
+      "citedFor": [
+        "cassava"
+      ],
+      "note": "Named in the p12 cassava source cell beside a pill that belongs to the CIAT line; no link or pill of its own.",
+      "liftsActionability": false
+    },
+    {
+      "id": "oae",
+      "name": "Office of Agricultural Economics",
+      "tier": "official",
+      "url": null,
+      "citedFor": [
+        "cassava"
+      ],
+      "note": "Named in the p12 cassava source cell beside a pill that belongs to the CIAT line; no link or pill of its own.",
+      "liftsActionability": false
+    }
+  ],
+  "tiers": {
+    "official": "Government or intergovernmental body, or primary legal/standard text",
+    "research": "University, research institute, or peer-reviewed journal",
+    "commercial": "Everything else: company, retailer, blog, news, hobbyist, or an inventor's claim"
+  }
+}

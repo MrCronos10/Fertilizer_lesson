@@ -1,3 +1,5 @@
+import { backingFor, isActionable } from "../sources";
+import type { Guidance } from "./types";
 import { RAW_TABLES, TABLE_IDS, type TableId } from "./index";
 
 /**
@@ -105,6 +107,23 @@ function checkGuidance(into: Problem[], where: string, value: unknown): void {
   }
   if (!SCOPES.has(String(value["scope"]))) into.push(`${where}.scope: ${String(value["scope"])}`);
   checkString(into, `${where}.text`, value["text"]);
+  if (typeof value["actionable"] !== "boolean") into.push(`${where}.actionable: expected a boolean`);
+  for (const key of ["citations", "namedSources"] as const) {
+    const list = value[key];
+    if (!Array.isArray(list) || list.some((x) => typeof x !== "string"))
+      into.push(`${where}.${key}: expected a list of strings`);
+  }
+  // Every guidance must resolve to at least one source, and the stored flag must
+  // agree with the rule — otherwise a hand-edited flag could grant actionability
+  // to a rate the bibliography does not support.
+  try {
+    const guidance = value as unknown as Guidance;
+    if (backingFor(guidance).length === 0) into.push(`${where}: resolves to no source at all`);
+    else if (guidance.actionable !== isActionable(guidance))
+      into.push(`${where}.actionable is ${String(guidance.actionable)} but the rule says ${String(isActionable(guidance))}`);
+  } catch (error) {
+    into.push(`${where}: ${(error as Error).message}`);
+  }
 
   const grades = value["grades"];
   if (!Array.isArray(grades)) into.push(`${where}.grades: expected an array`);

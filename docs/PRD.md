@@ -79,7 +79,7 @@ These override visual polish, schedule, and feature completeness.
 
 1. **No invented agronomy.** No fact, formula, rate, or number appears on the site unless it
    traces to a source page recorded in `docs/content/SOURCES.md`.
-2. **Source tiering is visible.** The source cites 38 domains with no bibliography, mixing
+2. **Source tiering is visible.** The source's 67 inline links name 37 domains (plus 5 hidden sources) with no bibliography, mixing
    doa.go.th / ldd.go.th / ricethailand.go.th / irri.org with blogspot, wordpress, and fertilizer
    bag photos. We build the bibliography it lacks, tag every domain by tier, and show the tier.
    Low-tier material may appear as descriptive text but never as a number a farmer would act on.
