@@ -333,21 +333,30 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 - **Open for the owner:** `docs/content/THAI-REVIEW.md` U16 and U17. `ตัวเลขที่ใช้ในบทนี้` says "numbers", but chapter 1's three items are a statute year and two rules, so a wider heading may fit better.
 
 ### T-013: Calculator logic (pure, no UI)
-- Status: todo
+- Status: done
 - Depends on: T-006
 - Goal: A tested pure function: target nutrient + grade → kg of product, with the worked arithmetic.
 - Acceptance criteria:
-  - [ ] `kg product = target nutrient × 100 ÷ %nutrient`, oxide-only, matching the source's form
-  - [ ] Reproduces the source's worked example exactly: N 10 kg/rai from urea 46-0-0 → ≈ 22 kg
-  - [ ] Reproduces the source's bag example: 50 kg of 16-20-0 contains 8 kg N and 10 kg P₂O₅
-  - [ ] Rai ↔ hectare conversion using the source's constants (1 ไร่ = 1,600 m², 1 ha = 6.25 ไร่)
-  - [ ] Returns the intermediate steps for display, not just the answer
-  - [ ] Rejects a 0% nutrient grade rather than dividing by zero; rejects negative targets
-  - [ ] **No elemental↔oxide conversion exists in the code at all**
-  - [ ] One unit test per crop row in the source table, asserting the function agrees with the published rate
-  - [ ] **(carried from T-007)** A test asserts no `actionable: false` Rate is reachable from the calculator's data queries. T-007 asserted this for `cropsFor` only, because the calculator did not yet exist. The per-crop suite above covers actionable crops only, so sugarcane, mango and pre-tapping rubber are expected to be absent from it by design.
+  - [x] `kg product = target nutrient × 100 ÷ %nutrient`, oxide-only, matching the source's form
+  - [x] Reproduces the source's worked example exactly: N 10 kg/rai from urea 46-0-0 → ≈ 22 kg
+  - [x] Reproduces the source's bag example: 50 kg of 16-20-0 contains 8 kg N and 10 kg P₂O₅
+  - [x] Rai ↔ hectare conversion using the source's constants (1 ไร่ = 1,600 m², 1 ha = 6.25 ไร่)
+  - [x] Returns the intermediate steps for display, not just the answer
+  - [x] Rejects a 0% nutrient grade rather than dividing by zero; rejects negative targets
+  - [x] **No elemental↔oxide conversion exists in the code at all**
+  - [x] One unit test per crop row in the source table, asserting the function agrees with the published rate
+  - [x] **(carried from T-007)** A test asserts no `actionable: false` Rate is reachable from the calculator's data queries. T-007 asserted this for `cropsFor` only, because the calculator did not yet exist. The per-crop suite above covers actionable crops only, so sugarcane, mango and pre-tapping rubber are expected to be absent from it by design.
 - Test plan: Vitest, including the two source examples as exact-value tests, the division-by-zero and negative cases, and the per-crop suite.
 - Notes: Reviewer: yes (calculator). This is the highest-consequence code in the project — a bug here hands a farmer a wrong dose (D10).
+- **Verified:** typecheck, lint, 604 unit tests and the production build green; the 129 WebKit e2e still pass (no UI changed). Written test-first, then a fresh calculator reviewer attacked it.
+  - **`lib/calculator.ts`** (pure, no Thai, no throws): `productFor` is `target × 100 ÷ %nutrient` and returns the steps as data (`multiply`, `divide`, `round`) so T-014 can render them in the source's own form. `nutrientsInBag`, rai↔hectare and kg/rai↔kg/ha use the pamphlet's 1,600 m² and 6.25. Failures are codes (`nutrient-unknown`, `target-invalid`, `grade-invalid`, `nutrient-zero`, `result-invalid`, `bag-invalid`) in a fixed, tested order. Both source examples are exact-value tests (≈22 kg; 8 kg N and 10 kg P₂O₅), and the reviewer re-read PDF p6 to confirm the formula, both examples and both constants.
+  - **No elemental↔oxide conversion exists:** the nutrient type is only `n | p2o5 | k2o`; a scan with number boundaries rejects every common conversion factor in the calculator's files, and a whole-grid test asserts the result equals `target × 100 ÷ percent` *exactly*, so a factor hidden anywhere in the path changes a number and fails.
+  - **`lib/calculator-data.ts`** is the only door from the crop table: it reads `cropsFor` (so non-actionable and Cambodian guidance are already gone), then keeps only per-area product rates. That yields 9 entries (rice clay and sandy basal grades at 20–25 kg/rai, urea 5–10 kg/rai on both, and cassava's CIAT line converted 500–600 kg/ha → 80–96 kg/rai). All 10 table rows are accounted for: rice ×2, cassava have per-grade tests with hand-computed nutrient supply (the reviewer recomputed every number); maize (grades, no rate), durian (per tree), sugarcane, mango, both rubber rows and vegetables are asserted absent.
+  - **Review findings fixed:** `-0` passed validation and came out as `-0` (a UI would print "-0 kg"); a `null` grade threw instead of `grade-invalid`; `nutrientsInBag` returned `Infinity` with `ok: true` on overflow; the unknown-nutrient guard was untested because `ok === false` also held by accident; the factor scan missed `0.83;`, `2.3`, `1.2` and friends; the "traces to actionable guidance" check matched on wording alone.
+  - **Mutation-tested:** 24 corruptions before the review and 13 after, plus the realistic `in`-instead-of-`includes` prototype-key bug; all fail except two equivalent mutants that were removed rather than kept (a redundant `p ≤ 100` check and a redundant `-0` clean). A type-level corruption (adding `"p"` to the nutrient type) is caught by `tsc`, not vitest.
+  - **Rounding rule, mine, not the source's:** whole kg like the source's "≈ 22", except under 1 kg, which keeps one significant digit so a real dose is never shown as 0. A zero target is allowed and answers 0 kg (the criterion rejects only negative targets).
+  - **Not capped:** an absurdly small percentage (0.0001%) gives a huge but finite product. The source gives no plausible range, so I invented none; T-014's input validation is the place to decide.
+- **Open for the owner — please decide:** **cassava's CIAT regional rate is in the calculator's data.** It is 15-15-15 at 80–96 kg/rai, about 2–3× the Thai figure on the same row (25–50 kg/rai), which the site correctly refuses because only commercial sources back it. It reaches the calculator because T-007 kept the CIAT line actionable (REGIONAL scope, one `cgiar` citation). The reviewer and I both think a Thai grower's calculator should not offer it. Options: (a) leave it, (b) drop `REGIONAL` from `calculatorRates` (one line plus one test), or (c) keep it but have T-014 label it as regional guidance. I have not changed it, since T-007's decision was yours.
 
 ### T-014: Calculator UI
 - Status: todo
