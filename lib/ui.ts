@@ -16,6 +16,17 @@ export const UI_KEYS = [
   "chapterNav",
   "previousChapter",
   "nextChapter",
+  "sources",
+  "jumpToSources",
+  "tierLabel",
+  "tierOfficial",
+  "tierResearch",
+  "tierCommercial",
+  "pamphletPages",
+  "unnamedSources",
+  "noLink",
+  /** The source's own p3 sentence, not new UI Thai; `lib/citations.test.ts` pins it to the raw page. */
+  "soilTestNote",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

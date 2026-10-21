@@ -286,17 +286,30 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - No iPad link yet: previews still need the two Vercel dashboard actions (T-003).
 
 ### T-011: Citation UI, ที่มาของข้อมูล section, soil-test note
-- Status: todo
+- Status: done
 - Depends on: T-007, T-010
 - Goal: The reusable components that make every number traceable on screen.
 - Acceptance criteria:
-  - [ ] An inline citation component linking a claim to its source entry and showing its tier badge
-  - [ ] A `ที่มาของข้อมูล` section rendered at the end of every chapter, reachable in one tap from anywhere in the chapter
-  - [ ] Every displayed Rate carries the visible soil-test / starting-point note
-  - [ ] `commercial`-tier citations are visually distinct from `official` / `research`
-  - [ ] Tier badges are not colour-only (they carry text or shape), and are announced by VoiceOver
+  - [x] An inline citation component linking a claim to its source entry and showing its tier badge
+  - [x] A `ที่มาของข้อมูล` section rendered at the end of every chapter, reachable in one tap from anywhere in the chapter
+  - [x] Every displayed Rate carries the visible soil-test / starting-point note
+  - [x] `commercial`-tier citations are visually distinct from `official` / `research`
+  - [x] Tier badges are not colour-only (they carry text or shape), and are announced by VoiceOver
 - Test plan: e2e asserting every chapter route contains a `ที่มาของข้อมูล` heading and at least one citation. Contrast check on badges in light and dark. VoiceOver spot-check on iPad.
 - Notes: Reviewer: yes (accessibility + content accuracy). This component is the PRD's §7 integrity rules made visible.
+- **Verified:** typecheck, lint, 508 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (run three times over against a fresh `next start` to rule out flakes). A fresh accessibility + content reviewer then found real problems; the ones that held up are fixed.
+  - **Zero client JS added.** Everything is a server component, so the 180 KB budget is untouched (the budget test still passes).
+  - Inline `<Cite>` shows the source name and a tier badge and links to its entry in the chapter's `ที่มาของข้อมูล` section. The tier is read from `sources.json`; an unknown marker fails the build. Overflow pills print a count (`+2`, `+3`) and never invent names.
+  - **Tier is text + shape + border, not colour:** official ◆, research ●, commercial ▲ (dashed, warm). VoiceOver hears "ระดับแหล่งที่มา: …" before the tier; the shape is `aria-hidden`.
+  - **`RateBlock` is the only way to show a Rate** and always carries the soil-test note. No rate renders yet (tables arrive in T-012/T-019/T-020), so this is guaranteed by construction and a test, but not yet seen on a real page.
+  - The note's sentence is the pamphlet's own p3 wording, pinned character-for-character to the raw page.
+  - **Review findings fixed:** the sticky "jump to sources" bar covered anchor targets and focused links (now `scroll-padding-top`, with an e2e that a clicked citation lands below it); inline citations read as a bare "doa" (now prefixed with `ที่มาของข้อมูล`, underlined so they aren't colour-only); the soil-note test would have passed a truncated sentence; nothing checked that inline citations are listed in the section or that the list has no duplicates; the `+2`/`+3` rendering, the shape mapping and the hidden-label position were unguarded; page ranges would have hidden a gap. Nine unit corruptions plus the earlier eight are each verified to fail.
+  - **Deviation from the test plan:** ch06 (glossary) and ch07 (summary and quiz) have **no citations in the source**, so they show the heading and the source page only. The test plan's "at least one citation on every chapter" cannot be met without inventing one. Chapters 1–5 are asserted to cite.
+- **Open for the owner:**
+  - **ch05 lists sources for a table the site hides.** `cambridge` is cited only on p11 and `irri` mostly on p9–11, which looks like the Cambodian rice table (D11). They still appear in ch05's sources list. I did not filter them because I cannot tell from the data which cite backs which table. Say whether to drop them, or whether T-020 should decide.
+  - **The soil-test sentence (U15 in `THAI-REVIEW.md`):** the wording is the source's, but its original context is "yellow leaves can have other causes, so test the soil". Keep it on every rate, or give me other wording.
+  - New UI Thai U6–U14 (tier names and labels) in `docs/content/THAI-REVIEW.md` need ✅/✍️. `เชิงพาณิชย์` is the one I'm least sure of, since it also covers blogs and news.
+  - Not done here, by design: a VoiceOver pass on a real iPad (T-025), and tables (T-012).
 
 ### T-012: Chapter 1 — what fertilizer is, N/P/K, nutrient groups (G1)
 - Status: todo
