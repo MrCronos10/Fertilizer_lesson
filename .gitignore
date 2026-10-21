@@ -42,3 +42,6 @@ Thumbs.db
 !.vscode/extensions.json
 *.swp
 .env*
+
+# Vitest's cache
+.vitest/
