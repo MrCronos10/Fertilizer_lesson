@@ -699,3 +699,45 @@ main:focus {
 .source-table .grade {
   white-space: nowrap;
 }
+
+/* Crop matcher (T-020). Reuses .def-choice / .def-option for the radio group. */
+.crop-matcher {
+  display: grid;
+  gap: 1rem;
+}
+.crop-panel .panel {
+  display: grid;
+  gap: 1rem;
+}
+.crop-row,
+.crop-stage {
+  display: grid;
+  gap: 0.5rem;
+}
+.crop-name,
+.crop-row h4,
+.crop-stage h5 {
+  margin: 0;
+}
+.crop-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.crop-item {
+  display: grid;
+  gap: 0.25rem;
+}
+.crop-item[data-actionable="false"] .crop-text {
+  color: var(--muted);
+}
+.crop-figures,
+.crop-text,
+.crop-sources {
+  margin: 0;
+}
+.crop-source {
+  display: inline-block;
+  margin-inline-end: 0.75rem;
+}

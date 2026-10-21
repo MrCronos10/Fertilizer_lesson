@@ -75,6 +75,13 @@ export const UI_KEYS = [
   "tableStraightCaption",
   "tableCompoundCaption",
   "tableConditionersCaption",
+  /** The crop matcher (T-020). `cropBasal`, `cropTopDressing` and `cropRate` are the pamphlet's own words (p5, p3); pinned to the raw pages. */
+  "cropLegend",
+  "cropBasal",
+  "cropTopDressing",
+  "cropRate",
+  "cropNoReliable",
+  "cropDescriptiveHeading",
   /** The deficiency explorer (T-018). `defOld`, `defYoung` and the two rules are the source's own words. */
   "defLegend",
   "defOld",
