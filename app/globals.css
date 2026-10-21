@@ -606,3 +606,23 @@ main:focus {
   display: grid;
   gap: 0.5rem;
 }
+
+/* 3D island (T-017). The box is sized here, not by the canvas, so layout does not
+   jump when WebGL starts or is unavailable. */
+.scene3d {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 70dvh;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--soft);
+  overflow: hidden;
+  /* Vertical swipes still scroll the page; a scene that wants a vertical drag must say so itself. */
+  touch-action: pan-y;
+}
+.scene3d-fallback {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--soft);
+}

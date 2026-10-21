@@ -432,18 +432,27 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 ## P3 — Breadth and interactives
 
 ### T-017: 3D foundation — R3F island, one-context discipline, WebGL fallback
-- Status: todo
+- Status: done
 - Depends on: T-016
 - Goal: The 3D substrate: a client island that never leaks a WebGL context and degrades gracefully.
 - Acceptance criteria:
-  - [ ] React Three Fiber island loaded only on routes that need it; three.js absent from all other route bundles
-  - [ ] DPR capped at 2
-  - [ ] **Exactly one WebGL context alive at a time**, explicitly disposed on unmount/route change — verified, not assumed
-  - [ ] When WebGL is unavailable, a static fallback renders and the lesson text remains fully readable
-  - [ ] `prefers-reduced-motion` disables idle animation
-  - [ ] 3D route ≤ 600 KB gzipped total
+  - [x] React Three Fiber island loaded only on routes that need it; three.js absent from all other route bundles
+  - [x] DPR capped at 2
+  - [x] **Exactly one WebGL context alive at a time**, explicitly disposed on unmount/route change — verified, not assumed
+  - [x] When WebGL is unavailable, a static fallback renders and the lesson text remains fully readable
+  - [x] `prefers-reduced-motion` disables idle animation
+  - [x] 3D route ≤ 600 KB gzipped total
 - Test plan: e2e navigating in and out of the 3D route repeatedly, asserting context count stays at 1 and memory does not climb. A test with WebGL disabled asserting the fallback and the text. Bundle-size assertion on both 3D and non-3D routes.
 - Notes: Reviewer: yes. iPad Safari silently reloads pages under memory pressure — the disposal rule is the single most important line in the performance budget (D16). The prior art never disposed.
+- **Verified:** typecheck, lint, 696 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (309 tests), four full-suite runs in a row after the last fix. Built on the owner's explicit instruction to **skip the T-016 gate** ("skip the gate and start T-017"); any problem the iPad review finds will be fixed in code that now sits on top of the earlier work. A fresh reviewer read the foundation; its findings are fixed or carried to T-018 below.
+  - **What it is:** `components/Scene3D.tsx` (lazy `next/dynamic`, `ssr:false`) → `components/Scene3DIsland.tsx` (the only place a WebGL context is created) with `lib/webgl.ts` (`MAX_DPR = 2`, a probe that releases its own context). Procedural placeholder `components/DemoScene.tsx` (an icosahedron, no assets) is shown only on two internal fixture routes, `/specimen-3d` and `/specimen-3d-b` (noindex, English sample text, like `/specimen`). No lesson page uses 3D yet; T-018 mounts the real scene and the fixtures can go.
+  - **Found by testing, not assumed:** with `cacheComponents` Next keeps a visited route **mounted but hidden** (React `<Activity>`), so the canvas and its WebGL context survived navigating away — the exact leak D16 forbids. Fix: the island's route-active subscription is torn down when the route is hidden, which drops the `<Canvas>` and releases the context.
+  - **Found by repeated full-suite runs:** React re-renders a hidden tree at low priority, so under load the old canvas lingered while the next route mounted (two live contexts, about 3 failures in 5 runs). Fix: the same cleanup now calls `forceContextLoss()` on the renderer synchronously. Four full runs in a row then passed. **This synchronous release has no deterministic test** — the race only appears under CPU load — so removing that one line would not fail a quiet run.
+  - **Proven by e2e (all three viewports):** exactly one live context on the route and the probe's released; 6 leave/return laps never leave one alive off the route or two on it; 4 round trips between two 3D routes never have two contexts alive at once (measured at the moment each context is created); no WebGL → static fallback plus readable text; the browser taking the context back → fallback replaces the dead canvas; the probe passing but the real canvas failing → fallback, page survives (error boundary); idle animation runs by default and stops under `prefers-reduced-motion` (toggled at runtime), with a still first frame; a 3x display gets at most a 2x drawing buffer; the 3D route is ≤ 600 KB gzipped JS and does contain three.js (control); `WebGLRenderer` is absent from `/th`, ch01–ch03 and `/specimen`; the existing text-route ≤ 180 KB test still passes.
+  - **Mutation-tested:** no release on hide, uncapped DPR, ignoring reduced motion, probe context not released, no fallback, no error boundary, no context-lost listener, no `isConnected`-style guard on the loss event — each fails a named test.
+  - **Reviewer's findings:** fixed — dead `cappedDpr` removed, error boundary, context-lost fallback, `touch-action: pan-y` (was `none`, a one-finger scroll trap), same-size loading placeholder, 3D→3D overlap proven. `70vh` replaced by `70dvh` (the design-system guard caught it).
+  - **Memory is only a proxy:** "memory does not climb" is checked as live contexts and rendered canvases staying flat across laps; WebKit under Playwright exposes no heap reading. A real-iPad check of Safari reloads under memory pressure still needs a person.
+- **Carried to T-018 (reviewer):** (1) the text alternative — the p3 table — must be **server-rendered as a sibling** of the island, not passed as `fallback`: the island is client-only, so with JS off, while the chunk loads, or if the chunk fails to fetch, only the placeholder shows. (2) `role="img"` makes children presentational: selectable leaf regions must be DOM buttons **outside** the island, and the current selection should be announced by a live region outside it. (3) Gestures: `touch-action: pan-y` is set; a vertical drag gesture needs its own plan. (4) Keyboard users cannot rotate the plant; acceptable only if the table is the real alternative. (5) `Scene3D`'s `children(animate)` render prop is thin: T-018 will need `invalidate` for damped controls (reachable through `useThree`) and selection callbacks.
 
 ### T-018: Deficiency explorer (3D)
 - Status: todo
