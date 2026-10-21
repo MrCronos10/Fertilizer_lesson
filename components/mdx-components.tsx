@@ -6,10 +6,12 @@ import { cropChoices } from "@/lib/crop-matcher";
 import { deficiencyGroups } from "@/lib/deficiency";
 import { BagReader as BagReaderIsland } from "./BagReader";
 import { Calculator as CalculatorIsland } from "./Calculator";
+import { readChapters } from "@/lib/content";
 import { makeCite } from "./Citations";
 import { CropMatcher } from "./CropMatcher";
 import { DeficiencyExplorer } from "./DeficiencyExplorer";
 import { makeNums } from "./Nums";
+import { Quiz as QuizIsland } from "./Quiz";
 import { makeSourceTable } from "./SourceTables";
 
 /**
@@ -26,10 +28,6 @@ export function Callout({ type, children }: { type?: string; children: ReactNode
   );
 }
 
-export function Quiz({ chapter }: { chapter: number }) {
-  return <div data-quiz={chapter} hidden />;
-}
-
 export function mdxComponents(ui: UiStrings) {
   return {
     Cite: makeCite(ui),
@@ -41,6 +39,10 @@ export function mdxComponents(ui: UiStrings) {
     DeficiencyExplorer: () => <DeficiencyExplorer ui={ui} groups={deficiencyGroups()} />,
     Calculator: () => <CalculatorIsland ui={ui} grades={publishedGrades()} />,
     Callout,
-    Quiz,
+    // The questions are chapter 7's own frontmatter, passed through untouched.
+    Quiz: ({ chapter }: { chapter: number }) => {
+      const items = readChapters("th").find((c) => c.frontmatter.chapter === chapter)?.frontmatter.quiz ?? [];
+      return <QuizIsland ui={ui} items={items} />;
+    },
   };
 }
