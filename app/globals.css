@@ -94,7 +94,8 @@ html {
   -webkit-text-size-adjust: 100%;
   /* The sticky .jump-sources bar must never cover an anchor target or a
      focused link (WCAG 2.4.11). */
-  scroll-padding-top: calc(var(--tap) + 0.75rem);
+  /* rem as well as the fixed tap size: at a large text size the bar is taller than 44 px. */
+  scroll-padding-top: calc(max(var(--tap), 3.5rem) + 0.75rem);
 }
 
 body {
@@ -154,6 +155,21 @@ h2,
 h3,
 p {
   margin: 0;
+}
+
+/* A long Latin word in a Thai heading ("Slow/Controlled-release") cannot wrap, and at large text sizes it
+   pushed the page past a 320 px screen (WCAG 1.4.10). Break it rather than scroll. */
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+dt,
+dd,
+th,
+td {
+  overflow-wrap: break-word;
 }
 
 /* Thai needs more leading than Latin: stacked vowels and tone marks sit well
@@ -272,6 +288,9 @@ main:focus {
 
 .stack {
   display: grid;
+  /* minmax(0, 1fr), not the default auto track: a wide table or long line otherwise stretches the whole
+     column past a 320 px screen (WCAG 1.4.10). */
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
   max-width: 70ch;
   margin-inline: auto;
@@ -349,6 +368,15 @@ main:focus {
   border-bottom: 1px solid var(--line);
 }
 
+/* On a phone-width screen the bar can wrap to several lines at large text sizes, and a sticky bar that tall
+   covers whatever a keyboard moves focus to (WCAG 2.4.11; scroll-padding only allows for one line). There
+   it scrolls with the page instead of sticking. */
+@media (max-width: 30em) {
+  .jump-sources {
+    position: static;
+  }
+}
+
 .sources {
   display: grid;
   gap: 0.75rem;
@@ -378,6 +406,12 @@ main:focus {
   margin: 0;
   display: grid;
   gap: 0.5rem;
+  /* A table wider than a phone scrolls inside its own box instead of pushing the page sideways. The box
+     is focusable (tabIndex in SourceTables) so a keyboard can scroll it. */
+  overflow-x: auto;
+  /* The visually hidden caption is position: absolute; without a positioned ancestor it escapes this box
+     (an overflow clip does not catch it) and widens the whole page. */
+  position: relative;
 }
 .source-table {
   width: 100%;
