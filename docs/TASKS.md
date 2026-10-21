@@ -550,16 +550,24 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Open for the owner:** the eight new strings U41–U48 in `docs/content/THAI-REVIEW.md`; whether `ทำเครื่องหมายว่าตอบถูก X จาก 6` reads naturally.
 
 ### T-022: Basal vs top dressing — static annotated diagram (G5)
-- Status: todo
+- Status: done (VoiceOver read-through needs a real iPad)
 - Depends on: T-019
 - Goal: An honest labelled diagram of ปุ๋ยรองพื้น vs ปุ๋ยแต่งหน้า.
 - Acceptance criteria:
-  - [ ] Static SVG diagram, no time slider, no animation
-  - [ ] Both terms defined from the source (§2.7, p5) with citation
-  - [ ] Thai rates shown where the source gives them (basal 20–25 kg/rai; urea top-dress 5–10 kg/rai) with soil-test note
-  - [ ] Diagram text is real SVG text, VoiceOver-readable, with a text alternative
+  - [x] Static SVG diagram, no time slider, no animation
+  - [x] Both terms defined from the source (§2.7, p5) with citation
+  - [x] Thai rates shown where the source gives them (basal 20–25 kg/rai; urea top-dress 5–10 kg/rai) with soil-test note
+  - [x] Diagram text is real SVG text, VoiceOver-readable, with a text alternative
 - Test plan: Screenshots all three viewports and both themes; VoiceOver read-through.
 - Notes: Deliberately demoted from the original scrubbable timeline — four lines of source support a picture, not an animation (D15). Cambodian rice timing detail stays excluded (D11).
+- **Verified:** typecheck, lint, unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac. A fresh content + accessibility reviewer found the pamphlet's words exact and the rates correct; its five findings were real and are fixed (below). Screenshots of light and dark at iPad portrait were looked at.
+  - **What it is:** in chapter 2, under the §2.7 bullets, a static picture: two stacked panels, `ปุ๋ยรองพื้น` over `ปุ๋ยแต่งหน้า`, each with the pamphlet's own three or four phrases (`ใส่ก่อนหรือพร้อมปลูก`, `เน้น P และ K`, `เช่น 16-20-0 หรือปุ๋ยคอก`; `ใส่ระหว่างที่พืชเติบโต`, `เน้น N และแบ่งใส่หลายครั้ง`, `เช่น ยูเรียตอนข้าวแตกกอหรือตั้งท้อง`) split only at its own spaces, a test rejoining them to the bullets and to p5. Under each go the Thai rice rates from the data: basal `20–25 kg/rai` with the clay and sandy grade lists, urea `46-0-0` `5–10 kg/rai` for both soils, then the soil-test note. No slider, no animation, no time scale, no durations the source does not give. Cambodian rice timing is excluded (D11): only Thai-scope, per-area guidance can appear, and a test fails on `kg/ha` or `kg/tree`.
+  - **Real SVG text and a text alternative:** every word is an SVG `<text>` (selectable, scales, follows the theme; text contrast ≥ 4.5 in light and dark is asserted). The figure is one named image (`role="img"`, title + description) whose description carries every word, one sentence per panel, so VoiceOver reads it without stopping between `เช่น` and its example. Honestly: `role="img"` means VoiceOver reads the description, not the individual `<text>` nodes.
+  - **Reviewer's findings, fixed:** the description split `เช่น` from its example with a full stop (and the example sat orphaned on its own line) — now one line and one sentence; the source chips under the figure were a union that implied Rice Department for the sandy row — each rice row now lists its own sources and page (Rice Department and TAS 4401-2008 on the clay row, FAO on the sandy row), and the definitions' page 5 is stated separately; the rate text rendered at about 13 px — now 16 units, asserted ≥ 15 px on screen; fixed element ids — now unique per diagram; the arrow's head touched the panel and implied a sequence the source does not state — **removed** (two panels, read top to bottom, nothing drawn between them).
+  - **Mutation-tested:** an animation element, no soil-test note, `role="img"` removed, a reworded definition, a tiny font, a changed rate in the data, an arrow added back, sources merged across rows, the description split again — each fails a named test.
+  - **Citation, honestly:** §2.7 prints no marker, so the definitions carry the page (`ปุ๋ยรองพื้น / ปุ๋ยแต่งหน้า: หน้าในเอกสารต้นฉบับ: 5`); the chips belong to the rates (p12), not to the definitions.
+  - **Not verified:** a VoiceOver read-through on a real iPad (the ticket's test plan; T-025).
+  - **New Thai: none.** All words are the pamphlet's, or existing keys (`สูตร`, `อัตราอ้างอิง`, `หน้าในเอกสารต้นฉบับ`). **Open for the owner:** the diagram shows rice rates only, because they are the only per-area Thai rates for basal and urea; whether to say so in a caption is your call.
 
 ### T-023: Chapters 4 and 7 — safe use, storage, mistakes, environment (G7)
 - Status: todo
