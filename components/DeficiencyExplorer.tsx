@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { RULE_PAGE, type LeafGroup, type LeafGroupId } from "@/lib/deficiency";
 import type { UiStrings } from "@/lib/ui";
+import { NearViewport } from "./NearViewport";
 import { PlantExplorer } from "./PlantExplorer";
 
 /**
@@ -37,12 +38,15 @@ export function DeficiencyExplorer({ ui, groups }: { ui: UiStrings; groups: read
         ))}
       </fieldset>
 
-      <PlantExplorer
-        label={ui.defSceneLabel}
-        fallback={<p className="scene3d-fallback">{ui.defNo3d}</p>}
-        selected={selected}
-        onSelect={setSelected}
-      />
+      {/* three.js is fetched when the plant is about to be seen, not on arrival (T-024). */}
+      <NearViewport placeholder={<div className="scene3d" aria-hidden="true" />}>
+        <PlantExplorer
+          label={ui.defSceneLabel}
+          fallback={<p className="scene3d-fallback">{ui.defNo3d}</p>}
+          selected={selected}
+          onSelect={setSelected}
+        />
+      </NearViewport>
 
       <div role="status" aria-live="polite" aria-atomic="true" className="def-panel">
         {group ? (

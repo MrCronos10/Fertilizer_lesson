@@ -715,9 +715,16 @@ main:focus {
   gap: 0.5rem;
 }
 .crop-name,
+.crop-row h3,
 .crop-row h4,
-.crop-stage h5 {
+.crop-stage h3,
+.crop-stage h4 {
   margin: 0;
+}
+.crop-stage h3,
+.crop-stage h4,
+.crop-row h3 {
+  font-size: 1.05rem;
 }
 .crop-list {
   display: grid;

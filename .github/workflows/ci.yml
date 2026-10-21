@@ -1,0 +1,52 @@
+# The performance budget as a build failure (D16, T-024), plus the checks every ticket already ran by hand.
+# A push or pull request fails here if: types, lint or unit tests fail; any route's gzipped JS is over
+# budget (text routes 180 KB, 3D routes 600 KB); a font is over 60 KB; the WebKit e2e fails; or
+# Lighthouse scores a lesson route under 90 (performance) / under 100 (accessibility), or a text
+# route's LCP reaches 2.0 s on the Fast 4G preset.
+name: CI
+
+on:
+  push:
+    branches: [main, "task/**"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+      # The e2e builds the production site itself, then measures every route's real page weight
+      # (e2e/budget.spec.ts) beside the functional specs, in WebKit: every v1 target is WebKit.
+      - run: npx playwright install --with-deps webkit
+      - run: npm run test:e2e
+        env:
+          CI: "true"
+
+      # Lighthouse needs Chrome, which the runner image provides. The site was just built by the e2e step.
+      - name: Lighthouse budget
+        run: |
+          npm run start -- --port 3300 &
+          for i in $(seq 1 60); do curl -fs http://localhost:3300/th >/dev/null && break; sleep 1; done
+          LH_BASE=http://localhost:3300 npm run perf:lighthouse
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: budget-reports
+          path: |
+            test-results/page-weights-*.json
+            test-results/lighthouse.json
+            playwright-report
+          if-no-files-found: ignore

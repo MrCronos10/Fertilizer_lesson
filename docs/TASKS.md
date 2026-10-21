@@ -592,17 +592,26 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 ## P4 — Hardening
 
 ### T-024: Enforce the performance budget in CI
-- Status: todo
+- Status: done (one decision for you below: which "throttled 4G")
 - Depends on: T-023
 - Goal: The budget becomes a build failure rather than an aspiration.
 - Acceptance criteria:
-  - [ ] CI fails when a text route exceeds 180 KB gzipped JS or a 3D route exceeds 600 KB
-  - [ ] Font files asserted ≤ 60 KB woff2 each
-  - [ ] Lighthouse run in CI: performance ≥ 90, accessibility = 100
-  - [ ] LCP < 2.0 s on a throttled 4G profile for text routes
-  - [ ] Measured page weight for every route recorded in the task notes
+  - [x] CI fails when a text route exceeds 180 KB gzipped JS or a 3D route exceeds 600 KB
+  - [x] Font files asserted ≤ 60 KB woff2 each
+  - [x] Lighthouse run in CI: performance ≥ 90, accessibility = 100
+  - [x] LCP < 2.0 s on a throttled 4G profile for text routes
+  - [x] Measured page weight for every route recorded in the task notes
 - Test plan: Deliberately exceed a budget on a scratch branch and confirm CI fails.
 - Notes: D16. Report the final page weights to the owner.
+- **Verified locally:** typecheck, lint, 852 unit tests and the production build green; WebKit e2e green (556 tests, three viewports); the Lighthouse script run against the production build.
+  - **What was added:** `.github/workflows/ci.yml` (typecheck, lint, unit, WebKit e2e, Lighthouse; fails on any); `lib/budget.ts` (one list of every route and its kind, text or 3D, plus the three budget numbers); `e2e/budget.spec.ts` (loads every route in WebKit, measures each response, fails over budget, checks three.js is on exactly the 3D routes, writes `test-results/page-weights-<project>.json`); `scripts/lighthouse.mjs` + `npm run perf:lighthouse` (`lighthouse` 13.5.0 and `chrome-launcher` as dev dependencies); unit tests `lib/budget.test.ts` (a new page under `app/` or a new chapter with no budget entry fails) and `lib/ci.test.ts` (a dropped CI step, a loosened number or a `|| true` fails). The font cap (60 KB each) was already a unit test and stays one.
+  - **Failure demonstrated:** a scratch copy with three.js imported into the shared layout fails `e2e/budget.spec.ts` with `/th (text) ships 330.0 KB gzipped JS, over its 180 KB budget` and `/th is "text"` (three.js on a text route). Dropping the e2e step, loosening the accessibility budget to 90, and adding `|| true` to a CI step each fail `lib/ci.test.ts`. Running Lighthouse with `LH_STRICT_SLOW=1` exits non-zero with `BUDGET FAILED`.
+  - **Page weights (gzipped JS as a WebKit browser loads it, including lazy chunks):** `/th` 150.6 KB · ch01 **391.1 KB** (3D route, budget 600) · ch02 150.6 · ch03 154.0 · ch04 150.6 · ch05 150.6 · ch06 150.6 · ch07 152.0 · `/specimen` 134.3 · `/specimen-3d` 380.5 (3D) · `/specimen-3d-b` 377.3 (3D). Text routes use 84–86% of their 180 KB (about 26–29 KB left). CSS is 3.0 KB gzipped on every route; HTML 2.7–15.5 KB (ch02 is the largest). Fonts: six woff2 files, each ≤ 12 KB.
+  - **Lighthouse (production build, mobile profile, median of 3, Chrome):** performance 97–99 and accessibility **100** on all eight lesson routes (home + ch01–ch07). LCP on the DevTools **Fast 4G** preset (9 Mbit/s, 150 ms RTT, 4× CPU): 1.4–1.5 s on every text route — under 2.0 s.
+  - **Two real defects Lighthouse found and the ticket fixed:** (1) chapter 5 scored accessibility 98 — `heading-order`: the crop matcher's headings jumped from h1 to h3; they now run h2 (crop), h3 (row, only for two-row crops), then the stage, never skipping a level (an e2e test checks every crop); (2) the three Latin font files were not preloaded, so they arrived after the stylesheet and re-rendered the text — a layout shift of 0.23 and performance 86 on chapter 4; all six faces are now preloaded (a test pins it).
+  - **Decision for you — which "throttled 4G"?** The ticket says LCP < 2.0 s on "a throttled 4G profile" without naming one. On Lighthouse's own **slow-4G** preset (1.6 Mbit/s, 150 ms RTT, 4× CPU) the text routes' simulated LCP is **2.1–2.6 s**, i.e. the budget is **not met** there; the cost is moving about 220 KB (scripts 150 KB + fonts 62 KB) over a 200 KB/s link, not any one slow resource (the in-browser breakdown is a few milliseconds). I enforce **Fast 4G** (a named DevTools preset; 1.4–1.5 s) and record the slow-4G figure in every report; `LH_STRICT_SLOW=1` makes slow 4G fail the build. Meeting 2.0 s on slow 4G would need roughly 40–50 KB less JavaScript before the first paint, a larger change (and it would not be the 180 KB budget that moves). Say which you meant.
+  - **CI ran, and found a third real defect:** the first GitHub Actions run (Ubuntu runner) passed typecheck, lint, unit tests and the full WebKit e2e, then **failed Lighthouse: chapter 1 scored 83** (budget 90; locally 98). Cause: the 390 KB three.js chunk was fetched and parsed on arrival although the plant is about 1,100 px down on a phone; a slower machine feels that. Fix: `NearViewport` loads the plant only when it is within 200 px of the screen, so a phone reader who has not scrolled that far downloads none of it, while on iPad and desktop (where the plant is already in the first screen) it loads at once. The second run, on GitHub's runner, **passed everything**: performance 96–99, accessibility 100 on all eight routes, LCP (Fast 4G) 1.36–1.67 s. Tests: three.js is absent on arrival in a short window and fetched once the plant is scrolled to; the radios and table work before the plant has loaded; the budget spec reads each route to the end (worst case) before measuring.
+  - **Caveats:** Lighthouse is Chromium and the site's target is WebKit, so scores describe the network and the bytes, not Safari's rendering; the lab server is `next start` over HTTP/1.1 on localhost, which makes six parallel connections the limit, unlike Vercel's HTTP/2, so real LCP on the live site is probably better, not worse (not measured: there is no preview URL). CI uses Node 26 (local is 26.0.0) and the runner prints deprecation notices for the v4 actions (Node 20) and for the coming Ubuntu 26 label; neither fails anything. Page weights for non-lesson responses (HTML etc.) were measured as served, not on a CDN.
 
 ### T-025: Accessibility audit
 - Status: todo

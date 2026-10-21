@@ -33,6 +33,8 @@ const canvas = (page: Page) => page.locator(".scene3d canvas:visible");
 async function open(page: Page) {
   await page.goto(ROUTE, { waitUntil: "networkidle" });
   const group = page.getByRole("group", { name: "เลือกตำแหน่งใบ", exact: true });
+  // The plant loads when it is about to be seen, so bring it into view like a reader would.
+  await group.scrollIntoViewIfNeeded();
   await expect(group).toBeVisible();
   return group;
 }
@@ -237,4 +239,31 @@ test("chapter 1 holds one WebGL context while open, none after leaving, and one 
   await page.goBack();
   await expect(canvas(page)).toBeVisible();
   await expect.poll(alive).toBe(1);
+});
+
+test("three.js is not fetched until the plant is near the screen, and is fetched when it is", async ({ page }) => {
+  const scripts: string[] = [];
+  page.on("response", (r) => {
+    if (/\.js(\?|$)/.test(r.url())) scripts.push(r.url());
+  });
+  // A short phone-shaped window, so the plant (about 1,100 px down) starts below the fold on every project.
+  await page.setViewportSize({ width: 412, height: 700 });
+  const bodies = () => page.evaluate(async (urls) => (await Promise.all(urls.map((u) => fetch(u).then((r) => r.text())))).some((t) => t.includes("WebGLRenderer")), scripts);
+  await page.goto(ROUTE, { waitUntil: "networkidle" });
+  await expect(page.locator(".deficiency .scene3d")).toHaveCount(1); // the placeholder holds the space
+  await expect(page.locator("canvas")).toHaveCount(0);
+  expect(await bodies(), "no three.js on arrival").toBe(false);
+  const before = scripts.length;
+  await page.locator(".deficiency").scrollIntoViewIfNeeded();
+  await expect(page.locator(".scene3d canvas:visible")).toBeVisible();
+  expect(scripts.length, "scrolling to the plant fetches the 3D chunk").toBeGreaterThan(before);
+  expect(await bodies(), "three.js after scrolling").toBe(true);
+});
+
+test("the radios and the table work before the plant has loaded", async ({ page }) => {
+  await page.setViewportSize({ width: 412, height: 700 });
+  await page.goto(ROUTE, { waitUntil: "networkidle" });
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await page.getByLabel("ใบอ่อน/ยอด", { exact: true }).check({ force: true });
+  await expect(page.locator('.def-panel [data-row="ca"] dd')).toHaveText(ROWS.ca![1]);
 });
