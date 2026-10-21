@@ -211,15 +211,34 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   reading that one article would restore tapped rubber to the matcher.
 
 ### T-008: Propose corpus additions for the G4 and G5 gaps
-- Status: todo
+- Status: done (awaiting owner ticks — see T-008b)
 - Depends on: T-007
 - Goal: A reviewable list of official-source additions to fill the calculation and basal/top-dressing gaps.
 - Acceptance criteria:
-  - [ ] `docs/content/ADDITIONS.md`: each entry has the exact claim, the official URL (doa.go.th / ldd.go.th / ricethailand.go.th only), the feature needing it, and an unticked checkbox
-  - [ ] Replacement candidates proposed for every `commercial`-only Rate from T-007
-  - [ ] Nothing written into `content/` — this task produces only the proposal list
+  - [x] `docs/content/ADDITIONS.md`: each entry has the exact claim, the official URL (doa.go.th / ldd.go.th / ricethailand.go.th only), the feature needing it, and an unticked checkbox
+  - [x] Replacement candidates proposed for every `commercial`-only Rate from T-007
+  - [x] Nothing written into `content/` — this task produces only the proposal list
 - Test plan: Manual — owner reads the list. A test asserts no `content/` file references an unticked Addition.
 - Notes: **Stop-and-ask gate (D8).** Task ends awaiting owner ticks; the ticked items become their own follow-up task.
+- **Verified:** 426 unit tests, clean `npm run check`. A fresh reviewer then checked every quote against the originals and found the quoted Thai and table numbers faithful, but found errors in my commentary and a gate that was easy to bypass. All fixed.
+  - Ten entries (A-01…A-10), each with an exact Thai quote, an exact official URL on doa/ldd/ricethailand, the page, how it was read, and every place it **disagrees with the pamphlet**. Every document was downloaded and read directly; search-engine summaries were used only to find documents, and were wrong more than once (one attributed durian's rate to mango).
+  - **Review corrections to my own commentary:** I had miscounted Table 13 (45 rows, not 54); quoted only half of the cassava timing rule (the case that actually covers the sandy row was omitted, and the note is printed under a different table than the one I applied it to); called the pamphlet's cassava lime figure a blogspot-only claim when DOA states the same 100 kg/rai (new A-10); and overstated a "conflict" on rice that TAS 4401-2008 reconciles. One reviewer claim was checked and found **wrong**: A-01's "ตารางที่ 8" is the sugarcane chapter's own Table 8, not the maize one.
+  - **The gate** (`lib/additions.ts`) was bypassable: a markdown-link source parsed as "no source" and passed; `A–03`, `a-03`, `A 03`, `A03`, full-width digits and `id=A-03` all slipped past; an earlier `- [x] note` could flip an entry to approved; a fenced block could create a ticked entry. Each is now a failing test and is closed; a tripwire also blocks distinctive wording from unticked entries being pasted into `content/` without naming its id. Twelve cases (ten bad, two controls that must pass) are verified.
+  - Hardening produced one false positive worth recording: hex escapes in percent-encoded URLs (`%B8%A7`) contain `A7`, which read as A-07 throughout `sources.json`.
+- **Open for the owner — this task ends at a gate (D8):** tick or reject each entry in `docs/content/ADDITIONS.md`. Four need a decision, not just a tick: A-05 (how G5 should teach the rice "first application", given TAS 4401-2008's definitions), A-07 (durian disagrees with the pamphlet), A-09/A-10 (two official lime figures disagree with each other by 2–40×), and A-02 (accept only the timing, or also ingest the soil-test tables, which is new scope).
+- **Not found:** mango, rubber (both stages) and vegetables have no usable official source in the three allowed domains. Rubber's real authority (RRIT) is outside D8; widening D8 is the owner's call.
+
+### T-008b: Apply the ticked additions
+- Status: blocked
+- Depends on: T-008 (owner ticks)
+- Goal: Turn each ticked entry in `docs/content/ADDITIONS.md` into cited content and data, and nothing else.
+- Acceptance criteria:
+  - [ ] Only entries with `- [x]` are applied; each applied entry is referenced by id from the content or data row it changes
+  - [ ] Any `Guidance` row an addition backs gets its `citations` and `actionable` flag recomputed through `isActionable`, and `sources.json` gains the new documents via `tools/build-sources.py`-style provenance (URL, page)
+  - [ ] Every disagreement the entry lists is resolved the way the owner decided, recorded in `docs/DECISIONS.md`, never silently picked
+  - [ ] Unticked entries remain unreferenced (the existing gate test)
+- Test plan: the T-006/T-007/T-008 suites stay green; new rows are anchored to their quoted wording the way the crop table is.
+- Notes: Reviewer: yes (content accuracy). Cannot start until the owner has ticked at least one entry.
 
 ### T-009: Import the p14 glossary into CONTEXT.md
 - Status: todo
