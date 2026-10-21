@@ -61,3 +61,18 @@ For the record, these were considered and left alone:
   it means "function, in an easy-to-remember form", but as a two-word parenthetical it
   is ambiguous about what exactly is easy to remember. The table rows are not extracted
   yet, so this belongs to T-006's review rather than this one.
+
+## New UI Thai written for T-010 (not from the source)
+
+D6: new Thai is allowed only for interface chrome, and is listed here for you. These live in
+`content/th/ui.json`; changing one is a one-line edit. Decide each with ✅ or ✍️.
+
+| #   | Key               | Thai                | Used for                                              |
+| --- | ----------------- | ------------------- | ----------------------------------------------------- |
+| U1  | `skipToContent`   | `ข้ามไปยังเนื้อหา`   | Keyboard/VoiceOver skip link at the top of every page |
+| U2  | `contents`        | `สารบัญ`             | Chapter list heading, nav label, and link back to it  |
+| U3  | `chapterNav`      | `เลื่อนระหว่างบท`     | Accessible name of the previous/next navigation       |
+| U4  | `previousChapter` | `บทก่อนหน้า`          | Link prefix, followed by the previous chapter's title |
+| U5  | `nextChapter`     | `บทถัดไป`            | Link prefix, followed by the next chapter's title     |
+
+`siteTitle` (`เรียนรู้เรื่องปุ๋ย`) is not new: it is the title already shipped since T-002.

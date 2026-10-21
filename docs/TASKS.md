@@ -1,6 +1,6 @@
 # Tasks
 
-**Awaiting approval. No code until the owner approves this list.**
+**Approved and in progress** — T-001 to T-009 shipped; see each ticket's Status. The owner checks progress here.
 
 Worked one at a time in dependency order. Branch per task: `task/T-XXX-short-name`.
 Definition of done for every task is in `docs/DECISIONS.md` D17 — it is not repeated below.
@@ -250,28 +250,40 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - [x] `CONTEXT.md` still contains no implementation details
 - Test plan: Manual read-through against the source page.
 - Notes: Reviewer: yes (content accuracy). Thai/Khmer/English/Chinese columns exist; keep Thai + English, park the rest in the glossary JSON.
-
----
-
-## P2 — Chapter 1 vertical slice
 - **Verified:** 45 glossary tests (all 20 p14 rows checked against the rendered page, Thai and English), clean `npm run check`. A fresh reviewer found no wrong row but found errors in my commentary, all fixed.
   - **Four things the earlier `CONTEXT.md` attributed to the source that the source does not say:** `สูตรปุ๋ย` as the term for a grade (it occurs nowhere in the pamphlet; the source's table header is `สูตร` and chapter 3 says "ตัวเลข 3 ตัวบนกระสอบ"); "primary" nutrients (the source says Macronutrients); basal fertilizer as "worked into the soil" and top dressing as going "to the soil surface" (neither phrase is in the source). All replaced with the source's own wording; the first is kept only as a ⚠ note for the owner.
   - **Review corrections to my own commentary:** a false statement that Khmer and Chinese were "kept in the glossary data" (Chinese is; Khmer is not carried anywhere); 4R placed under the "safety chapter" when it sits under chapter 4; invented English glosses for the three chemical types that the source does not give; and three missing conflicts (four p14-only terms, English labels that differ between p14 and the chapter headings, ground limestone as the §2.8 baseline).
   - **The test suite guarded quoted phrases only,** so any unquoted claim about the source could be changed and still pass. Each is now pinned to the committed source text (the 1,600 m² rai, the 6.25 hectare factor, the 16-20-0 bag example, the p2 group lists, the 4R chapter, §2.7 as the location of the basal/top-dressing wording, the glossary data's columns). Seven unquoted corruptions were each verified to fail.
 - **Open for the owner:** whether the UI may use `สูตรปุ๋ย` (natural Thai, absent from the source), and the basal/top-dressing disagreement already raised as A-05.
 
+---
+
+## P2 — Chapter 1 vertical slice
 ### T-010: App shell, `/th` routing, chapter layout
-- Status: todo
+- Status: done
 - Depends on: T-004, T-005
 - Goal: Navigable shell with a locale segment and a reusable chapter layout.
 - Acceptance criteria:
-  - [ ] Route structure `/[locale]/...`; `/` redirects to `/th`
-  - [ ] Chapter list and chapter route render from MDX frontmatter — no hard-coded Thai strings in components
-  - [ ] Navigation works by keyboard on Mac and by touch on iPad; no hover-only affordance anywhere
-  - [ ] Layout correct at iPad portrait, iPad landscape, and Mac desktop, with safe areas respected
-  - [ ] Text routes ship ≤ 180 KB gzipped JS
+  - [x] Route structure `/[locale]/...`; `/` redirects to `/th`
+  - [x] Chapter list and chapter route render from MDX frontmatter — no hard-coded Thai strings in components
+  - [x] Navigation works by keyboard on Mac and by touch on iPad; no hover-only affordance anywhere
+  - [x] Layout correct at iPad portrait, iPad landscape, and Mac desktop, with safe areas respected
+  - [x] Text routes ship ≤ 180 KB gzipped JS
 - Test plan: e2e in all three WebKit viewports: navigate every chapter link, assert no console errors, assert `/`→`/th` redirect. Screenshots at all three sizes. Check bundle size in build output.
 - Notes: No i18n library (D18). Phones must not break even though they are not a target.
+- **Verified:** typecheck, lint, 483 unit tests and the production build green; 78 WebKit e2e across the three viewports (all run against a fresh `next start` on its own port).
+  - Routes: `/` → `/th` (non-permanent redirect in `next.config.ts`), `/th` (contents), `/th/ch01`…`/th/ch07`. Chapters compile from `content/th/*.mdx` at build time with `@mdx-js/mdx`; the Thai in the shell comes from chapter frontmatter and the new `content/th/ui.json`. A test fails if Thai appears in any route or component file.
+  - **Measured JS: 175 KB gzipped on `/th`** against the 180 KB budget (~97% used by an empty shell). The framework baseline is already most of the budget; T-011 and T-012 must add almost no client JS or the budget breaks. The test measures every text route's scripts, not a build-output estimate.
+  - **Tables, citations and the quiz are slots, not UI yet.** `<SourceTable>` and `<Quiz>` render hidden and empty; `<Cite>` shows the raw key (e.g. `[doa]`). Chapters therefore show prose only until T-011/T-012/T-019/T-021. The Cambodian table cannot reach the page (D11): a unit test and an e2e tripwire cover it.
+  - **Guards mutation-tested** (each corruption made, confirmed to fail, then restored): a chapter tag with no component (this crashed the first build on `<Quiz>`), Thai hard-coded in a component, a missing UI key, a table rendered from the KH slot, a lowered bundle limit, a removed noindex tag.
+  - **Found and fixed in my own test setup:** a `next dev` server already on :3000 was silently reused by Playwright, so a first "30 passed" ran against dev, not production (and showed 829 KB of JS). `E2E_PORT` now makes the config start its own server.
+  - Not run: the fresh-reviewer subagent. T-010 is not a content, calculator or accessibility ticket (D17). Keyboard (skip link, link tab order) and 44 px targets are asserted; a VoiceOver pass belongs to T-025.
+  - Screenshots read at all three sizes in light and dark; Thai tone marks (ปุ๋ย, ที่, น้ำ, เรื่อง) are correct.
+- **Open for the owner:**
+  - **Unknown URLs return HTTP 200, not 404.** With `cacheComponents` the status is fixed before `notFound()` runs (Next docs, loading.md "Status codes"); the page shows not-found and carries `noindex`. A real 404 needs a `proxy.ts` that checks the slug — a small architecture addition I did not make without asking. Say if you want it.
+  - **New UI Thai (U1–U5)** in `docs/content/THAI-REVIEW.md` needs your ✅/✍️.
+  - `npm audit` shows one moderate `yaml` advisory (stack overflow on deeply nested YAML). It was present before this ticket and only parses our own files at build time.
+  - No iPad link yet: previews still need the two Vercel dashboard actions (T-003).
 
 ### T-011: Citation UI, ที่มาของข้อมูล section, soil-test note
 - Status: todo
