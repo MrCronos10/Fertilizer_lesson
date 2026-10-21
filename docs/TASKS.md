@@ -393,17 +393,28 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - The cassava CIAT question from T-013 does not touch this UI (the picker offers the printed bag grades, not the crop rates).
 
 ### T-015: NPK bag reader (2D)
-- Status: todo
+- Status: done
 - Depends on: T-014
 - Goal: A legible 2D bag label whose three numbers are individually tappable.
 - Acceptance criteria:
-  - [ ] Each of the three numbers is a ≥ 44×44pt tap target explaining N, P₂O₅, or K₂O
-  - [ ] Explanations come from the source, with citations
-  - [ ] Works by tap on iPad and click/keyboard on Mac; no hover-only reveal
-  - [ ] Label text is real DOM/SVG text — selectable, zoomable, and VoiceOver-readable
-  - [ ] Legible at iPad portrait width without horizontal scrolling
+  - [x] Each of the three numbers is a ≥ 44×44pt tap target explaining N, P₂O₅, or K₂O
+  - [x] Explanations come from the source, with citations
+  - [x] Works by tap on iPad and click/keyboard on Mac; no hover-only reveal
+  - [x] Label text is real DOM/SVG text — selectable, zoomable, and VoiceOver-readable
+  - [x] Legible at iPad portrait width without horizontal scrolling
 - Test plan: e2e tapping each number in all three viewports; keyboard tab-through on Mac; screenshots both themes.
 - Notes: Deliberately 2D, not 3D — WebGL text on iPad is blurry, unselectable, invisible to VoiceOver, and untestable (D3).
+- **Verified:** typecheck, lint, 685 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac. A fresh accessibility + content reviewer then rendered PDF p2 and p6 and compared every word and number: **no content error**; its findings were test gaps and a VoiceOver concern, now fixed.
+  - **What it is:** in chapter 3, right under the paragraph that introduces the three numbers, a 2D bag label of the pamphlet's own example: **16-20-0, 50 kg** (p6). The numbers 16, 20 and 0 are big tiles; the N tile is already chosen so an explanation is on screen on arrival. Tapping or clicking a tile (or arrow keys) shows that nutrient's explanation, how much of it the bag holds, and `หน้าในเอกสารต้นฉบับ: 2, 6`.
+  - **Everything shown is the pamphlet's:** the explanations are the p2 table's own phrases (`N = ใบเขียว โตเร็ว`, `P = ราก ดอก เมล็ด`, `K = ผลโต หวาน ต้นแข็ง ทนโรค`); the amounts are what the calculator works out for that bag (8 kg N, 10 kg P₂O₅, and none for K₂O), matching the pamphlet's "N 8 กก. P₂O₅ 10 กก. และไม่มี K"; the five strings it adds to `ui.json` are the pamphlet's own words, each pinned to the raw page. **No new UI Thai.**
+  - **Built as native radios** styled as tiles, so touch, click and arrow keys all work with no hover and no script-only affordance; the label is real, selectable DOM text, not a canvas or image. Each tile is far over 44×44; text is large (number 40 px, symbol 17 px). A polite, atomic live region announces each choice. Zoom is allowed. A guard fails if any `:hover` rule appears on the reader.
+  - **VoiceOver:** each radio has an explicit name, `N 16 เปอร์เซ็นต์`, and the visible symbol and number are hidden from assistive tech so a tile is not read twice; `เปอร์เซ็นต์` is added because the page shows no `%` sign and a VoiceOver user who lands on the group would otherwise hear only bare numbers.
+  - **Reviewer's findings fixed:** two corruptions passed the whole e2e suite (the bag's printed weight read as 100 kg; `lang="en"` removed from the symbols) and the keyboard test only ever started from a script `focus()`. Each is now a failing test, with a markup-level check that the radios are reachable, in one group, with one tab stop.
+  - **Mutation-tested:** about 28 corruptions (bag weight and grade, wrong wording, tile order, elemental symbol, default selection, live region, node replacement, page citation, tile and number size, a hover rule, non-selectable text, focus ring, zoom, selected-state fill, accessible name, group membership); all fail except two equivalent mutants (min-height is redundant because the content is already over 70 px; the browser itself allows one checked radio per group).
+  - **A platform fact, not fixable here:** macOS Safari skips radios and buttons on Tab unless Option-Tab or Full Keyboard Access is on. Tab therefore cannot be driven in this WebKit, so the keyboard test uses focus plus arrow keys.
+  - **Focus ring on `:focus`, not `:focus-visible`:** after arrow-key navigation between radios, this WebKit reports `:focus-visible` as false, which would leave a keyboard user with no ring. The cost is a ring after a mouse click on the already-highlighted tile.
+- **Not verified, needs a person:** VoiceOver on a real iPad (the radio name, the live-region announcement, double-tap on a tile) and a real finger. That is what T-016 is for. No iPad link exists until T-003's Vercel actions are done.
+- **Open for the owner:** two questions in `docs/content/THAI-REVIEW.md` — **Q1** the K₂O tile says `ไม่มี K` (the pamphlet's wording, with the element letter) rather than `ไม่มี K₂O`; **Q2** nothing tells a beginner the numbers are tappable, and fixing that needs new Thai (`แตะตัวเลขเพื่อดูความหมาย`).
 
 ### T-016: Phase A gate — owner review on a real iPad
 - Status: todo

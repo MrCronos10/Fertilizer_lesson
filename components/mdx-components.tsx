@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { UiStrings } from "@/lib/ui";
 import { publishedGrades } from "@/lib/calculator-data";
+import { BAG, bagTiles } from "@/lib/bag-reader";
+import { BagReader as BagReaderIsland } from "./BagReader";
 import { Calculator as CalculatorIsland } from "./Calculator";
 import { makeCite } from "./Citations";
 import { makeNums } from "./Nums";
@@ -30,6 +32,7 @@ export function mdxComponents(ui: UiStrings) {
     SourceTable: makeSourceTable(ui),
     Nums: makeNums(ui),
     // The one client island in the chapters; its grades are read here, on the server.
+    BagReader: () => <BagReaderIsland ui={ui} tiles={bagTiles()} weightKg={BAG.weightKg} />,
     Calculator: () => <CalculatorIsland ui={ui} grades={publishedGrades()} />,
     Callout,
     Quiz,
