@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3000;
+// Overridable so a dev server already on :3000 is never mistaken for the production build.
+const PORT = Number(process.env.E2E_PORT ?? 3000);
 const BASE_URL = `http://localhost:${PORT}`;
 
 /**
@@ -40,6 +41,6 @@ export default defineConfig({
     command: `npm run build && npm run start -- --port ${PORT}`,
     url: BASE_URL,
     timeout: 240_000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env.CI && !process.env.E2E_PORT,
   },
 });

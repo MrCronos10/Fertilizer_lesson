@@ -181,3 +181,8 @@ export function proseBlocks(body: string): string[] {
 export function textStream(value: string): string {
   return value.replace(/\s+/gu, "");
 }
+
+/** URL segment for a chapter: `ch01`, matching its file name without the extension. */
+export function chapterSlug(chapter: number): string {
+  return `ch${String(chapter).padStart(2, "0")}`;
+}

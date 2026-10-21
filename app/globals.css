@@ -228,3 +228,73 @@ button.primary {
     scroll-behavior: auto !important;
   }
 }
+
+/* App shell (T-010). */
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: 0;
+  transform: translateY(-120%);
+  z-index: 10;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 1rem;
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-radius: var(--radius);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  padding-block-end: 0.5rem;
+}
+.site-title {
+  /* Same column as .stack, so the title lines up with the content on wide screens. */
+  display: flex;
+  max-width: 70ch;
+  margin-inline: auto;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--brand);
+  text-decoration: none;
+}
+
+main:focus {
+  outline: none;
+}
+
+.stack {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 70ch;
+  margin-inline: auto;
+}
+
+.chapter-list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding-inline-start: 1.5rem;
+}
+.chapter-list a,
+.chapter-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+}
+
+.chapter-nav {
+  display: grid;
+  gap: 0.25rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+}
+
+.cite {
+  color: var(--muted);
+  font-size: 0.75em;
+}
