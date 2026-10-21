@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChapterBody } from "@/components/ChapterBody";
+import { Sources } from "@/components/Citations";
 import { chapterSlug, readChapters } from "@/lib/content";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
 import { readUiStrings } from "@/lib/ui";
@@ -38,8 +39,12 @@ export default async function ChapterPage({ params }: { params: Params }) {
 
   return (
     <article className="stack">
+      <a className="jump-sources" href="#sources">
+        {ui.jumpToSources}
+      </a>
       <h1>{chapter.frontmatter.heading}</h1>
-      <ChapterBody source={chapter.body} />
+      <ChapterBody source={chapter.body} ui={ui} />
+      <Sources chapter={chapter} ui={ui} />
       <nav className="chapter-nav" aria-label={ui.chapterNav}>
         {previous ? (
           <Link rel="prev" href={`/${locale}/${chapterSlug(previous.frontmatter.chapter)}`}>

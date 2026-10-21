@@ -4,5 +4,15 @@
   "contents": "สารบัญ",
   "chapterNav": "เลื่อนระหว่างบท",
   "previousChapter": "บทก่อนหน้า",
-  "nextChapter": "บทถัดไป"
+  "nextChapter": "บทถัดไป",
+  "sources": "ที่มาของข้อมูล",
+  "jumpToSources": "ไปที่ที่มาของข้อมูล",
+  "tierLabel": "ระดับแหล่งที่มา",
+  "tierOfficial": "ทางการ",
+  "tierResearch": "งานวิจัย",
+  "tierCommercial": "เชิงพาณิชย์",
+  "pamphletPages": "หน้าในเอกสารต้นฉบับ",
+  "unnamedSources": "แหล่งที่ไม่ได้ระบุชื่อ",
+  "noLink": "ไม่มีลิงก์",
+  "soilTestNote": "ควรส่งดินตรวจที่สถานีพัฒนาที่ดินจังหวัดก่อนเติมปุ๋ย"
 }

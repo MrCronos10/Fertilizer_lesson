@@ -76,3 +76,28 @@ D6: new Thai is allowed only for interface chrome, and is listed here for you. T
 | U5  | `nextChapter`     | `บทถัดไป`            | Link prefix, followed by the next chapter's title     |
 
 `siteTitle` (`เรียนรู้เรื่องปุ๋ย`) is not new: it is the title already shipped since T-002.
+
+## New UI Thai written for T-011 (not from the source)
+
+Same rule as above (D6). These are in `content/th/ui.json`. U6 is a project label and U7–U9
+are my own names for the three source tiers (D9); the source has no word for a tier, so
+none of them can be quoted. Decide each with ✅ or ✍️.
+
+| #   | Key               | Thai                     | Used for                                                                 |
+| --- | ----------------- | ------------------------ | ------------------------------------------------------------------------ |
+| U6  | `sources`         | `ที่มาของข้อมูล`          | Not new: the project brief's fixed label (CONTEXT.md). Heading of every chapter's citation section. |
+| U7  | `tierOfficial`    | `ทางการ`                  | Badge for `official` sources (government, standards)                      |
+| U8  | `tierResearch`    | `งานวิจัย`                | Badge for `research` sources (university, journal)                        |
+| U9  | `tierCommercial`  | `เชิงพาณิชย์`             | Badge for `commercial` sources (company, blog, news). Also covers blogs and news, which `เชิงพาณิชย์` does not literally say — a better word is welcome. |
+| U10 | `tierLabel`       | `ระดับแหล่งที่มา`         | Read aloud before each badge by VoiceOver; not shown on screen            |
+| U11 | `jumpToSources`   | `ไปที่ที่มาของข้อมูล`      | The always-reachable link at the top of each chapter                      |
+| U12 | `pamphletPages`   | `หน้าในเอกสารต้นฉบับ`      | "Pages in the original document", followed by e.g. `3–5`                  |
+| U13 | `unnamedSources`  | `แหล่งที่ไม่ได้ระบุชื่อ`    | After `+2` / `+3`: sources the pamphlet counts but does not name          |
+| U14 | `noLink`          | `ไม่มีลิงก์`              | A source the pamphlet names with no link (e.g. a standard number)         |
+
+`soilTestNote` is **not** new Thai: it is the pamphlet's own p3 sentence
+(`ควรส่งดินตรวจที่สถานีพัฒนาที่ดินจังหวัดก่อนเติมปุ๋ย`), and a unit test pins it to the raw
+page. Note what the source says: *send soil for testing before applying fertilizer*. It does
+not use the words "starting point", so the site does not claim the source said that.
+
+| U15 | `soilTestNote` | `ควรส่งดินตรวจที่สถานีพัฒนาที่ดินจังหวัดก่อนเติมปุ๋ย` | **Decide this one.** The wording is the pamphlet's own (p3), but there it closes a warning about yellow leaves (*"ใบเหลืองอาจเกิดจากน้ำขัง รากเสีย หรือดินกรดจัดก็ได้ ควรส่งดินตรวจ…"*). The site attaches it to every rate, which is the site's use of it, not something the pamphlet says about rates. ✅ keep it, or ✍️ give me wording to use instead. |

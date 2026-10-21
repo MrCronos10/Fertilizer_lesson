@@ -38,7 +38,7 @@ describe("MDX slots", () => {
       readChapters("th").flatMap((c) => [...c.body.matchAll(/<([A-Z][A-Za-z]*)/g)].map((m) => m[1])),
     );
     expect(used.size).toBeGreaterThan(0);
-    for (const tag of used) expect(Object.keys(mdxComponents)).toContain(tag);
+    for (const tag of used) expect(Object.keys(mdxComponents(readUiStrings("th")))).toContain(tag);
   });
 });
 

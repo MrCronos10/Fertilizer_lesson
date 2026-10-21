@@ -89,6 +89,9 @@ describe.each([
     ["--warn", "--warn-bg"],
     ["--brand-ink", "--brand"],
     ["--accent-ink", "--accent"],
+    // Official/research tier badges (.tier) sit on --soft.
+    ["--ink", "--soft"],
+    ["--muted", "--bg"],
   ])("%s on %s meets 4.5:1", (fg, surface) => {
     const base = at(surface);
     expect(ratio(at(fg, base), base)).toBeGreaterThanOrEqual(4.5);
