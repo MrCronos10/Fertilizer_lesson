@@ -30,6 +30,29 @@ export function Callout({ type, children }: { type?: string; children: ReactNode
 }
 
 export function mdxComponents(ui: UiStrings) {
+  /**
+   * A block of a chapter, named so it can be found, styled and checked: it states the
+   * pamphlet page its text is on, and a test confirms that text really is on that page.
+   * It adds no words of its own (D6) except the existing "pamphlet pages" label.
+   */
+  function Section({ id, page, tone, uncited, children }: { id: string; page: number; tone?: string; uncited?: boolean; children: ReactNode }) {
+    return (
+      <section className={tone === "warn" ? "chapter-section chapter-section-warn" : "chapter-section"} data-section={id} data-source-page={page}>
+        {children}
+        <p className="muted chapter-section-page">
+          {ui.pamphletPages}: {page}
+        </p>
+        {/* Said outright, so a page number is not mistaken for a checked source. */}
+        {uncited ? (
+          <p className="muted chapter-section-note" data-uncited>
+            {ui.sectionUncited}
+          </p>
+        ) : null}
+      </section>
+    );
+  }
+
+
   return {
     Cite: makeCite(ui),
     SourceTable: makeSourceTable(ui),
@@ -40,6 +63,7 @@ export function mdxComponents(ui: UiStrings) {
     DeficiencyExplorer: () => <DeficiencyExplorer ui={ui} groups={deficiencyGroups()} />,
     Calculator: () => <CalculatorIsland ui={ui} grades={publishedGrades()} />,
     TimingDiagram: () => <TimingDiagram ui={ui} />,
+    Section,
     Callout,
     // The questions are chapter 7's own frontmatter, passed through untouched.
     Quiz: ({ chapter }: { chapter: number }) => {

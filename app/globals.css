@@ -833,3 +833,27 @@ main:focus {
   margin: 0.25rem 0 0;
   padding-inline-start: 1.25rem;
 }
+
+/* Named blocks of a chapter (Section in mdx-components): 4R, safety, mistakes, environment. */
+.chapter-section {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.75rem var(--gutter);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+.chapter-section-warn {
+  border-inline-start: 4px solid var(--warn);
+  background: var(--warn-bg);
+}
+.chapter-section ul,
+.chapter-section ol {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.chapter-section-page,
+.chapter-section-note {
+  margin: 0;
+  font-size: 0.875rem;
+}

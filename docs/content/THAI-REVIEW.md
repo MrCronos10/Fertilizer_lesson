@@ -204,3 +204,11 @@ The pamphlet prints answers after an arrow and **no wrong options**, so the quiz
 | U46 | `quizScore` | `ทำเครื่องหมายว่าตอบถูก`     | Start of the score line: "marked as right: 2 of 6" (`ทำเครื่องหมายว่าตอบถูก 2 จาก 6`, plus `· ยังไม่ถูก 1` when some are marked not yet). |
 | U47 | `quizOf`    | `จาก`                       | "of" in the score line.                                                                        |
 | U48 | `quizReset` | `เริ่มใหม่`                  | Button that clears all marks ("start over").                                                    |
+
+## Chapters 4 and 7, T-023: one new UI string; the wording flags are still open
+
+| #   | Key              | Thai                                                       | Used for                                                                                                                         |
+| --- | ---------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| U49 | `sectionUncited` | `เอกสารต้นฉบับไม่ได้ระบุแหล่งอ้างอิงภายนอกสำหรับข้อความนี้` | Line under a block (4R, safety, mistakes, environment, the chapter 7 summary) whose text the pamphlet prints no outside source for: "the pamphlet names no outside source for this text". |
+
+Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Extension EB0209`) above are **still open** and unchanged: the chapter 4 text is the pamphlet's, word for word, and cannot be edited without your decision.

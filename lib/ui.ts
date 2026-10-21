@@ -75,6 +75,8 @@ export const UI_KEYS = [
   "tableStraightCaption",
   "tableCompoundCaption",
   "tableConditionersCaption",
+  /** T-023: new UI Thai, shown on a block whose text the pamphlet prints no outside source for. */
+  "sectionUncited",
   /** The quiz (T-021): all new UI Thai (the pamphlet prints answers after an arrow, with no such labels). */
   "quizShow",
   "quizHide",
