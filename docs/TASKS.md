@@ -570,15 +570,22 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: none.** All words are the pamphlet's, or existing keys (`สูตร`, `อัตราอ้างอิง`, `หน้าในเอกสารต้นฉบับ`). **Open for the owner:** the diagram shows rice rates only, because they are the only per-area Thai rates for basal and urea; whether to say so in a caption is your call.
 
 ### T-023: Chapters 4 and 7 — safe use, storage, mistakes, environment (G7)
-- Status: todo
+- Status: done (one claim-level gap left for you, see below)
 - Depends on: T-019
 - Goal: The safety chapter complete, including the 4R framing and the 6 common mistakes.
 - Acceptance criteria:
-  - [ ] 4R (right source, rate, time, place) presented from the source
-  - [ ] All 6 common mistakes present; storage and safety guidance present; eutrophication caution present
-  - [ ] Every claim cited
+  - [x] 4R (right source, rate, time, place) presented from the source
+  - [x] All 6 common mistakes present; storage and safety guidance present; eutrophication caution present
+  - [x] Every claim cited
 - Test plan: e2e asserting 6 mistake entries and the 4R section; screenshots.
 - Notes: Reviewer: yes (content accuracy).
+- **Verified:** typecheck, lint, unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac. A fresh content reviewer compared chapter 4 and chapter 7's summary with p06/p07: **no word, number or unit changed**; the six mistakes are the source's six, in order; page 6 is right for every block.
+  - **What changed:** chapter 4's text was already the pamphlet's, so this ticket gives it structure without touching a word. It is now five named blocks in the source's order: `หลัก 4 ถูก (4R)`, practice (rice field, field crops, fruit trees, moisture), safety and storage, the six common mistakes, and the environment caution; chapter 7's six-point summary is one block. Each block states `หน้าในเอกสารต้นฉบับ: 6`, and a test confirms each block's words really are on that page and that **no prose sits outside a block**. Safety, mistakes and environment are drawn as warnings (text ≥ 4.5:1 in light and dark, asserted).
+  - **4R:** the pamphlet's own line, `หลัก 4 ถูก (4R): ถูกชนิด ถูกอัตรา ถูกเวลา และถูกที่`, in its own block. **Six mistakes:** one list item each (`ใส่มากจนปุ๋ยไหม้`, `โรยยูเรียทิ้งบนผิวดิน` with the MSU Extension figure 30–44% / under 5%, `ใส่ N ครั้งเดียว`, `ไม่แก้ดินกรด`, `เผาฟาง`, `ซื้อ "ปุ๋ยวิเศษ"`). **Storage and safety:** gloves and mask, dry place on a platform, away from food, children, animals and fuel, urea bag sealed. **Eutrophication:** `N และ P ที่ไหลลงน้ำทำให้สาหร่ายบลูมและปลาตาย …` with the water-body warning.
+  - **"Every claim cited", honestly:** the pamphlet prints outside markers for only two claims (rice field → FAO, field crops → OAE; both official), and both show as linked tier-badged citations. Every other claim has only the pamphlet page. Rather than let a page number read as a checked source, the four blocks with no marker (4R, safety, mistakes, environment) and the chapter 7 summary now say so in words (`เอกสารต้นฉบับไม่ได้ระบุแหล่งอ้างอิงภายนอกสำหรับข้อความนี้`), and a test fails if that line is missing from a block with no marker or present on one with a marker.
+  - **Mutation-tested:** a bullet moved outside a block, a wrong page, a mistake dropped, the warning tone removed, a citation removed, a summary point reworded (`3 ปี` → `2 ปี`) — each fails a named test.
+  - **Open for the owner:** (1) **The N-loss figure** (30–44% / <5%) is attributed in the pamphlet's text to `MSU Extension EB0209` but that document has **no entry in the sources list and no tier**; adding one means choosing its tier (a university extension document reads as `research`), so it is yours (`docs/content/TIER-REVIEW.md`). (2) `กลบยูเรียทุกครั้ง` (summary point 4) is stronger than the mistakes list, which says watering in also works; both are the pamphlet's words. (3) THAI-REVIEW rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (the document ID) are unchanged. (4) New Thai: U49.
+  - **Not verified:** a real-iPad look at the warning blocks; the chapter-4 text is not independently fact-checked beyond the pamphlet (that would need sources the owner approves, D6/D8).
 
 ---
 
