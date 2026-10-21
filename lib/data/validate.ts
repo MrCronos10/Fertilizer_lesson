@@ -161,6 +161,12 @@ const ROW_CHECKS: Record<TableId, (into: Problem[], where: string, row: Record<s
     const th = (row["labels"] as { th?: Record<string, unknown> })?.th;
     checkString(into, `${where}.labels.th.name`, th?.["name"]);
     checkString(into, `${where}.labels.th.note`, th?.["note"]);
+    checkString(into, `${where}.labels.th.npkText`, th?.["npkText"]);
+    // The printed form must be the numbers and nothing else: same three values, in order.
+    const npk = row["npk"] as { n?: number; p2o5?: number; k2o?: number } | undefined;
+    const printed = String(th?.["npkText"] ?? "").split("-").map(Number);
+    if (npk && (printed.length !== 3 || printed[0] !== npk.n || printed[1] !== npk.p2o5 || printed[2] !== npk.k2o))
+      into.push(`${where}.labels.th.npkText: "${String(th?.["npkText"])}" is not ${npk.n}-${npk.p2o5}-${npk.k2o}`);
   },
   "straight-fertilizers": (into, where, row) => {
     if (!("grade" in row)) into.push(`${where}.grade: missing`);

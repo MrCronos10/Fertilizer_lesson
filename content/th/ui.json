@@ -53,5 +53,18 @@
   "defRuleYoung": "ธาตุที่เคลื่อนที่ไม่ได้ (Fe, Ca, B, S, Mn) แสดงอาการที่ ใบอ่อน/ยอด ก่อน",
   "defRuleNone": "เอกสารไม่ได้ระบุว่าธาตุกลุ่มนี้แสดงอาการที่ใบแก่หรือใบอ่อนก่อน",
   "defSceneLabel": "ภาพวาดต้นพืชสามมิติ ลากเพื่อหมุน",
-  "defNo3d": "เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน"
+  "defNo3d": "เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน",
+  "colType": "ชนิด",
+  "colCharacterUse": "ลักษณะ / ใช้กับ",
+  "colFertilizer": "ปุ๋ย",
+  "colGrade": "สูตร",
+  "colCharacter": "ลักษณะ",
+  "colUseFor": "ใช้กับ",
+  "colMaterial": "วัสดุ",
+  "colPurpose": "ใช้ทำอะไร",
+  "colEquivalence": "ปริมาณเทียบกับหินปูนบด",
+  "tableOrganicCaption": "ปุ๋ยอินทรีย์",
+  "tableStraightCaption": "ปุ๋ยแม่ปุ๋ย N-P-K",
+  "tableCompoundCaption": "ปุ๋ยสูตรผสม NPK",
+  "tableConditionersCaption": "สารปรับปรุงดิน"
 }

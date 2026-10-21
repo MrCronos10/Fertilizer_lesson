@@ -265,6 +265,13 @@ describe("organic fertilizer NPK is anchored to its row", () => {
     // "มูลวัว ( ปุ๋ยคอก ) 1.1-0.4-1.6 ปลอดภัย ช่วยให้ดินร่วน …"
     expectInSourceRow(lines, [row.labels.th.name, formatGrade(row.npk), row.labels.th.note], row.id);
   });
+
+  // formatGrade(npk) drops a trailing zero ("1.5-0.4-1"), which still passes the substring check
+  // above; npkText is the printed form, so it must match the page token for token.
+  it.each(table.rows)("$id: npkText is the printed token, trailing zeros included", (row) => {
+    const tokens = lines.join(" ").split(/\s+/);
+    expect(tokens, row.id).toContain(row.labels.th.npkText);
+  });
 });
 
 describe("compound grades are anchored to their use", () => {

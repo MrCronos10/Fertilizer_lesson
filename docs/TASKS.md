@@ -482,17 +482,26 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Open for the owner:** five new Thai strings U33–U37 in `docs/content/THAI-REVIEW.md` (`เลือกตำแหน่งใบ`, `เอกสารไม่ระบุตำแหน่งใบ`, `เอกสารไม่ได้ระบุว่าธาตุกลุ่มนี้แสดงอาการที่ใบแก่หรือใบอ่อนก่อน`, `ภาพวาดต้นพืชสามมิติ ลากเพื่อหมุน`, `เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน`); and the `ใบอ่อน/ยอด` choice sits over rows about fruit and flowers (Ca, B) — the grouping is the source's own, by element, but the label may read oddly. The amber "selected" glow turns green leaves yellow, which a beginner could read as "this is what deficiency looks like".
 
 ### T-019: Chapters 2–3 — deficiency and fertilizer types (G2, G3)
-- Status: todo
+- Status: done
 - Depends on: T-012, T-018
 - Goal: The two strongest chapters, with their four source tables rendered and cited.
 - Acceptance criteria:
-  - [ ] Deficiency chapter renders the p3 symptom table (10 rows) and links to the explorer
-  - [ ] Types chapter renders organic NPK (5), straight fertilizers (7), compound grades (6), and soil conditioners with lime equivalence (4)
-  - [ ] All requested types present: urea, AS, DAP, TSP, rock phosphate, KCl, K₂SO₄, compound, slow-release, foliar, lime, marl, dolomite, gypsum
-  - [ ] Tables readable at iPad portrait width without horizontal scroll
-  - [ ] Every row cited; tier badges shown
+  - [x] Deficiency chapter renders the p3 symptom table (10 rows) and links to the explorer
+  - [x] Types chapter renders organic NPK (5), straight fertilizers (7), compound grades (6), and soil conditioners with lime equivalence (4)
+  - [x] All requested types present: urea, AS, DAP, TSP, rock phosphate, KCl, K₂SO₄, compound, slow-release, foliar, lime, marl, dolomite, gypsum
+  - [x] Tables readable at iPad portrait width without horizontal scroll
+  - [x] Every row cited; tier badges shown
 - Test plan: e2e asserting row counts per table and the presence of each named fertilizer type. Screenshots at all three sizes.
 - Notes: Reviewer: yes (content accuracy).
+- **Verified:** typecheck, lint, 765 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (377 tests), two full runs. A fresh content reviewer compared all 22 rows with the raw pages p3–p5: **no content defect**.
+  - **Mapping, decided:** the ticket says "deficiency chapter" and "types chapter", but in this repo deficiency (G2) is Chapter 1 and fertilizer types are Chapter 2. The p3 symptom table (10 rows) and the explorer were delivered in **T-018** (the table sits directly under the explorer in ch01), so T-019 adds the four fertilizer tables to **ch02**. Nothing was needed in ch03 (bag reader and calculator).
+  - **What renders in ch02:** organic NPK (5 rows, p3), straight fertilizers (7, p4), compound grades (6, p5), soil conditioners with lime equivalence (4, p5), each from the JSON, in the source's row order, with the pamphlet's own column headings, a screen-reader caption (its section title), a row header, and the page named under it. Prose already named every type the ticket lists (urea, AS, DAP, TSP, rock phosphate, KCl, K₂SO₄, compound, slow-release, foliar, lime, marl, dolomite, gypsum); a test pins each name.
+  - **A real defect found by the tests:** a JSON number cannot keep a trailing zero, so compost (printed `1.5-0.4-1.0`) would have shown as `1.5-0.4-1`; the old row test could not see it because `1.5-0.4-1` is a substring of the printed token. The organic file now carries the printed form (`npkText`), validated against the numbers and pinned token-for-token to the raw page.
+  - **Citations:** each row shows exactly the markers the data attaches to it, as the same linked chips with tier badges the prose uses; every one resolves to ch02's sources list. **"Every row cited" is honest only as "every row names its pamphlet page":** ammonium sulphate, DAP, TSP, rock phosphate, gypsum and most compound rows carry no printed marker, so they show none. The row-to-marker mapping (urea→phys, KCl and SOP→nutrien-ekonomics, marl/dolomite→ku, slaked lime→ku + bansuanporpeang, pre-flowering→sotus + tratruamkaset) follows the pamphlet's marker order and was never confirmed against a rendered PDF (no PDF in the repo). The organic rows' `doa` rests on the printed line "ที่มาของตัวเลข: กรมวิชาการเกษตร", a table-level source.
+  - **Layout:** no table and no page scrolls sideways at iPad portrait, iPad landscape or Mac; Thai has room for stacked vowels; a grade never breaks across lines (it did: `18-46-` over `0`, fixed with a nowrap grade column and a line-count test). The compound table's first cell is a list such as `15-15-15 / 16-16-16`, as the pamphlet prints it.
+  - **Mutation-tested:** dropped citation chips, compost shown from the number, a dropped row, a corrupted DAP grade, a corrupted marl factor, a mismatched `npkText`, a wrong heading, and the nowrap rule (the first attempt hit the wrong CSS rule; redone) — each fails a named test.
+  - **New Thai: none.** All headings are the pamphlet's header words; the four captions are its section titles. The only new key text is not Thai (`N-P-K (%)` is inlined, as the pamphlet prints it).
+  - **Open for the owner:** (1) DAP's use cell reads `ปุ๋ยรองพื้น (นิยมในกัมพูชา)` — the pamphlet's own words, but a Cambodia mention inside a Thai-audience table (D11); keep or cut? (2) three of the cited rows show a **commercial** tier badge (urea, KCl, SOP, pre-flowering), which is honest but may surprise; (3) whether a beginner will read the compound table's `สูตร` cells as one formula; (4) confirm the row-to-marker mapping against the PDF.
 
 ### T-020: Crop matcher (G6)
 - Status: todo
