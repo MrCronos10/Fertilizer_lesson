@@ -21,7 +21,7 @@ function NutrientGroups({ ui }: { ui: UiStrings }) {
   const pages = [...new Set(rows.map((r) => r.sourcePage))].join(", ");
   return (
     <figure className="table-figure" tabIndex={0} aria-label={ui.nutrientGroupsCaption}>
-      <table className="source-table">
+      <table className="source-table" data-cols={3}>
         <caption className="visually-hidden">{ui.nutrientGroupsCaption}</caption>
         <thead>
           <tr>
@@ -53,7 +53,7 @@ function DeficiencySymptoms({ ui }: { ui: UiStrings }) {
   const pages = [...new Set(rows.map((r) => r.sourcePage))].join(", ");
   return (
     <figure className="table-figure" tabIndex={0} aria-label={ui.defTableCaption}>
-      <table className="source-table">
+      <table className="source-table" data-cols={2}>
         <caption className="visually-hidden">{ui.defTableCaption}</caption>
         <thead>
           <tr>
@@ -117,7 +117,7 @@ function TableFigure({
 }) {
   return (
     <figure className="table-figure" tabIndex={0} aria-label={caption}>
-      <table className="source-table">
+      <table className="source-table" data-cols={headings.length}>
         <caption className="visually-hidden">{caption}</caption>
         <thead>
           <tr>
