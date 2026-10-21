@@ -171,3 +171,19 @@ New Thai, written for the site and **needing your ✅ / ✍️**:
 
 Also worth your eye: the plant tells nobody it can be dragged or pinched except through U36
 (`ลากเพื่อหมุน`, "drag to rotate"), which is read by VoiceOver but not shown on screen.
+
+## The crop matcher, T-020: three new UI strings, three of the pamphlet's own words
+
+The pamphlet's p12–13 crop table is printed in **English**. D6 forbids new agronomic Thai, so each item's wording is shown exactly as printed (marked as English) next to a structured line built from the data: `สูตร` and the number with the source's own unit (`kg/rai`, `kg/ha`, `kg/tree`), not translated. **Decision for you:** if you want those items in Thai, the translation has to be yours, or approved by you line by line.
+
+The pamphlet's own words (pinned to the raw pages by a test): `ปุ๋ยรองพื้น`, `ปุ๋ยแต่งหน้า` (p5), `อัตราอ้างอิง` (p3, there used for the standard's rate). The crop names are the table's own Thai (`ข้าว`, `ข้าวโพด`, `มันสำปะหลัง`, `อ้อย`, `มะม่วง`, `ทุเรียน`, `ผัก`; `ยางพารา` is the p5 word for the group, the two rows are `ยางก่อนเปิดกรีด` and `ยางเปิดกรีด`).
+
+New Thai, needing your ✅ / ✍️:
+
+| #   | Key                      | Thai                                                                                        | Used for                                                                                                          |
+| --- | ------------------------ | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| U38 | `cropLegend`             | `เลือกพืช`                                                                                   | Label of the eight-crop choice ("choose a crop").                                                                 |
+| U39 | `cropNoReliable`         | `ยังไม่มีแหล่งที่เชื่อถือได้พอสำหรับพืชนี้ จึงแสดงเป็นข้อความอ้างอิงเท่านั้น ไม่ใช่ตัวเลขที่แนะนำ`  | Shown for a crop (sugarcane, rubber, mango, vegetables) whose only backing is commercial or unattributed: "no source reliable enough for this crop yet, so reference text only, not a recommended figure". Also read aloud on selecting it. |
+| U40 | `cropDescriptiveHeading` | `ข้อความอ้างอิง (ไม่ใช่ตัวเลขที่แนะนำ)`                                                        | Heading over any guidance the site will not stand behind as a number: "reference text (not a recommended figure)". |
+
+Things to decide, all in `docs/TASKS.md` T-020 Verified note: the cassava number (a CIAT **regional** figure, about 80–96 kg/rai, roughly 3× the Thai 25–50 kg/rai that sits under the reference heading), the vegetables row (its only source is a Cambodian working paper), and chapter 5's sources list (`irri` and `cambridge` removed).

@@ -66,5 +66,11 @@
   "tableOrganicCaption": "ปุ๋ยอินทรีย์",
   "tableStraightCaption": "ปุ๋ยแม่ปุ๋ย N-P-K",
   "tableCompoundCaption": "ปุ๋ยสูตรผสม NPK",
-  "tableConditionersCaption": "สารปรับปรุงดิน"
+  "tableConditionersCaption": "สารปรับปรุงดิน",
+  "cropLegend": "เลือกพืช",
+  "cropBasal": "ปุ๋ยรองพื้น",
+  "cropTopDressing": "ปุ๋ยแต่งหน้า",
+  "cropRate": "อัตราอ้างอิง",
+  "cropNoReliable": "ยังไม่มีแหล่งที่เชื่อถือได้พอสำหรับพืชนี้ จึงแสดงเป็นข้อความอ้างอิงเท่านั้น ไม่ใช่ตัวเลขที่แนะนำ",
+  "cropDescriptiveHeading": "ข้อความอ้างอิง (ไม่ใช่ตัวเลขที่แนะนำ)"
 }

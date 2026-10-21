@@ -504,18 +504,28 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Open for the owner:** (1) DAP's use cell reads `ปุ๋ยรองพื้น (นิยมในกัมพูชา)` — the pamphlet's own words, but a Cambodia mention inside a Thai-audience table (D11); keep or cut? (2) three of the cited rows show a **commercial** tier badge (urea, KCl, SOP, pre-flowering), which is honest but may surprise; (3) whether a beginner will read the compound table's `สูตร` cells as one formula; (4) confirm the row-to-marker mapping against the PDF.
 
 ### T-020: Crop matcher (G6)
-- Status: todo
+- Status: done
 - Depends on: T-019
 - Goal: Pick one of 8 crops, see type, rate, and timing with citation and tier.
 - Acceptance criteria:
-  - [ ] All 8 crops selectable: rice, corn, cassava, sugarcane, rubber, mango, durian, vegetables
-  - [ ] Data from the p12–13 table (10 rows); rates shown as ranges with the soil-test note
-  - [ ] `commercial`-tier-only rates shown as descriptive text, not as actionable numbers
-  - [ ] No `KH`-tagged row is reachable
-  - [ ] Keyboard and touch operable; no hover-only reveal
-  - [ ] **(carried from T-007)** A crop for which `cropsFor()` returns no actionable guidance (sugarcane, mango, both rubber rows) shows an explicit "no reliable source" state with its descriptive text from `cropsForReading()`, instead of rendering a crop with no advice.
+  - [x] All 8 crops selectable: rice, corn, cassava, sugarcane, rubber, mango, durian, vegetables
+  - [x] Data from the p12–13 table (10 rows); rates shown as ranges with the soil-test note
+  - [x] `commercial`-tier-only rates shown as descriptive text, not as actionable numbers
+  - [x] No `KH`-tagged row is reachable
+  - [x] Keyboard and touch operable; no hover-only reveal
+  - [x] **(carried from T-007)** A crop for which `cropsFor()` returns no actionable guidance (sugarcane, mango, both rubber rows) shows an explicit "no reliable source" state with its descriptive text from `cropsForReading()`, instead of rendering a crop with no advice.
 - Test plan: e2e cycling all 8 crops, asserting the rate matches the JSON and that the KH table is unreachable. Unit test on the tier-filtering query.
 - Notes: Reviewer: yes (content accuracy). Mango's rate is per-tree (1–2 kg/tree), not per-rai — the UI must not assume every rate shares a unit.
+- **Verified:** typecheck, lint, 790 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (436 tests), two full runs. A fresh content + accessibility reviewer checked every crop against the raw p12–13 table: **no number, grade, unit, stage or source attached to the wrong place**. Its findings were about how two things read, now partly fixed (below).
+  - **What it is:** in chapter 5 (the matcher's chapter, G6) a choice of the eight crops (`ข้าว`, `ข้าวโพด`, `มันสำปะหลัง`, `อ้อย`, `ยางพารา`, `มะม่วง`, `ทุเรียน`, `ผัก`) as real radios, rice already shown. The 10 rows of the p12–13 table are covered exactly once (rice = clay + sandy rows, rubber = before + after tapping). Each shows `ปุ๋ยรองพื้น` / `ปุ๋ยแต่งหน้า`, the source's wording, tier-badged sources and the soil-test note.
+  - **Language, decided:** the table is printed in **English** and D6 forbids new agronomic Thai, so each item shows the source's wording as printed (marked as English), plus a structured line built from the data: `สูตร` and `อัตราอ้างอิง <range> <source's own unit>`. Nothing is translated. A per-tree rate says `kg/tree`; a rate with no number (maize, "by soil test") shows none.
+  - **The tier filter (D9), derived not listed:** numbers appear only for guidance the data layer marks actionable (via `cropsForReading`, which already drops Cambodian guidance); the rest is the source's text under `ข้อความอ้างอิง (ไม่ใช่ตัวเลขที่แนะนำ)` with no structured figure. A crop whose rows have no actionable guidance says so in words (`ยังไม่มีแหล่งที่เชื่อถือได้พอ…`). The derived list is **sugarcane, rubber (both rows), mango and vegetables**; the ticket named the first three groups but not vegetables, which has the same property (unattributed + Cambodian-survey backing only).
+  - **Sources:** each chip shows a name and tier. A marker links to chapter 5's sources list only if the list has it; cassava's dolomite marker (`blogspot`) is printed on p5, not p12–13, so it shows name and tier **without a link** rather than a dead one. Named-only sources (TAS 4401-2008, Rice Department, …) show name and tier, unlinked. **`irri` and `cambridge` were removed from chapter 5's list** (they only backed the hidden Cambodian rice table, so the list named sources nothing visible cited — the open item from T-019); a test fails if the list names a source no figure links to.
+  - **Two reviewer points fixed:** a figure the source calls regional now carries a visible `regional` tag, so cassava's number is not read as the Thai rate; and only the crop's name (plus the no-source warning) is announced on a change, not the whole panel (the long panel is no longer a live region).
+  - **Proven by e2e (all three viewports):** all 8 crops cycled with each item's wording, actionable flag, range and unit read back and checked against the JSON directly (not through the app's own filter); the no-source state on exactly the right crops with zero numbers; the soil-test note once per panel; no Cambodian wording under any crop and no table on the page; per-tree and no-number cases; chips resolve to the list; the list names no orphan; arrow-key and touch operation; tap targets ≥ 44 px; no `:hover` rule on the matcher; the radios and the rice panel are in the server HTML; no sideways scroll; no console errors.
+  - **Mutation-tested:** figures on descriptive items, a missing soil-test block, a hard-coded unit, every chip linked, the actionable filter inverted, Cambodian guidance relabelled Thai, a crop dropped, `irri` put back — each fails a named test.
+  - **Open for the owner — please decide:** (1) **Cassava** shows one number: a CIAT *regional* 500–600 kg/ha (about 80–96 kg/rai, roughly 3× the descriptive Thai 25–50 kg/rai). It is actionable by D9 and labelled regional, but a beginner could still read it as the rate; options: leave, drop the REGIONAL row (one line + one test), or add a sentence (new agronomic Thai, yours to write). (2) **Vegetables**: the only named source is a Cambodian working paper; it is not tagged Cambodian so it passes D11, and is shown as reference text only with that source named. Keep, or hide the crop? (3) **English items**: translate them yourself, or keep them as printed? (4) New Thai **U38–U40** in `docs/content/THAI-REVIEW.md`. (5) `ยางพารา` is the p5 word for the group, not a p12 row label.
+  - **Not verified:** VoiceOver on a real iPad; the matcher's contrast of the muted reference text was not measured (T-025).
 
 ### T-021: Quiz with `localStorage` progress (G7 review)
 - Status: todo
