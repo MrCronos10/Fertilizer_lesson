@@ -33,6 +33,25 @@ export const UI_KEYS = [
   "colRole",
   "nutrientGroupsCaption",
   "numsHeading",
+  /** The calculator (T-014). `calcUse` and `calcKg` are the source's own words (p6). */
+  "calcHeading",
+  "calcNutrient",
+  "calcTarget",
+  "calcGrade",
+  "calcPick",
+  "calcCustom",
+  "calcSubmit",
+  "calcUse",
+  "calcKg",
+  "calcPerRai",
+  "calcWorking",
+  "calcErrTargetEmpty",
+  "calcErrNotNumber",
+  "calcErrTargetInvalid",
+  "calcErrGradeEmpty",
+  "calcErrGradeInvalid",
+  "calcErrNutrientZero",
+  "calcErrResult",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

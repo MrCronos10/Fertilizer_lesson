@@ -273,7 +273,7 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 - Notes: No i18n library (D18). Phones must not break even though they are not a target.
 - **Verified:** typecheck, lint, 483 unit tests and the production build green; 78 WebKit e2e across the three viewports (all run against a fresh `next start` on its own port).
   - Routes: `/` → `/th` (non-permanent redirect in `next.config.ts`), `/th` (contents), `/th/ch01`…`/th/ch07`. Chapters compile from `content/th/*.mdx` at build time with `@mdx-js/mdx`; the Thai in the shell comes from chapter frontmatter and the new `content/th/ui.json`. A test fails if Thai appears in any route or component file.
-  - **Measured JS: 175 KB gzipped on `/th`** against the 180 KB budget (~97% used by an empty shell). The framework baseline is already most of the budget; T-011 and T-012 must add almost no client JS or the budget breaks. The test measures every text route's scripts, not a build-output estimate.
+  - **JS budget, corrected in T-014:** I first reported 175 KB gzipped on `/th` (97% of 180 KB) by summing every `<script src>` in the HTML. That wrongly counted two `noModule` polyfill chunks (about 41 KB) that Safari never downloads. Measured in a real WebKit page the figure is **about 139 KB** on text routes, which leaves about 40 KB of headroom. The budget test now measures what the browser actually loads.
   - **Tables, citations and the quiz are slots, not UI yet.** `<SourceTable>` and `<Quiz>` render hidden and empty; `<Cite>` shows the raw key (e.g. `[doa]`). Chapters therefore show prose only until T-011/T-012/T-019/T-021. The Cambodian table cannot reach the page (D11): a unit test and an e2e tripwire cover it.
   - **Guards mutation-tested** (each corruption made, confirmed to fail, then restored): a chapter tag with no component (this crashed the first build on `<Quiz>`), Thai hard-coded in a component, a missing UI key, a table rendered from the KH slot, a lowered bundle limit, a removed noindex tag.
   - **Found and fixed in my own test setup:** a `next dev` server already on :3000 was silently reused by Playwright, so a first "30 passed" ran against dev, not production (and showed 829 KB of JS). `E2E_PORT` now makes the config start its own server.
@@ -359,18 +359,38 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 - **Open for the owner — please decide:** **cassava's CIAT regional rate is in the calculator's data.** It is 15-15-15 at 80–96 kg/rai, about 2–3× the Thai figure on the same row (25–50 kg/rai), which the site correctly refuses because only commercial sources back it. It reaches the calculator because T-007 kept the CIAT line actionable (REGIONAL scope, one `cgiar` citation). The reviewer and I both think a Thai grower's calculator should not offer it. Options: (a) leave it, (b) drop `REGIONAL` from `calculatorRates` (one line plus one test), or (c) keep it but have T-014 label it as regional guidance. I have not changed it, since T-007's decision was yours.
 
 ### T-014: Calculator UI
-- Status: todo
+- Status: done
 - Depends on: T-013, T-011
 - Goal: A touch-friendly calculator that shows its working and its sources.
 - Acceptance criteria:
-  - [ ] Inputs for target nutrient (kg/rai) and grade; grade selectable from the source's published list as well as free entry
-  - [ ] The worked arithmetic is displayed, not just the result
-  - [ ] All controls ≥ 44×44pt; numeric keypad triggered on iPad; fully keyboard-operable on Mac
-  - [ ] Invalid input produces a clear Thai message, never a crash or `NaN`
-  - [ ] Result carries the soil-test note and its citation
-  - [ ] Announced correctly by VoiceOver, including the result updating
+  - [x] Inputs for target nutrient (kg/rai) and grade; grade selectable from the source's published list as well as free entry
+  - [x] The worked arithmetic is displayed, not just the result
+  - [x] All controls ≥ 44×44pt; numeric keypad triggered on iPad; fully keyboard-operable on Mac
+  - [x] Invalid input produces a clear Thai message, never a crash or `NaN`
+  - [x] Result carries the soil-test note and its citation
+  - [x] Announced correctly by VoiceOver, including the result updating
 - Test plan: e2e in all three viewports covering a valid calculation, a zero-nutrient grade, and a negative target. VoiceOver check on iPad. Screenshots both themes.
 - Notes: Reviewer: yes (accessibility).
+- **Verified:** typecheck, lint, 677 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (the calculator spec run three times over). Test-first for the pure form logic; a fresh accessibility reviewer then found real problems.
+  - **Where it lives:** the `<Calculator />` slot at the end of chapter 3 (the chapter about reading the three numbers on a bag). The form is a client island loaded as its own 2.4 KB chunk, so only chapter 3 pays for it; the form is in the server-rendered HTML, so there is no flash of a missing form. Real browser-loaded JS on ch03 is about 141 KB against the 180 KB budget.
+  - **Inputs:** N / P₂O₅ / K₂O radios; the amount in kg/rai; the grade from a picker of the 20 bag grades printed on the pamphlet's p4 and p5 (in table order, straight fertilizers named by the pamphlet's Thai, rock phosphate and the organic "about" figures left out) or typed into three fields. Text fields with `inputmode="decimal"` raise the iPad's decimal keypad; Thai digits are accepted; Enter submits.
+  - **The answer** is `ให้ใช้ ≈ 22 กก. ต่อไร่`, the source-form line `10 × 100 ÷ 46 ≈ 22 กก.`, and the working step by step. It appears only when asked for and disappears the moment any control changes, so an old dose is never left next to new inputs. It carries the soil-test note and `หน้าในเอกสารต้นฉบับ: 3, 6` (pinned to the raw pages).
+  - **Errors** are Thai, specific, and never `NaN`: empty amount, not a number (with a hint about the decimal point), negative amount, blank or invalid grade, a 0% nutrient (e.g. P₂O₅ from urea), too large. The offending field gets `aria-invalid`, a heavier border (not colour alone), `aria-describedby` pointing at the message, and the cursor.
+  - **Announcing:** a polite, atomic `role=status` region that is always in the page, plus a separate `role=alert`. Both replace their content on every submit, so pressing the button twice with identical input is still announced.
+  - **Review findings fixed:**
+    - The printed working could contradict itself: it rounded inputs and intermediates to two decimals while computing in full, so `22.499 kg` showed `2,249.9 ÷ 100 = 22.5` then `22.5 ≈ 22`, and `10.005` showed `10.01 × 100 = 1,000.5`. Inputs are now printed exactly as typed, an exact quotient is printed in full, and an inexact one gets two decimals or more only as needed for its last step to agree.
+    - Testing that found a real bug in the calculator itself: `2.3 × 100` is `229.99999999999997` in floating point, so 2.3 kg N from a 20% product rounded **down** to 11 kg when the arithmetic is exactly 11.5 and the source's rounding gives 12. The rounding now cleans float noise first (and rounds sub-1 kg amounts half-up by decimal scaling, since `toPrecision` rounded 0.35 to 0.3). Regression tests cover it.
+    - "Not a number" had the wrong message ("must not be negative"); it is now its own error.
+    - Five corruptions passed the whole e2e suite, the worst being that switching the nutrient radio did not clear the answer. Each is now a failing test, alongside focus-on-error, re-announcing, and all three grade fields being flagged for a grade that sums over 100.
+  - **My own tests caught two more:** the native `<select>` renders 26 px tall in WebKit (it ignores `min-height`; an explicit `height` fixes it), and the flagged-field style never applied because a more specific input rule overrode it.
+  - **A WebKit bug found by a flaky test, and fixed.** A citations test that walks all seven chapters began timing out about a third of the time at `/th/ch03`: `readyState` stuck at `interactive`, `load` never fired, nothing outstanding. Bisected, not guessed: rendering nothing in the slot fixed it; running the component with empty markup fixed it; removing the native `<select>` fixed it; ASCII-only option labels fixed it; but fewer options, a static instead of lazy import, and removing the height rule did **not**. The cause is a native `<select>` that inherits the page's web font while holding Thai text. Giving the select the system font fixes it (0 failures in 80 navigations, against about 30% before). Two guards stay in the calculator spec: the select must not use the web font, and chapter 3 must reach `load` eight times in a row. I could not test real Safari, so a spinning tab there is unconfirmed, but the fix costs nothing visible.
+  - **Mutation-tested:** about 45 corruptions across parsing, formatting, field mapping, picker contents, rounding, the working lines, state clearing, ARIA wiring, focus and height; all fail.
+- **Not verified, needs a person:** VoiceOver on a real iPad (announcement of the result, the radio group, the picker) and a real finger on the keys. Mac Safari skips radios and buttons on Tab unless Option-Tab or the preference is on; the controls are all keyboard-operable otherwise. No iPad link exists until T-003's Vercel actions are done.
+- **Open for the owner:**
+  - **UI Thai U18 to U32** in `docs/content/THAI-REVIEW.md` (labels and error messages).
+  - There is **no plausibility cap**: 0.0046% N gives `217,391 กก.` with no warning, because the source gives no plausible range and I invented none. Say if you want a warning above some amount.
+  - A person who types before the form hydrates may lose that input on a very slow connection (a controlled field resets at hydration). It affects a tiny chunk on one chapter; I did not engineer around it.
+  - The cassava CIAT question from T-013 does not touch this UI (the picker offers the printed bag grades, not the crop rates).
 
 ### T-015: NPK bag reader (2D)
 - Status: todo

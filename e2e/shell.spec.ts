@@ -100,16 +100,20 @@ test("respects safe-area padding on the shell", async ({ page }) => {
   expect(parseFloat(padding)).toBeGreaterThan(0);
 });
 
-test("text routes ship at most 180 KB gzipped JS", async ({ request }) => {
+test("text routes ship at most 180 KB gzipped JS, counting every script a real page loads", async ({ page }) => {
+  // Measured in the browser, not from <script> tags: a lazily imported chunk (the
+  // calculator on ch03) is fetched after hydration and would be missed by the HTML.
   for (const route of ["/th", ...CHAPTERS.map((c) => `/th/${c}`)]) {
-    const html = await (await request.get(route)).text();
-    const srcs = [...new Set([...html.matchAll(/<script[^>]+src="([^"]+\.js[^"]*)"/g)].map((m) => m[1]))];
-    let total = 0;
-    for (const src of srcs) {
-      const body = await (await request.get(src as string)).body();
-      total += gzipSync(body).length;
-    }
-    expect(srcs.length, `${route} found no scripts to measure`).toBeGreaterThan(0);
+    const loaded: Promise<number>[] = [];
+    const onResponse = (response: import("@playwright/test").Response) => {
+      if (/\.js(\?|$)/.test(response.url())) loaded.push(response.body().then((b) => gzipSync(b).length));
+    };
+    page.on("response", onResponse);
+    await page.goto(route, { waitUntil: "networkidle" });
+    page.off("response", onResponse);
+    const sizes = await Promise.all(loaded);
+    const total = sizes.reduce((a, b) => a + b, 0);
+    expect(sizes.length, `${route} found no scripts to measure`).toBeGreaterThan(0);
     expect(total, `${route} JS is ${total} bytes gzipped`).toBeLessThanOrEqual(180 * 1024);
   }
 });

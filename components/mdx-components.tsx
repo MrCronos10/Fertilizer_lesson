@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import type { UiStrings } from "@/lib/ui";
+import { publishedGrades } from "@/lib/calculator-data";
+import { Calculator as CalculatorIsland } from "./Calculator";
 import { makeCite } from "./Citations";
 import { makeNums } from "./Nums";
 import { makeSourceTable } from "./SourceTables";
@@ -23,5 +25,13 @@ export function Quiz({ chapter }: { chapter: number }) {
 }
 
 export function mdxComponents(ui: UiStrings) {
-  return { Cite: makeCite(ui), SourceTable: makeSourceTable(ui), Nums: makeNums(ui), Callout, Quiz };
+  return {
+    Cite: makeCite(ui),
+    SourceTable: makeSourceTable(ui),
+    Nums: makeNums(ui),
+    // The one client island in the chapters; its grades are read here, on the server.
+    Calculator: () => <CalculatorIsland ui={ui} grades={publishedGrades()} />,
+    Callout,
+    Quiz,
+  };
 }

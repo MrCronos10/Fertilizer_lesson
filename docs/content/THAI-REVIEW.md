@@ -111,3 +111,32 @@ not use the words "starting point", so the site does not claim the source said t
 
 The three column headings of the p2 table (`กลุ่ม`, `ธาตุ`, `หน้าที่ (จำง่าย)`) are the pamphlet's
 own words and a test pins them to the raw page; they are not new Thai.
+
+## New UI Thai written for T-014, the calculator (not from the source)
+
+Two keys are the pamphlet's own words and are not new: `calcUse` = `ให้ใช้` and `calcKg` = `กก.`
+(p6: *"ให้ใช้ 10 × 100 ÷ 46 ≈ 22 กก."*). `calcGrade` = `สูตร (ตัวเลข 3 ตัวบนกระสอบ)` joins the
+pamphlet's table heading `สูตร` with its own phrase `ตัวเลข 3 ตัวบนกระสอบ` (ch. 3, p6); it avoids
+`สูตรปุ๋ย`, which is still your call (CONTEXT.md). Everything below is written by me.
+
+| #   | Key                    | Thai                                              | Used for                                                              |
+| --- | ---------------------- | ------------------------------------------------- | --------------------------------------------------------------------- |
+| U18 | `calcHeading`          | `คำนวณปริมาณปุ๋ย`                                  | Heading of the calculator                                             |
+| U19 | `calcNutrient`         | `ธาตุที่ต้องการ`                                   | Legend over the N / P₂O₅ / K₂O choice                                  |
+| U20 | `calcTarget`           | `ปริมาณธาตุที่ต้องการ (กก./ไร่)`                    | Label of the amount field; `กก./ไร่` is the pamphlet's unit            |
+| U21 | `calcPick`             | `เลือกสูตรที่มีในเอกสาร`                            | Label of the list of grades the pamphlet prints                        |
+| U22 | `calcCustom`           | `กรอกเอง`                                          | First option of that list: type your own three numbers                 |
+| U23 | `calcSubmit`           | `คำนวณ`                                            | The button                                                            |
+| U24 | `calcPerRai`           | `ต่อไร่`                                           | After the answer: "≈ 22 กก. ต่อไร่" (the target is per rai)            |
+| U25 | `calcWorking`          | `วิธีคำนวณ`                                        | Heading over the step-by-step arithmetic                              |
+| U26 | `calcErrTargetEmpty`   | `กรอกปริมาณธาตุที่ต้องการ`                          | The amount field is empty                                             |
+| U27 | `calcErrTargetInvalid` | `กรอกปริมาณเป็นตัวเลขที่ไม่ติดลบ`                    | The amount is a number but negative                                   |
+| U28 | `calcErrGradeEmpty`    | `กรอกตัวเลขสูตรให้ครบทั้ง 3 ช่อง`                   | One of the three grade fields is blank                                |
+| U29 | `calcErrGradeInvalid`  | `ตัวเลขสูตรต้องไม่ติดลบ และรวมกันไม่เกิน 100`        | A grade number is negative, or the three add to more than 100         |
+| U30 | `calcErrNutrientZero`  | `สูตรนี้ไม่มีธาตุที่เลือก (0%) จึงคำนวณไม่ได้`       | e.g. asking for P₂O₅ from urea 46-0-0                                 |
+| U32 | `calcErrNotNumber`     | `กรอกเป็นตัวเลข โดยใช้จุด (.) เป็นทศนิยม`            | Text, `1e3` or a comma such as `1,5` in any field: "enter a number, with a point for decimals" |
+| U31 | `calcErrResult`        | `ตัวเลขใหญ่เกินไปที่จะคำนวณ`                        | The amount is so large the answer overflows                           |
+
+The grade list shows each straight fertilizer by the Thai name the pamphlet gives it (`ยูเรีย`,
+`แอมโมเนียมซัลเฟต`, `DAP`, `TSP`, `KCl`, `K₂SO₄`); the Chinese gloss in the pamphlet's glossary is
+dropped. The soil-test note under every answer is the p3 sentence from U15.
