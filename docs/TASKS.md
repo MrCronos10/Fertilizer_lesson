@@ -639,15 +639,23 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: none** (the tables' accessible names reuse their existing captions).
 
 ### T-026: Phone layouts must not break
-- Status: todo
+- Status: done (real-phone look is yours)
 - Depends on: T-023
 - Goal: Confirm phones degrade acceptably even though they are not a v1 target.
 - Acceptance criteria:
-  - [ ] No horizontal page scroll at 390 px wide on any route
-  - [ ] All tables remain readable (scroll container or reflow, owner's choice per table)
-  - [ ] 3D scenes either work or show the static fallback — never a broken canvas
+  - [x] No horizontal page scroll at 390 px wide on any route
+  - [x] All tables remain readable (scroll container or reflow, owner's choice per table)
+  - [x] 3D scenes either work or show the static fallback — never a broken canvas
 - Test plan: WebKit at 390×844; screenshot every route.
 - Notes: PRD §4 non-goal, but "must not break" is still a criterion.
+- **Verified:** typecheck, lint, unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac. `e2e/phone.spec.ts` runs once in a 390 × 844 window with touch at 3× pixel density; a full-page picture of every route is saved to `test-results/phone/` (and attached to the report, which CI uploads). Most of the groundwork was T-025's 320 px reflow work; this ticket measures the phone case itself and fixes what it found.
+  - **No sideways scroll at 390 px on any route** (home, chapters 1–7 and the three specimen pages), and nothing visible past the right edge except inside a table's own scroll box; no console error on any of them.
+  - **Tables (my choice, per your "scroll or reflow"): scroll.** The pictures showed chapter 2's four-column tables crushed: text columns about 70 px wide, six or seven lines for one sentence, the last column cut off. Below 30 em a three-column table now keeps a 30 rem width and a four-column table 40 rem, so its columns stay readable, and it scrolls sideways inside its own focusable box with the first cell (the row's name) pinned, so a row is never read without its name. iPad and desktop are untouched (the tables still fit there, which T-019 requires). I chose scrolling over turning rows into cards because a CSS card layout makes Safari drop the table's structure for VoiceOver; say if you would rather have cards and I will do it with explicit roles.
+  - **3D scenes:** on a phone the plant draws (buffer at most 2× even on this 3× screen, never wider than the screen), and a finger tap on the old leaves selects them. With WebGL unavailable the fallback text shows and the choices and table still work. A scene that cannot start shows the fallback through the error boundary as well, so even removing the up-front WebGL check does not leave a broken canvas (that mutation did not fail the test, correctly: the boundary catches it).
+  - **Also checked at 390 px:** the calculator (valid result), the bag reader, the crop matcher and the quiz all work with taps and fit; the timing diagram scales to the screen with text at least 14 px.
+  - **Mutation-tested:** the four-column minimum width removed (a text column fell to 82 px: caught), the pinned first column removed (caught).
+  - **Not verified:** a real phone (the only one I can give you is WebKit in a phone-sized window); iOS's on-screen keyboard covering a form field (the calculator's focus handling is the same as on iPad); the pictures in `test-results/phone/` were looked at for chapters 1 and 2 only.
+  - **New Thai: none.**
 
 ---
 

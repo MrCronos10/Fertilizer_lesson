@@ -898,3 +898,22 @@ main:focus {
   margin: 0;
   font-size: 0.875rem;
 }
+
+/* Tables on a phone (T-026). Squeezed into 358 px a four-column Thai table gets columns about 70 px wide and
+   the last one is cut off, so below 30 em a table keeps a width its columns can read in and scrolls sideways
+   inside its own (focusable) box; its first cell stays pinned so a row is never read without its name. Wider
+   screens are untouched: at iPad width these tables fit with no scrolling. */
+@media (max-width: 30em) {
+  .source-table[data-cols="3"] {
+    min-width: 30rem;
+  }
+  .source-table[data-cols="4"] {
+    min-width: 40rem;
+  }
+  .table-figure .source-table th[scope="row"] {
+    position: sticky;
+    inset-inline-start: 0;
+    background: var(--panel);
+    box-shadow: 1px 0 0 var(--line);
+  }
+}
