@@ -61,6 +61,20 @@ export const UI_KEYS = [
   /** The p3 table's own heading and the source's "อาการขาดธาตุ" label; pinned to the raw page / chapter 1. */
   "colSymptom",
   "defTableCaption",
+  /** Column headings and captions of the four fertilizer tables (T-019): the pamphlet's own words on p3, p4, p5 (captions are its section headings). */
+  "colType",
+  "colCharacterUse",
+  "colFertilizer",
+  "colGrade",
+  "colCharacter",
+  "colUseFor",
+  "colMaterial",
+  "colPurpose",
+  "colEquivalence",
+  "tableOrganicCaption",
+  "tableStraightCaption",
+  "tableCompoundCaption",
+  "tableConditionersCaption",
   /** The deficiency explorer (T-018). `defOld`, `defYoung` and the two rules are the source's own words. */
   "defLegend",
   "defOld",

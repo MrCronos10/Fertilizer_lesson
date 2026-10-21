@@ -111,7 +111,11 @@ export interface DeficiencyRow extends Row {
 
 export interface OrganicFertilizerRow extends Row {
   readonly npk: Npk;
-  readonly labels: { readonly th: { readonly name: string; readonly note: string } };
+  /**
+   * `npk` as the pamphlet prints it. A JSON number cannot keep a trailing zero, and the
+   * source prints compost as `1.5-0.4-1.0`; the page must not quietly show `1.5-0.4-1`.
+   */
+  readonly labels: { readonly th: { readonly name: string; readonly npkText: string; readonly note: string } };
 }
 
 /* ------------------------------------------------------------------ p4 */

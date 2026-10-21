@@ -694,3 +694,8 @@ main:focus {
 .def-list dd {
   margin: 0;
 }
+
+/* A grade such as 18-46-0 must not break at its hyphens ("18-46-" / "0"). */
+.source-table .grade {
+  white-space: nowrap;
+}

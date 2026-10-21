@@ -60,8 +60,15 @@ describe("p2 nutrient-group table", () => {
 });
 
 describe("which tables render", () => {
-  it("is exactly the two tables chapter 1 owns (the p2 groups, and the p3 symptoms for T-018)", () => {
-    expect(RENDERED_TABLE_IDS).toEqual(["nutrient-groups", "deficiency-symptoms"]);
+  it("is exactly the six tables for Thai readers: p2 groups, p3 symptoms and the four fertilizer tables", () => {
+    expect(RENDERED_TABLE_IDS).toEqual([
+      "nutrient-groups",
+      "deficiency-symptoms",
+      "organic-fertilizer-npk",
+      "straight-fertilizers",
+      "compound-grades",
+      "soil-conditioners",
+    ]);
   });
 
   it.each(["rice-by-soil-group-kh", "other-crops", "glossary", "no-such-table"])(
