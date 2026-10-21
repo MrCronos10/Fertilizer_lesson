@@ -20,13 +20,22 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="th">
       <head>
-        {/* Only the Thai subsets are preloaded: every page is Thai, so these are
-            always needed, while the Latin files often are not. The 600 weight is
-            included because it carries the soil-test note and the primary call to
-            action — iPad's Thai fallback (Thonburi) has very different metrics, so
-            leaving it to `swap` causes visible reflow on exactly the elements that
-            matter most. */}
-        {["sarabun-400-thai", "sarabun-600-thai", "noto-sans-thai-700-thai"].map((face) => (
+        {/* All six faces are preloaded. The Thai subsets were preloaded alone at first, on the
+            thought that the Latin ones are rarely needed; Lighthouse (T-024) showed they are
+            fetched on every page (digits, N, P, K, kg) but only once the stylesheet had been read,
+            so the text re-rendered when they arrived: LCP 2.5 s and a layout shift of 0.23 on
+            chapter 4 under the slow-4G profile. Fetched in parallel with the Thai ones, the swap
+            happens with the first paint. The 600 weight is included because it carries the
+            soil-test note and the primary call to action: iPad's Thai fallback (Thonburi) has very
+            different metrics, so leaving it to `swap` reflows exactly the elements that matter. */}
+        {[
+          "sarabun-400-thai",
+          "sarabun-600-thai",
+          "noto-sans-thai-700-thai",
+          "sarabun-400-latin",
+          "sarabun-600-latin",
+          "noto-sans-thai-700-latin",
+        ].map((face) => (
           <link
             key={face}
             rel="preload"

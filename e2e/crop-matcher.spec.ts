@@ -221,3 +221,12 @@ test("the choices and the first crop's panel are in the server HTML; the page do
   const [sw, cw] = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(sw).toBeLessThanOrEqual(cw);
 });
+
+test("headings never skip a level, for any crop (Lighthouse's heading-order, which caught h1 then h3)", async ({ page }) => {
+  const group = await open(page);
+  for (const crop of CROPS) {
+    await radio(group, crop.label).check();
+    const levels = await page.locator("#content h1, #content h2, #content h3, #content h4, #content h5, #content h6").evaluateAll((hs) => hs.map((h) => Number(h.tagName[1])));
+    for (let i = 1; i < levels.length; i++) expect(levels[i]! - levels[i - 1]!, `${crop.id}: h${levels[i - 1]} then h${levels[i]}`).toBeLessThanOrEqual(1);
+  }
+});

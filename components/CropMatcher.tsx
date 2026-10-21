@@ -119,10 +119,10 @@ export function CropMatcher({ ui, crops }: { ui: UiStrings; crops: readonly Crop
         {crop ? (
           <div key={crop.id} className="panel" data-crop={crop.id} data-reliable={crop.reliable}>
             <RateBlock ui={ui}>
-              <h3 className="crop-name">{crop.label}</h3>
+              <h2 className="crop-name">{crop.label}</h2>
               {crop.rows.map((row) => (
                 <section key={row.id} className="crop-row" data-row={row.id}>
-                  {crop.rows.length > 1 ? <h4>{row.label}</h4> : null}
+                  {crop.rows.length > 1 ? <h3>{row.label}</h3> : null}
                   {!row.hasActionable ? (
                     <p className="note" data-no-reliable role="note">
                       {ui.cropNoReliable}
@@ -130,7 +130,12 @@ export function CropMatcher({ ui, crops }: { ui: UiStrings; crops: readonly Crop
                   ) : null}
                   {row.stages.map((stage) => (
                     <div key={stage.stage} className="crop-stage" data-stage={stage.stage}>
-                      <h5>{stage.stage === "basal" ? ui.cropBasal : ui.cropTopDressing}</h5>
+                      {/* h2 crop, h3 row (only when a crop has two rows), then the stage: no level is ever skipped. */}
+                      {crop.rows.length > 1 ? (
+                        <h4>{stage.stage === "basal" ? ui.cropBasal : ui.cropTopDressing}</h4>
+                      ) : (
+                        <h3>{stage.stage === "basal" ? ui.cropBasal : ui.cropTopDressing}</h3>
+                      )}
                       {stage.actionable.length > 0 ? (
                         <ul className="crop-list">
                           {stage.actionable.map((g) => (
