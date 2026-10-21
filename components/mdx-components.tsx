@@ -11,6 +11,7 @@ import { makeCite } from "./Citations";
 import { CropMatcher } from "./CropMatcher";
 import { DeficiencyExplorer } from "./DeficiencyExplorer";
 import { makeNums } from "./Nums";
+import { TimingDiagram } from "./TimingDiagram";
 import { Quiz as QuizIsland } from "./Quiz";
 import { makeSourceTable } from "./SourceTables";
 
@@ -38,6 +39,7 @@ export function mdxComponents(ui: UiStrings) {
     CropMatcher: () => <CropMatcher ui={ui} crops={cropChoices("th")} />,
     DeficiencyExplorer: () => <DeficiencyExplorer ui={ui} groups={deficiencyGroups()} />,
     Calculator: () => <CalculatorIsland ui={ui} grades={publishedGrades()} />,
+    TimingDiagram: () => <TimingDiagram ui={ui} />,
     Callout,
     // The questions are chapter 7's own frontmatter, passed through untouched.
     Quiz: ({ chapter }: { chapter: number }) => {

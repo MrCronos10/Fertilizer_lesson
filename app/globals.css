@@ -799,3 +799,37 @@ main:focus {
   margin: 0;
   font-weight: 600;
 }
+
+/* Basal vs top dressing diagram (T-022): static, theme-aware, nothing animates. */
+.timing {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  max-width: 440px;
+}
+.timing-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.timing-box {
+  fill: var(--panel);
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+.timing-text,
+.timing-term {
+  fill: var(--ink);
+}
+.timing-term {
+  fill: var(--brand);
+}
+.timing-caption p {
+  margin: 0;
+}
+.timing-sources {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.25rem 0 0;
+  padding-inline-start: 1.25rem;
+}
