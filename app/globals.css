@@ -508,3 +508,101 @@ main:focus {
   height: var(--tap);
   font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* NPK bag reader (T-015): a 2D label of real text. Tiles are labels around visually hidden
+   native radios, so the whole tile is the tap target and the text stays selectable. */
+.bag-reader {
+  display: grid;
+  gap: 1rem;
+}
+.bag {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.bag legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.bag-body {
+  position: relative;
+  display: grid;
+  gap: 0.75rem;
+  max-width: 28rem;
+  padding: 1.75rem var(--gutter) 1rem;
+  background: var(--soft);
+  border: 2px solid var(--line);
+  border-radius: 0.5rem 0.5rem 1.25rem 1.25rem;
+}
+/* The sewn top of the sack: decoration only, no text. */
+.bag-body::before {
+  content: "";
+  position: absolute;
+  inset: 0.5rem 0.75rem auto;
+  border-top: 2px dashed var(--line);
+}
+.bag-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+.bag-tile {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.25rem;
+  min-height: 6rem;
+  min-width: var(--tap);
+  padding: 0.5rem;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.bag-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.bag-symbol {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.bag-number {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+.bag-tile:has(.bag-input:checked) {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
+}
+/* `:focus`, not `:focus-visible`: after arrow-key navigation between radios WebKit reports
+   :focus-visible as false, which would leave a keyboard user with no ring at all (WCAG 2.4.7).
+   The cost is a ring after a mouse click on a tile that is already highlighted. */
+.bag-tile:has(.bag-input:focus) {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.bag-weight {
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+}
+.bag-role {
+  font-weight: 600;
+}
+.bag-panel .panel {
+  display: grid;
+  gap: 0.5rem;
+}

@@ -140,3 +140,16 @@ pamphlet's table heading `สูตร` with its own phrase `ตัวเลข 
 The grade list shows each straight fertilizer by the Thai name the pamphlet gives it (`ยูเรีย`,
 `แอมโมเนียมซัลเฟต`, `DAP`, `TSP`, `KCl`, `K₂SO₄`); the Chinese gloss in the pamphlet's glossary is
 dropped. The soil-test note under every answer is the p3 sentence from U15.
+
+## The bag reader, T-015: no new UI Thai, but two things for you to decide
+
+All five strings the reader adds to `content/th/ui.json` are the pamphlet's own words from p6
+and a test pins each to the raw page: `ตัวเลข 3 ตัวบนกระสอบ` (legend), `กระสอบ`, `มี`, `ไม่มี`, and
+`เปอร์เซ็นต์` (read aloud with each number: "N 16 เปอร์เซ็นต์").
+The explanations are the p2 table's own wording, and the amounts (8 kg, 10 kg) are what the
+calculator works out for the pamphlet's own 50 kg bag of 16-20-0.
+
+| #   | Question                                                                                                                                                                                                                                                                  |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Q1  | **`ไม่มี K`, not `ไม่มี K₂O`.** For the K₂O tile the panel says `กระสอบ 50 กก. ไม่มี K`, because that is the pamphlet's wording on p6, and the explanation line above it (`K = ผลโต …`) is the p2 table's. Both use the element letter while the tile says K₂O. I kept the source's words. ✅ keep, or ✍️ show `K₂O`?                |
+| Q2  | **Nothing tells a beginner the numbers are tappable.** The tiles look like cards and N is already chosen, so the explanation is visible on arrival, but there is no `แตะตัวเลขเพื่อดูความหมาย` ("tap a number to see what it means"). That would be new Thai, so I did not add it. ✅ leave as is, or ✍️ give me wording?             |

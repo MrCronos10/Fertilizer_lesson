@@ -52,6 +52,12 @@ export const UI_KEYS = [
   "calcErrGradeInvalid",
   "calcErrNutrientZero",
   "calcErrResult",
+  /** The bag reader (T-015): all four are the pamphlet's own words (p6), pinned to the raw page. */
+  "bagLegend",
+  "bagWord",
+  "bagHas",
+  "bagNone",
+  "bagPercent",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;
