@@ -101,3 +101,13 @@ page. Note what the source says: *send soil for testing before applying fertiliz
 not use the words "starting point", so the site does not claim the source said that.
 
 | U15 | `soilTestNote` | `ควรส่งดินตรวจที่สถานีพัฒนาที่ดินจังหวัดก่อนเติมปุ๋ย` | **Decide this one.** The wording is the pamphlet's own (p3), but there it closes a warning about yellow leaves (*"ใบเหลืองอาจเกิดจากน้ำขัง รากเสีย หรือดินกรดจัดก็ได้ ควรส่งดินตรวจ…"*). The site attaches it to every rate, which is the site's use of it, not something the pamphlet says about rates. ✅ keep it, or ✍️ give me wording to use instead. |
+
+## New UI Thai written for T-012 (not from the source)
+
+| #   | Key                     | Thai                                | Used for                                                                                                                                                                       |
+| --- | ----------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| U16 | `nutrientGroupsCaption` | `ธาตุอาหารพืช`                       | Hidden table caption read by VoiceOver for the p2 table. The pamphlet's table has no caption of its own.                                                                         |
+| U17 | `numsHeading`           | `ตัวเลขที่ใช้ในบทนี้ (จากเอกสาร)`     | Heading of each chapter's list of figures. Adapted from your factory page's `ตัวเลขที่ใช้ในโซนนี้ (จากบทความ)`: `โซน` → `บท` (this site has chapters) and `บทความ` → `เอกสาร` (the source is a pamphlet, not an article). Note `ตัวเลข` means "numbers": for chapter 1 the three items are a statute year and two mobility rules, so a word like `ข้อมูลสำคัญ` may fit better. |
+
+The three column headings of the p2 table (`กลุ่ม`, `ธาตุ`, `หน้าที่ (จำง่าย)`) are the pamphlet's
+own words and a test pins them to the raw page; they are not new Thai.

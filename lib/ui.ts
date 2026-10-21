@@ -27,6 +27,12 @@ export const UI_KEYS = [
   "noLink",
   /** The source's own p3 sentence, not new UI Thai; `lib/citations.test.ts` pins it to the raw page. */
   "soilTestNote",
+  /** Column headings of the p2 table, in the source's own words; pinned to the raw page. */
+  "colGroup",
+  "colElements",
+  "colRole",
+  "nutrientGroupsCaption",
+  "numsHeading",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

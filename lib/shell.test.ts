@@ -5,6 +5,8 @@ import { mdxComponents } from "../components/mdx-components";
 import { chapterSlug, readChapters } from "./content";
 import { UI_KEYS, parseUiStrings, readUiStrings } from "./ui";
 
+const ui = readUiStrings("th");
+
 const ROOT = process.cwd();
 const THAI = /[฀-๿]/u;
 
@@ -77,8 +79,8 @@ describe("no hard-coded Thai in components", () => {
 describe("Cambodian table", () => {
   it("is never rendered by the SourceTable slot", async () => {
     const { renderToStaticMarkup } = await import("react-dom/server");
-    const { SourceTable } = await import("../components/mdx-components");
-    const html = renderToStaticMarkup(SourceTable({ id: "rice-by-soil-group-kh" }));
+    const { makeSourceTable } = await import("../components/SourceTables");
+    const html = renderToStaticMarkup(makeSourceTable(ui)({ id: "rice-by-soil-group-kh" }));
     expect(html).toContain("hidden");
     expect(html).not.toMatch(/<(table|tr|td)/);
   });

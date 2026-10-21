@@ -312,16 +312,25 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - Not done here, by design: a VoiceOver pass on a real iPad (T-025), and tables (T-012).
 
 ### T-012: Chapter 1 — what fertilizer is, N/P/K, nutrient groups (G1)
-- Status: todo
+- Status: done
 - Depends on: T-011
 - Goal: The first chapter complete, cited, and readable with JavaScript disabled.
 - Acceptance criteria:
-  - [ ] Chapter 1 prose renders from `ch01.mdx`; the p2 nutrient-group table (3 rows) renders from JSON
-  - [ ] Full lesson text present in the server-rendered HTML (verifiable with JS disabled)
-  - [ ] `nums` block listing the chapter's figures with citations, per the inherited pattern
-  - [ ] Thai tone marks correct at every size in both themes
+  - [x] Chapter 1 prose renders from `ch01.mdx`; the p2 nutrient-group table (3 rows) renders from JSON
+  - [x] Full lesson text present in the server-rendered HTML (verifiable with JS disabled)
+  - [x] `nums` block listing the chapter's figures with citations, per the inherited pattern
+  - [x] Thai tone marks correct at every size in both themes
 - Test plan: e2e in all three viewports; screenshot comparison; load with JS disabled and assert the lesson text is present. Owner reads the chapter on an iPad.
 - Notes: Reviewer: yes (content accuracy).
+- **Verified:** typecheck, lint, 529 unit tests and the production build green; 129 WebKit e2e at iPad portrait, iPad landscape and Mac against a fresh production server. A fresh content-accuracy reviewer rendered PDF p2 and compared the table **cell by cell**: all 3 rows (group, elements, role), the column headings, the order, the punctuation and every `nums` figure are exactly the source's. It found no content error.
+  - The p2 table renders from `content/data/nutrient-groups.json` through `components/SourceTables.tsx` as a real table: hidden caption, column headers, row headers, the page it came from beneath it. Only this table renders; a test fails if any other id (the symptom table, the Cambodian table, crops, glossary) starts rendering before its own ticket.
+  - **`nums` block:** three figures, each a verbatim stretch of p2 with its own citation — the Fertilizer Act year (2518, `doa`) and the two mobility lists (`uga +2`). Pinned exactly in `lib/nums.ts` and `lib/chapter1.test.ts`. `ch01.mdx` gained one line, `<Nums chapter={1} />`; the rest is untouched and the zero-rewording test still passes.
+  - **No-JS:** a WebKit context with JavaScript off shows the prose, the table, the figures and the sources, because everything is a server component. **Zero client JS added.**
+  - **Thai:** screenshots read at all three sizes plus a 390 px phone, light and dark; tone marks and stacked vowels are correct. Tests assert table cell line-height ≥ 1.7× (the guard fails if the rule is removed, mutation-verified), no clipped cells, the Thai faces actually loaded, no horizontal scroll at the project viewport or 390 px, and ≥ 4.5:1 text and header contrast in both themes.
+  - **Review findings:** the reviewer said JSON cell corruptions would pass; I ran them and they do not (the T-006 data tests anchor every row to the raw page, so rewording a role, `;`→`,`, swapping two roles and renaming a group all fail). It was right that four `nums` corruptions did pass (a figure cut to one word, swapped citations, a dropped `+2`); each is now a failing test. The e2e also now asserts the role cells and which source sits on which figure.
+  - Found while testing: `overflow-wrap: anywhere` split English words in a 390 px column (`Macronu/trients`); now `break-word`.
+- **Not in this ticket, by its criteria:** the p3 deficiency table (10 rows) still renders nothing in Chapter 1; it belongs to T-019. The "owner reads Chapter 1 on an iPad" step in the test plan is still yours: no iPad link exists until T-003's Vercel actions are done.
+- **Open for the owner:** `docs/content/THAI-REVIEW.md` U16 and U17. `ตัวเลขที่ใช้ในบทนี้` says "numbers", but chapter 1's three items are a statute year and two rules, so a wider heading may fit better.
 
 ### T-013: Calculator logic (pure, no UI)
 - Status: todo

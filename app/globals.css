@@ -372,3 +372,40 @@ main:focus {
   display: grid;
   gap: 0.5rem;
 }
+
+/* Source tables and the nums block (T-012). */
+.table-figure {
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.source-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+.source-table th,
+.source-table td {
+  padding: 0.5rem 0.75rem;
+  text-align: start;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+  /* Same reason as p/li: Thai upper vowels and tone marks collide at 1.55. */
+  line-height: 1.75;
+  /* break-word, not anywhere: `anywhere` shrinks the min-content width and splits
+     English words (Macronu/trients) in a 390px column. */
+  overflow-wrap: break-word;
+}
+.source-table thead th {
+  background: var(--soft);
+  font-family: var(--font-ui);
+}
+.source-table tbody th {
+  font-weight: 600;
+}
+.nums ul {
+  margin: 0.5rem 0 0;
+  padding-inline-start: 1.25rem;
+}
