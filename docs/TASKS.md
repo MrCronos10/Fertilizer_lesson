@@ -241,19 +241,24 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 - Notes: Reviewer: yes (content accuracy). Cannot start until the owner has ticked at least one entry.
 
 ### T-009: Import the p14 glossary into CONTEXT.md
-- Status: todo
+- Status: done
 - Depends on: T-006
 - Goal: Replace the provisional ⏳ glossary terms with the source's own authoritative wording.
 - Acceptance criteria:
-  - [ ] All 20 p14 rows reconciled into `CONTEXT.md`; every ⏳ marker resolved to ✅ or corrected
-  - [ ] Any conflict between a provisional term and the source's wording is called out explicitly, source wins
-  - [ ] `CONTEXT.md` still contains no implementation details
+  - [x] All 20 p14 rows reconciled into `CONTEXT.md`; every ⏳ marker resolved to ✅ or corrected
+  - [x] Any conflict between a provisional term and the source's wording is called out explicitly, source wins
+  - [x] `CONTEXT.md` still contains no implementation details
 - Test plan: Manual read-through against the source page.
 - Notes: Reviewer: yes (content accuracy). Thai/Khmer/English/Chinese columns exist; keep Thai + English, park the rest in the glossary JSON.
 
 ---
 
 ## P2 — Chapter 1 vertical slice
+- **Verified:** 45 glossary tests (all 20 p14 rows checked against the rendered page, Thai and English), clean `npm run check`. A fresh reviewer found no wrong row but found errors in my commentary, all fixed.
+  - **Four things the earlier `CONTEXT.md` attributed to the source that the source does not say:** `สูตรปุ๋ย` as the term for a grade (it occurs nowhere in the pamphlet; the source's table header is `สูตร` and chapter 3 says "ตัวเลข 3 ตัวบนกระสอบ"); "primary" nutrients (the source says Macronutrients); basal fertilizer as "worked into the soil" and top dressing as going "to the soil surface" (neither phrase is in the source). All replaced with the source's own wording; the first is kept only as a ⚠ note for the owner.
+  - **Review corrections to my own commentary:** a false statement that Khmer and Chinese were "kept in the glossary data" (Chinese is; Khmer is not carried anywhere); 4R placed under the "safety chapter" when it sits under chapter 4; invented English glosses for the three chemical types that the source does not give; and three missing conflicts (four p14-only terms, English labels that differ between p14 and the chapter headings, ground limestone as the §2.8 baseline).
+  - **The test suite guarded quoted phrases only,** so any unquoted claim about the source could be changed and still pass. Each is now pinned to the committed source text (the 1,600 m² rai, the 6.25 hectare factor, the 16-20-0 bag example, the p2 group lists, the 4R chapter, §2.7 as the location of the basal/top-dressing wording, the glossary data's columns). Seven unquoted corruptions were each verified to fail.
+- **Open for the owner:** whether the UI may use `สูตรปุ๋ย` (natural Thai, absent from the source), and the basal/top-dressing disagreement already raised as A-05.
 
 ### T-010: App shell, `/th` routing, chapter layout
 - Status: todo
