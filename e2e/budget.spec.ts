@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { gzipSync } from "node:zlib";
-import { expect, test, type Response } from "@playwright/test";
+import { expect, test, type Page, type Response } from "@playwright/test";
 import { FONT_BUDGET_BYTES, ROUTES, jsBudgetFor } from "../lib/budget";
 
 /**
@@ -10,6 +10,16 @@ import { FONT_BUDGET_BYTES, ROUTES, jsBudgetFor } from "../lib/budget";
  * fetched after hydration and would be missed by the HTML. The weights are written to
  * test-results/page-weights-<project>.json and printed, so they can be recorded.
  */
+/** Scroll to the bottom in steps, so lazy-loaded parts (the 3D plant) are fetched, then let the network settle. */
+async function readToTheEnd(page: Page) {
+  const height = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y <= height; y += 400) {
+    await page.evaluate((top) => window.scrollTo(0, top), y);
+    await page.waitForTimeout(60);
+  }
+  await page.waitForLoadState("networkidle");
+}
+
 type Weights = { path: string; kind: string; jsGz: number; cssGz: number; htmlGz: number; fontBytes: number[]; scripts: number; hasThree: boolean };
 
 test("every route stays inside its JavaScript budget, and fonts inside theirs", async ({ page }, info) => {
@@ -33,6 +43,8 @@ test("every route stays inside its JavaScript budget, and fonts inside theirs", 
     };
     page.on("response", onResponse);
     await page.goto(route.path, { waitUntil: "networkidle" });
+    // Read to the end, as a reader would: anything that loads when it comes near the screen counts.
+    await readToTheEnd(page);
     page.off("response", onResponse);
     await Promise.all(pending);
     results.push(w);
@@ -60,6 +72,7 @@ test("three.js is on exactly the routes the budget calls 3D", async ({ page }) =
     };
     page.on("response", onResponse);
     await page.goto(route.path, { waitUntil: "networkidle" });
+    await readToTheEnd(page);
     page.off("response", onResponse);
     await Promise.all(pending);
     expect(hasThree, `${route.path} is "${route.kind}"`).toBe(route.kind === "3d");
