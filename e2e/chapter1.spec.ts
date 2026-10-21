@@ -25,7 +25,8 @@ const ROWS = [
 test("the p2 table renders its three rows from the data, with headers", async ({ page }) => {
   const problems = collectPageProblems(page);
   await page.goto("/th/ch01");
-  const table = page.locator("table.source-table");
+  // The p3 symptom table (T-018) is on the page too; this is the p2 one.
+  const table = page.locator("table.source-table", { has: page.locator('tr[data-row="macronutrients"]') });
   await expect(table).toHaveCount(1);
   await expect(table.locator("thead th")).toHaveText(["กลุ่ม", "ธาตุ", "หน้าที่ (จำง่าย)"]);
   await expect(table.locator("tbody tr")).toHaveCount(3);
@@ -35,13 +36,15 @@ test("the p2 table renders its three rows from the data, with headers", async ({
     await expect(tr.locator("td").first()).toHaveText(row.elements);
     await expect(tr.locator("td").last()).toHaveText(row.role);
   }
-  await expect(page.locator("figcaption")).toContainText("หน้าในเอกสารต้นฉบับ: 2");
+  await expect(table.locator("xpath=..").locator("figcaption")).toContainText("หน้าในเอกสารต้นฉบับ: 2");
   expect(problems).toEqual([]);
 });
 
-test("only the nutrient-group table renders: the symptom table waits for its own ticket", async ({ page }) => {
+test("exactly two tables render: the p2 groups and the p3 symptoms; no other source table is on the page", async ({ page }) => {
   await page.goto("/th/ch01");
-  await expect(page.locator("table")).toHaveCount(1);
+  await expect(page.locator("table")).toHaveCount(2);
+  await expect(page.locator("table tr[data-row]")).toHaveCount(3 + 10);
+  await expect(page.locator('table tr[data-source-page="3"]')).toHaveCount(10);
 });
 
 test("the nums block lists three figures, each linking to a listed source", async ({ page }) => {
@@ -74,7 +77,7 @@ test("Thai in the table has room for stacked vowels and tone marks, and is not c
       };
     }),
   );
-  expect(cells.length).toBe(3 + 9);
+  expect(cells.length).toBe(3 + 9 + 2 + 20); // p2 table, then the p3 table (2 headings + 10 rows of 2)
   for (const c of cells) {
     expect(c.ratio, c.text).toBeGreaterThanOrEqual(1.7);
     expect(c.clipped, c.text).toBe(false);
@@ -133,7 +136,7 @@ test.describe("with JavaScript disabled", () => {
     await expect(body).toContainText("อาหารของพืช");
     await expect(body).toContainText("ธาตุที่เคลื่อนที่ได้ในพืช");
     await expect(body).toContainText("ส่งดินตรวจ");
-    await expect(page.locator("table.source-table tbody tr")).toHaveCount(3);
+    await expect(page.locator("table.source-table tbody tr")).toHaveCount(3 + 10);
     await expect(page.locator("aside.nums li")).toHaveCount(3);
     await expect(page.locator("#sources")).toBeVisible();
   });

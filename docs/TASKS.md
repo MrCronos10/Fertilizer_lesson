@@ -455,20 +455,31 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 - **Carried to T-018 (reviewer):** (1) the text alternative — the p3 table — must be **server-rendered as a sibling** of the island, not passed as `fallback`: the island is client-only, so with JS off, while the chunk loads, or if the chunk fails to fetch, only the placeholder shows. (2) `role="img"` makes children presentational: selectable leaf regions must be DOM buttons **outside** the island, and the current selection should be announced by a live region outside it. (3) Gestures: `touch-action: pan-y` is set; a vertical drag gesture needs its own plan. (4) Keyboard users cannot rotate the plant; acceptable only if the table is the real alternative. (5) `Scene3D`'s `children(animate)` render prop is thin: T-018 will need `invalidate` for damped controls (reachable through `useThree`) and selection callbacks.
 
 ### T-018: Deficiency explorer (3D)
-- Status: todo
+- Status: done (gesture and fps items need a real iPad, see below)
 - Depends on: T-017
 - Goal: A rotatable procedural plant where tapping old vs young leaves teaches the mobility rule.
 - Acceptance criteria:
-  - [ ] Procedural geometry only — no glTF, no textures, no external assets
-  - [ ] One-finger rotate, pinch zoom, two-finger pan on iPad; drag, scroll/pinch zoom, click on Mac
-  - [ ] Old-leaf and young-leaf regions separately selectable, each ≥ 44×44pt in screen space
-  - [ ] Each selection shows the symptom and nutrient from the p3 10-row table, with citation
-  - [ ] The mobility rule (mobile → old leaves, immobile → young leaves) is stated explicitly
-  - [ ] All 10 symptom rows reachable
-  - [ ] A non-3D equivalent (the table plus text) is available and VoiceOver-navigable
-  - [ ] Sustains 60 fps on iPad 9th-gen or newer
+  - [x] Procedural geometry only — no glTF, no textures, no external assets
+  - [~] One-finger rotate, pinch zoom, two-finger pan on iPad; drag, scroll/pinch zoom, click on Mac — **built, not proven on a finger; Mac scroll-zoom is Ctrl+scroll only (see below)**
+  - [x] Old-leaf and young-leaf regions separately selectable, each ≥ 44×44pt in screen space
+  - [x] Each selection shows the symptom and nutrient from the p3 10-row table, with citation
+  - [x] The mobility rule (mobile → old leaves, immobile → young leaves) is stated explicitly
+  - [x] All 10 symptom rows reachable
+  - [x] A non-3D equivalent (the table plus text) is available and VoiceOver-navigable
+  - [ ] Sustains 60 fps on iPad 9th-gen or newer — **not measured; needs a real iPad**
 - Test plan: e2e selecting both leaf classes and asserting the correct symptom text, in all three viewports. Manual touch-gesture check on a real iPad plus an fps reading. Screenshots both themes.
 - Notes: Reviewer: yes (accessibility + content accuracy). Best-backed interactive in the project (D15). The 3D is for the camera; the text alternative is not optional.
+- **Verified:** typecheck, lint, 718 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (350 tests), three full-suite runs in a row. A fresh reviewer (content, accessibility, gestures) found **no content error**; its one change request is done (below). Built after the owner's instruction to skip the T-016 gate.
+  - **What it is:** in chapter 1, between the pamphlet's mobility sentence and the symptom table, a deficiency explorer. A 3-way choice (`ใบแก่` / `ใบอ่อน/ยอด` / `เอกสารไม่ระบุตำแหน่งใบ`) shows the pamphlet's own p3 lines for that group plus the mobility rule it came from (p2, quoted verbatim), with `หน้าในเอกสารต้นฉบับ: 2, 3`. Old leaves = N, P, K, Mg; young = S, Ca, Fe / Mn, B; the two rows the source does not place on a leaf class, **Zn and Cu / Mo, get their own third choice rather than a guess**. All 10 rows reachable. The p3 table now renders in full below it (the text equivalent, server-rendered, 10 rows, element then symptom, verbatim).
+  - **The 3D plant** is procedural (a stem, three old leaves low, three young leaves at the tip; no assets). Tapping/clicking a leaf cluster picks that choice; the radios do the same without the plant, so it works with no WebGL, no touch, no pointer. The selected cluster is also scaled and lit (not colour alone). Each cluster has an oversized invisible hit area; its on-screen size is published and e2e checks ≥ 44 × 44 CSS px, at the default distance and fully zoomed out.
+  - **Gestures:** drag rotates; pinch zooms; two-finger drag pans; a drag that starts on a leaf never counts as a tap (tap slop 6 px). Pure maths is in `lib/gestures.ts` with unit tests.
+  - **Chapter 1 is now a 3D route.** three.js loads lazily after the text (its own chunk) and the page's measured JS is within the 600 KB 3D budget; the ≤ 180 KB text-route test now covers every other route, and three.js is asserted absent from them. The 180 KB figure no longer applies to ch01.
+  - **Proven by e2e (all three viewports):** each choice shows exactly its own rows, verbatim, with the source's rule; all 10 rows reachable across the three choices; the table has 10 rows and is in the server HTML before any script; the p2 table is untouched; tapping the old / young leaves changes the choice (mouse everywhere, a real touch tap on iPad projects); region sizes; drag rotates and is not a tap; Ctrl + scroll zooms while plain scroll is left to the page; `touch-action: pan-y`; idle spin stops under reduced motion **and a redraw does not smuggle a spin step in**; no WebGL → note shown, choices, panel and table still work; one context while on ch01, none after leaving, one on return. Screenshots of light and dark at all three viewports were looked at.
+  - **Mutation-tested:** tiny hit area, drag counted as a tap, plain scroll swallowed, spin ignoring reduced motion (first survived; the redraw-step assertion killed it), unplaced showing the wrong rule, a dropped table row, `touch-action: none`, wrong default choice, swapped old / young mapping (unit) — each fails a named test.
+  - **Reviewer's change, done:** `defSceneLabel` originally said old leaves are at the bottom and young at the top — a botany claim the pamphlet never makes. It now reads `ภาพวาดต้นพืชสามมิติ ลากเพื่อหมุน` ("3D drawing of a plant, drag to rotate"). The leaf positions in the picture are a drawing, not a pamphlet claim.
+  - **Deliberate deviation, for the owner:** the ticket says "scroll/pinch zoom" on Mac. Plain scroll **does not** zoom, because a mouse or trackpad scroll over a 4:3 box would hijack the page; zoom is Ctrl + scroll (how browsers report a trackpad pinch) and Safari's own pinch gesture. Say if you want plain scroll to zoom.
+  - **Known limits, only a real iPad can settle:** (1) with `touch-action: pan-y` a one-finger **vertical** drag scrolls the page instead of rotating (chosen so the plant can never trap a scroll; rotation starts on a horizontal drag); (2) a two-finger **vertical** pan is probably taken by the page too, so pan may only work sideways; (3) pinch and two-finger pan are implemented with pointer events and untested on a finger — WebKit under Playwright cannot do multi-touch; (4) **60 fps on an iPad 9th-gen has not been measured**; (5) VoiceOver on the radios, the live panel and the table has not been run.
+  - **Open for the owner:** five new Thai strings U33–U37 in `docs/content/THAI-REVIEW.md` (`เลือกตำแหน่งใบ`, `เอกสารไม่ระบุตำแหน่งใบ`, `เอกสารไม่ได้ระบุว่าธาตุกลุ่มนี้แสดงอาการที่ใบแก่หรือใบอ่อนก่อน`, `ภาพวาดต้นพืชสามมิติ ลากเพื่อหมุน`, `เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน`); and the `ใบอ่อน/ยอด` choice sits over rows about fruit and flowers (Ca, B) — the grouping is the source's own, by element, but the label may read oddly. The amber "selected" glow turns green leaves yellow, which a beginner could read as "this is what deficiency looks like".
 
 ### T-019: Chapters 2–3 — deficiency and fertilizer types (G2, G3)
 - Status: todo

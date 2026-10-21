@@ -153,3 +153,21 @@ calculator works out for the pamphlet's own 50 kg bag of 16-20-0.
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Q1  | **`ไม่มี K`, not `ไม่มี K₂O`.** For the K₂O tile the panel says `กระสอบ 50 กก. ไม่มี K`, because that is the pamphlet's wording on p6, and the explanation line above it (`K = ผลโต …`) is the p2 table's. Both use the element letter while the tile says K₂O. I kept the source's words. ✅ keep, or ✍️ show `K₂O`?                |
 | Q2  | **Nothing tells a beginner the numbers are tappable.** The tiles look like cards and N is already chosen, so the explanation is visible on arrival, but there is no `แตะตัวเลขเพื่อดูความหมาย` ("tap a number to see what it means"). That would be new Thai, so I did not add it. ✅ leave as is, or ✍️ give me wording?             |
+
+## The deficiency explorer, T-018: five new UI strings, the rest the pamphlet's own
+
+These are the pamphlet's own words, and tests pin them to the raw pages or to chapter 1:
+`ใบแก่`, `ใบอ่อน/ยอด` (the two leaf classes, from the p2 sentence), the two rule sentences (`ธาตุที่เคลื่อนที่ได้ในพืช … ใบแก่ ก่อน` and `ธาตุที่เคลื่อนที่ไม่ได้ … ใบอ่อน/ยอด ก่อน`, identical to the figures in `lib/nums.ts`), the column heading `อาการ` (p3), and the caption `อาการขาดธาตุ` (chapter 1's own label). Every symptom is the p3 line.
+
+New Thai, written for the site and **needing your ✅ / ✍️**:
+
+| #   | Key              | Thai                                                                  | Used for                                                                                                                                  |
+| --- | ---------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| U33 | `defLegend`      | `เลือกตำแหน่งใบ`                                                       | Label of the three-way choice ("choose which leaves").                                                                                    |
+| U34 | `defUnplaced`    | `เอกสารไม่ระบุตำแหน่งใบ`                                               | Third choice: Zn and Cu / Mo, which the pamphlet lists on p3 but does not place on old or young leaves.                                   |
+| U35 | `defRuleNone`    | `เอกสารไม่ได้ระบุว่าธาตุกลุ่มนี้แสดงอาการที่ใบแก่หรือใบอ่อนก่อน`           | Shown in place of the rule for that third choice: "the pamphlet does not say whether this group shows on old or young leaves first".      |
+| U36 | `defSceneLabel`  | `ภาพวาดต้นพืชสามมิติ ลากเพื่อหมุน`                                         | VoiceOver name of the 3D plant: "a 3D drawing of a plant, drag to rotate". It says "drawing" on purpose and makes no claim about where old and young leaves sit (an earlier draft did; the reviewer removed it). |
+| U37 | `defNo3d`        | `เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน`      | Shown instead of the plant when the device cannot do WebGL: "this device cannot show the 3D picture; use the choices above and the table below". |
+
+Also worth your eye: the plant tells nobody it can be dragged or pinched except through U36
+(`ลากเพื่อหมุน`, "drag to rotate"), which is read by VoiceOver but not shown on screen.

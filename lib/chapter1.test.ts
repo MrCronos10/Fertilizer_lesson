@@ -60,16 +60,43 @@ describe("p2 nutrient-group table", () => {
 });
 
 describe("which tables render", () => {
-  it("is exactly the one this ticket owns", () => {
-    expect(RENDERED_TABLE_IDS).toEqual(["nutrient-groups"]);
+  it("is exactly the two tables chapter 1 owns (the p2 groups, and the p3 symptoms for T-018)", () => {
+    expect(RENDERED_TABLE_IDS).toEqual(["nutrient-groups", "deficiency-symptoms"]);
   });
 
-  it.each(["deficiency-symptoms", "rice-by-soil-group-kh", "other-crops", "glossary", "no-such-table"])(
+  it.each(["rice-by-soil-group-kh", "other-crops", "glossary", "no-such-table"])(
     "%s renders no table",
     (id) => {
       expect(render(id)).not.toMatch(/<table/);
     },
   );
+});
+
+describe("the deficiency symptom table (T-018)", () => {
+  const html = render("deficiency-symptoms");
+  const rows = [...html.matchAll(/<tr data-row="([^"]+)" data-source-page="(\d+)"><th scope="row" lang="en">(.*?)<\/th><td>(.*?)<\/td><\/tr>/g)];
+  const squash = (t: string) => t.replace(/\s+/g, "");
+
+  it("has all 10 rows, each from page 3, each cell as the pamphlet prints it", () => {
+    expect(rows).toHaveLength(10);
+    const page = squash(raw(3));
+    for (const [, id, sourcePage, element, symptom] of rows) {
+      expect(sourcePage, id).toBe("3");
+      expect(page, `${id} symptom`).toContain(squash(symptom ?? ""));
+      expect(page, `${id} element`).toContain(squash((element ?? "").replace(/ \/ /g, "/")));
+    }
+  });
+
+  it("uses the pamphlet's own two headings and names its page", () => {
+    expect([ui.colElements, ui.colSymptom]).toEqual(["ธาตุ", "อาการ"]);
+    expect(squash(raw(3))).toContain(squash(`${ui.colElements} ${ui.colSymptom}`));
+    expect(html).toContain(`<th scope="col">${ui.colSymptom}</th>`);
+    expect(plain(html)).toContain(`${ui.pamphletPages}: 3`);
+  });
+
+  it("is a real table with a caption", () => {
+    expect(html).toMatch(/<caption[^>]*>.+<\/caption>/);
+  });
 });
 
 describe("nums", () => {

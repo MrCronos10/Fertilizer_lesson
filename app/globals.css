@@ -626,3 +626,71 @@ main:focus {
   border-radius: 0.5rem;
   background: var(--soft);
 }
+
+/* Deficiency explorer (T-018). */
+.deficiency {
+  display: grid;
+  gap: 1rem;
+}
+.def-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.5rem var(--gutter) 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.def-choice legend {
+  padding-inline: 0.25rem;
+  font-weight: 600;
+}
+.def-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding-inline: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+}
+.def-option input {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--brand);
+}
+.def-option:has(input:checked) {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border-color: var(--brand);
+}
+.def-option:has(input:focus) {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+.def-panel .panel {
+  display: grid;
+  gap: 0.5rem;
+}
+.def-rule {
+  font-weight: 600;
+}
+.def-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+.def-list > div {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.75rem;
+}
+.def-list dt {
+  font-weight: 700;
+}
+.def-list dd {
+  margin: 0;
+}
