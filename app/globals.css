@@ -409,3 +409,102 @@ main:focus {
   margin: 0.5rem 0 0;
   padding-inline-start: 1.25rem;
 }
+
+/* Calculator (T-014). Every control is at least --tap tall; iPad's finger is the reference. */
+.calculator {
+  display: grid;
+  gap: 1rem;
+}
+.calc-form {
+  display: grid;
+  gap: 1rem;
+}
+.calc-fieldset {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.75rem var(--gutter);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  min-width: 0;
+}
+.calc-fieldset legend {
+  padding-inline: 0.25rem;
+  font-weight: 600;
+}
+.calc-field {
+  display: grid;
+  gap: 0.25rem;
+}
+.calc-field label {
+  font-weight: 600;
+}
+.calculator input[type="text"],
+.calculator select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: var(--tap);
+  width: 100%;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+/* More specific than the input rule above, or the flagged state never shows. */
+.calculator input[aria-invalid="true"],
+.calculator select[aria-invalid="true"] {
+  border-color: var(--warn);
+  border-width: 2px;
+}
+.calc-choices,
+.calc-grade-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.calc-grade-fields .calc-field {
+  flex: 1 1 8rem;
+}
+.calc-choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding-inline: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+}
+.calc-choice input {
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--brand);
+}
+.calc-answer {
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.calc-steps {
+  margin: 0;
+  padding-inline-start: 1.5rem;
+}
+/* The live region stays in the tree even when empty: a region that is display:none
+   until it fills is not reliably announced. */
+.calc-result:empty {
+  margin: 0;
+}
+
+/* WebKit ignores min-height on a native-appearance <select> (it stays ~26px, short of the
+   44px tap target) but obeys an explicit height. Keeps the native look and, on iPad, the
+   native picker.
+
+   The font is the system's, deliberately. A native <select> that inherited the page's web
+   font and held Thai option text made WebKit intermittently never fire `load` (readyState
+   stuck at "interactive", about a third of hard navigations to chapter 3, 0 of 80 after
+   this line). Bisected by removing the select, then its font: see TASKS.md T-014. */
+.calculator select {
+  height: var(--tap);
+  font-family: system-ui, -apple-system, sans-serif;
+}

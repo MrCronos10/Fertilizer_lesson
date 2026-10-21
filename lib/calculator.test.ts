@@ -10,6 +10,7 @@ import {
   nutrientsInBag,
   productFor,
   raiToHectare,
+  roundKg,
 } from "./calculator";
 import { calculatorRates } from "./calculator-data";
 import { cropsFor, cropsForReading } from "./data";
@@ -70,6 +71,27 @@ describe("the formula, for every nutrient", () => {
     expect(ok(productFor({ nutrient: "n", targetKgPerRai: 0.1, grade: UREA })).roundedKg).toBe(0.2);
     expect(ok(productFor({ nutrient: "n", targetKgPerRai: 0.1, grade: UREA })).roundedKg).toBeGreaterThan(0);
     expect(ok(productFor({ nutrient: "n", targetKgPerRai: 10, grade: UREA })).roundedKg).toBe(22);
+  });
+
+  it("rounds an exact half up even when floating point lands a hair below it", () => {
+    // 2.3 × 100 is 229.99999999999997 in floating point; on paper 2.3 × 100 ÷ 20 is 11.5.
+    expect(ok(productFor({ nutrient: "n", targetKgPerRai: 2.3, grade: { n: 20, p2o5: 0, k2o: 0 } })).roundedKg).toBe(12);
+    expect(ok(productFor({ nutrient: "n", targetKgPerRai: 1.15, grade: { n: 10, p2o5: 0, k2o: 0 } })).roundedKg).toBe(12);
+    expect(ok(productFor({ nutrient: "n", targetKgPerRai: 0.35, grade: { n: 100, p2o5: 0, k2o: 0 } })).roundedKg).toBe(0.4);
+    expect(ok(productFor({ nutrient: "n", targetKgPerRai: 10, grade: UREA })).roundedKg).toBe(22);
+  });
+
+  it.each([
+    [0.0043, 0.004],
+    [0.96, 1],
+    [0.095, 0.1],
+    [0.05, 0.05],
+    [0.15, 0.2],
+    [11.5, 12],
+    [11.4, 11],
+    [0.7, 0.7],
+  ])("rounds %d kg to %d, half up, never to zero", (amount, expected) => {
+    expect(roundKg(amount)).toBe(expected);
   });
 
   it("accepts a zero target and answers 0 kg", () => {

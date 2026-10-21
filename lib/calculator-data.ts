@@ -1,4 +1,4 @@
-import { cropsFor, type Npk, type Scope } from "./data";
+import { compoundGradeRows, cropsFor, straightFertilizers, type Npk, type Scope } from "./data";
 import { kgPerHaToKgPerRai } from "./calculator";
 
 /**
@@ -50,4 +50,37 @@ export function calculatorRates(locale: string): readonly PublishedRate[] {
     }
   }
   return rates;
+}
+
+/** A bag grade the source prints, for the calculator's picker. */
+export interface PublishedGrade {
+  readonly grade: Npk;
+  /** The source's Thai name where the grade belongs to one straight fertilizer. */
+  readonly name?: string;
+}
+
+/**
+ * The grades the pamphlet prints on p4 (straight fertilizers) and p5 (compound
+ * grades), in table order. Organic fertilizers' "about 1.5-0.4-1.0" figures are
+ * not bag grades, and rock phosphate has none, so neither is here.
+ *
+ * The source's glossary names carry a Chinese gloss in brackets ("ยูเรีย (Urea,
+ * 氮肥)"); only the part before the bracket is a name a picker should show.
+ */
+export function publishedGrades(): readonly PublishedGrade[] {
+  const out: PublishedGrade[] = [];
+  const seen = new Set<string>();
+  const add = (grade: Npk, name?: string) => {
+    const key = `${grade.n}-${grade.p2o5}-${grade.k2o}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(name ? { grade, name } : { grade });
+  };
+  for (const row of straightFertilizers()) {
+    if (row.grade) add(row.grade, row.labels.th.name.split(" (")[0]);
+  }
+  for (const row of compoundGradeRows()) {
+    for (const grade of row.grades) add(grade);
+  }
+  return out;
 }

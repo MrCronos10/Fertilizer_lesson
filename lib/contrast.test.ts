@@ -91,6 +91,8 @@ describe.each([
     ["--accent-ink", "--accent"],
     // Official/research tier badges (.tier) sit on --soft.
     ["--ink", "--soft"],
+    // The calculator's flagged-field border and error text sit on the page background.
+    ["--warn", "--bg"],
     ["--muted", "--bg"],
   ])("%s on %s meets 4.5:1", (fg, surface) => {
     const base = at(surface);

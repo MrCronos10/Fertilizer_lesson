@@ -75,9 +75,16 @@ function isValidGrade(grade: Npk): boolean {
  * significant digit: rounding 0.04 kg to "0" would tell someone a real dose is
  * nothing.
  */
-function roundKg(kg: number): number {
+export function roundKg(amount: number): number {
+  // Float noise first: 2.3 × 100 ÷ 20 is exactly 11.5 on paper but 11.499999999999998
+  // in floating point, which would round down to 11 instead of up to 12.
+  const kg = Number(amount.toPrecision(12));
   if (kg === 0) return 0;
-  return kg >= 1 ? Math.round(kg) : Number(kg.toPrecision(1));
+  if (kg >= 1) return Math.round(kg);
+  // One significant digit, half up. Scaled by hand because `toPrecision` rounds the
+  // binary value, and 0.35 sits a hair below its tie.
+  const scale = 10 ** -Math.floor(Math.log10(kg));
+  return Number((Math.round(Number((kg * scale).toPrecision(12))) / scale).toPrecision(12));
 }
 
 /**
