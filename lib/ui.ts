@@ -58,6 +58,19 @@ export const UI_KEYS = [
   "bagHas",
   "bagNone",
   "bagPercent",
+  /** The p3 table's own heading and the source's "อาการขาดธาตุ" label; pinned to the raw page / chapter 1. */
+  "colSymptom",
+  "defTableCaption",
+  /** The deficiency explorer (T-018). `defOld`, `defYoung` and the two rules are the source's own words. */
+  "defLegend",
+  "defOld",
+  "defYoung",
+  "defUnplaced",
+  "defRuleOld",
+  "defRuleYoung",
+  "defRuleNone",
+  "defSceneLabel",
+  "defNo3d",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

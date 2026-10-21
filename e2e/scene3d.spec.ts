@@ -188,8 +188,15 @@ test("the 3D route ships at most 600 KB gzipped JS and does carry three.js", asy
   expect(scripts.some((s) => s.text.includes("WebGLRenderer")), "control: three.js is on the 3D route").toBe(true);
 });
 
+test("chapter 1 (the deficiency explorer) is a 3D route: within 600 KB and carrying three.js", async ({ page }) => {
+  const scripts = await scriptsLoaded(page, "/th/ch01");
+  const total = scripts.reduce((n, s) => n + s.size, 0);
+  expect(total, `/th/ch01 JS is ${total} bytes gzipped`).toBeLessThanOrEqual(600 * 1024);
+  expect(scripts.some((s) => s.text.includes("WebGLRenderer"))).toBe(true);
+});
+
 test("three.js is absent from every non-3D route", async ({ page }) => {
-  for (const route of ["/th", "/th/ch01", "/th/ch02", "/th/ch03", "/specimen"]) {
+  for (const route of ["/th", "/th/ch02", "/th/ch03", "/th/ch04", "/th/ch05", "/th/ch06", "/th/ch07", "/specimen"]) {
     const scripts = await scriptsLoaded(page, route);
     expect(scripts.length, `${route} loaded scripts`).toBeGreaterThan(0);
     expect(

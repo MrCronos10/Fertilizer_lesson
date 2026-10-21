@@ -1,4 +1,4 @@
-import { nutrientGroupRows } from "@/lib/data";
+import { deficiencyRows, nutrientGroupRows } from "@/lib/data";
 import type { UiStrings } from "@/lib/ui";
 
 /**
@@ -38,8 +38,41 @@ function NutrientGroups({ ui }: { ui: UiStrings }) {
   );
 }
 
+/** The p3 symptom table, verbatim: the text equivalent of the 3D plant, with every one of the 10 rows. */
+function DeficiencySymptoms({ ui }: { ui: UiStrings }) {
+  const rows = deficiencyRows();
+  const pages = [...new Set(rows.map((r) => r.sourcePage))].join(", ");
+  return (
+    <figure className="table-figure">
+      <table className="source-table">
+        <caption className="visually-hidden">{ui.defTableCaption}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{ui.colElements}</th>
+            <th scope="col">{ui.colSymptom}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id} data-row={row.id} data-source-page={row.sourcePage}>
+              <th scope="row" lang="en">
+                {row.elements.join(" / ")}
+              </th>
+              <td>{row.labels.th.symptom}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <figcaption className="muted">
+        {ui.pamphletPages}: {pages}
+      </figcaption>
+    </figure>
+  );
+}
+
 const RENDERED: Readonly<Record<string, (props: { ui: UiStrings }) => React.ReactElement>> = {
   "nutrient-groups": NutrientGroups,
+  "deficiency-symptoms": DeficiencySymptoms,
 };
 
 export function makeSourceTable(ui: UiStrings) {
