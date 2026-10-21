@@ -75,6 +75,15 @@ export const UI_KEYS = [
   "tableStraightCaption",
   "tableCompoundCaption",
   "tableConditionersCaption",
+  /** The quiz (T-021): all new UI Thai (the pamphlet prints answers after an arrow, with no such labels). */
+  "quizShow",
+  "quizHide",
+  "quizAnswer",
+  "quizRight",
+  "quizAgain",
+  "quizScore",
+  "quizOf",
+  "quizReset",
   /** The crop matcher (T-020). `cropBasal`, `cropTopDressing` and `cropRate` are the pamphlet's own words (p5, p3); pinned to the raw pages. */
   "cropLegend",
   "cropBasal",

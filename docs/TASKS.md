@@ -528,17 +528,26 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Not verified:** VoiceOver on a real iPad; the matcher's contrast of the muted reference text was not measured (T-025).
 
 ### T-021: Quiz with `localStorage` progress (G7 review)
-- Status: todo
+- Status: done (VoiceOver on a real iPad is T-025)
 - Depends on: T-019
 - Goal: The 6 verbatim source questions, with progress surviving a reload.
 - Acceptance criteria:
-  - [ ] All 6 Thai questions from p6–7 verbatim; no invented questions
-  - [ ] Progress persists across reload via `localStorage`; no accounts, no network calls
-  - [ ] Every `localStorage` read and write wrapped so private browsing or blocked storage cannot throw
-  - [ ] Works fully with storage unavailable, just without persistence
-  - [ ] Keyboard and touch operable; results announced by VoiceOver
+  - [x] All 6 Thai questions from p6–7 verbatim; no invented questions
+  - [x] Progress persists across reload via `localStorage`; no accounts, no network calls
+  - [x] Every `localStorage` read and write wrapped so private browsing or blocked storage cannot throw
+  - [x] Works fully with storage unavailable, just without persistence
+  - [x] Keyboard and touch operable; results announced by VoiceOver
 - Test plan: e2e answering, reloading, and asserting persistence; a second run with storage blocked asserting no crash. All three viewports.
 - Notes: Reviewer: yes (accessibility). No new questions without going through the D8 gate.
+- **Verified:** typecheck, lint, 814 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (45 quiz tests, full suite below). A fresh accessibility + correctness reviewer found **no content problem** and five accessibility problems, all fixed (below).
+  - **What it is:** in chapter 7, under `แบบทดสอบ:`, the pamphlet's six questions word for word, as a numbered list. The source prints answers and **no wrong options**, so nothing could honestly be graded: each question has `ดูคำตอบ`, the answer, and two marks (`ตอบถูก` / `ยังไม่ถูก`) you set yourself. The score line says `ทำเครื่องหมายว่าตอบถูก 2 จาก 6` (plus `· ยังไม่ถูก 1`): your own marks, not a grade. Questions and answers come from ch07's frontmatter untouched. No new questions (D8).
+  - **Progress:** the marks (and nothing else: no answers, no name, no time) are saved on this device in `localStorage` under `fertilizer-quiz-v1` as `{"v":1,"marks":[…]}`, and restored after a reload with every answer closed. No cookies, no request to any server (an e2e test watches the requests while marking).
+  - **Storage can be unavailable:** every read, write and remove is wrapped. e2e runs the quiz with storage that throws on every access, with writes that throw (full / private), and with `localStorage` missing: no console or page error, marking and reset work for the visit, and a reload starts clean. A corrupt saved value (not JSON, another version, wrong length) is ignored and the quiz starts fresh.
+  - **Reviewer's accessibility findings, fixed:** the ✓ / ↻ marks were CSS glyphs that VoiceOver would read aloud — now real text (`· ตอบถูก`) beside the question, which also shows the state with the answer closed; the list numbers 1–6 were not drawn because a grid `<li>` loses its marker — fixed and tested; the mark group was named just `คำตอบ` — now named by its own question; a `ยังไม่ถูก` mark changed nothing in the status line so nothing was announced — every mark kind now changes it; Latin-only answers (`N`, `Fe`, `K₂SO₄`) are marked English. Reset now writes empty progress over the saved copy rather than removing it, so a refused remove cannot bring old marks back.
+  - **Proven by e2e:** the six questions word for word and in the server HTML; each answer is the pamphlet's, closed until asked; marks, take-back and score; reload persistence; reset; no network and no cookie; the three blocked-storage modes; three corrupt-value cases; keyboard (Enter, Space); every button ≥ 44 px; no sideways scroll.
+  - **Mutation-tested:** unwrapped read, unwrapped write, never persisting, no length check, answers always open, `aria-pressed` removed, score not live, a reworded answer, the list back to grid, the "not yet" count dropped from the score line, the group not named by its question — each fails a named test.
+  - **Not verified:** what VoiceOver actually says, and a real finger on an iPad (T-025 / T-016). The e2e checks the roles, names and live-region attributes, not the speech.
+  - **Open for the owner:** the eight new strings U41–U48 in `docs/content/THAI-REVIEW.md`; whether `ทำเครื่องหมายว่าตอบถูก X จาก 6` reads naturally.
 
 ### T-022: Basal vs top dressing — static annotated diagram (G5)
 - Status: todo

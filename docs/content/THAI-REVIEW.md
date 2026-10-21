@@ -187,3 +187,20 @@ New Thai, needing your ✅ / ✍️:
 | U40 | `cropDescriptiveHeading` | `ข้อความอ้างอิง (ไม่ใช่ตัวเลขที่แนะนำ)`                                                        | Heading over any guidance the site will not stand behind as a number: "reference text (not a recommended figure)". |
 
 Things to decide, all in `docs/TASKS.md` T-020 Verified note: the cassava number (a CIAT **regional** figure, about 80–96 kg/rai, roughly 3× the Thai 25–50 kg/rai that sits under the reference heading), the vegetables row (its only source is a Cambodian working paper), and chapter 5's sources list (`irri` and `cambridge` removed).
+
+## The quiz, T-021: eight new UI strings, the questions and answers are the pamphlet's
+
+The six questions and their answers are the pamphlet's own (p6–7), unchanged; a test pins each to the raw pages. The extraction had stray spaces (`?` after a space, `กก .`, `K ₂ SO ₄`); the stored text has them tidied (R14 in `docs/content/SOURCES.md`), words unchanged.
+
+The pamphlet prints answers after an arrow and **no wrong options**, so the quiz is a **self-check**: show the answer, then mark whether you had it. Nothing is graded by the site, so the score line says what it counts (your own marks), not "you scored".
+
+| #   | Key         | Thai                       | Used for                                                                                       |
+| --- | ----------- | -------------------------- | ---------------------------------------------------------------------------------------------- |
+| U41 | `quizShow`  | `ดูคำตอบ`                   | Button that opens a question's answer ("see the answer").                                      |
+| U42 | `quizHide`  | `ซ่อนคำตอบ`                 | Same button when it is open ("hide the answer").                                               |
+| U43 | `quizAnswer`| `คำตอบ`                     | Label before the answer.                                                                       |
+| U44 | `quizRight` | `ตอบถูก`                    | Mark: "I got it right". Also shown beside a marked question.                                   |
+| U45 | `quizAgain` | `ยังไม่ถูก`                 | Mark: "not right yet". Also shown beside a marked question and counted in the score line.      |
+| U46 | `quizScore` | `ทำเครื่องหมายว่าตอบถูก`     | Start of the score line: "marked as right: 2 of 6" (`ทำเครื่องหมายว่าตอบถูก 2 จาก 6`, plus `· ยังไม่ถูก 1` when some are marked not yet). |
+| U47 | `quizOf`    | `จาก`                       | "of" in the score line.                                                                        |
+| U48 | `quizReset` | `เริ่มใหม่`                  | Button that clears all marks ("start over").                                                    |
