@@ -282,11 +282,12 @@ test("no script scrolls or animates by itself: no smooth scrolling and no timers
   expect(offenders).toEqual([]);
 });
 
-test("every route has its own page title", async ({ page }) => {
+test("every route has its own page title", async ({ request }) => {
+  // Read from the served HTML (titles are rendered on the server), so eleven routes do not need eleven page loads.
   const titles = new Map<string, string>();
   for (const route of ROUTES) {
-    await page.goto(route.path);
-    const title = (await page.title()).trim();
+    const html = await (await request.get(route.path)).text();
+    const title = (/<title[^>]*>([^<]*)<\/title>/.exec(html)?.[1] ?? "").trim();
     expect(title, `${route.path} has a title`).not.toBe("");
     expect(titles.get(title), `${route.path} repeats the title of ${titles.get(title)}`).toBeUndefined();
     titles.set(title, route.path);

@@ -63,9 +63,10 @@ test("leaving and re-entering the 3D route never leaks a context", async ({ page
   for (let i = 0; i < 6; i++) {
     await page.getByRole("link", { name: "Leave this page" }).click(); // client-side navigation
     await expect(page).toHaveURL(/\/th$/);
-    const away = await counts(page);
-    expect(away.alive, `lap ${i}: none alive off the 3D route`).toBe(0);
-    expect(away.canvases, `lap ${i}: no canvas left in the DOM`).toBe(0);
+    // React hides the old route a moment after the URL changes (more than a moment on a slow CI machine), so
+    // wait for the release. What must never happen, two contexts at once, is checked by the 3D-to-3D test.
+    await expect.poll(async () => (await counts(page)).alive, { message: `lap ${i}: none alive off the 3D route`, timeout: 10_000 }).toBe(0);
+    await expect.poll(async () => (await counts(page)).canvases, { message: `lap ${i}: no canvas left in the DOM`, timeout: 10_000 }).toBe(0);
     await page.goBack(); // popstate, still client-side
     await ready(page);
     const back = await counts(page);
