@@ -164,17 +164,51 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   than `TH` because the source gives it no country. Filling that gap from an official Thai source is T-008.
 
 ### T-007: Bibliography and source tiering
-- Status: todo
+- Status: done
 - Depends on: T-006
-- Goal: Build the bibliography the source lacks and tier all 38 cited domains.
+- Goal: Build the bibliography the source lacks and tier every cited domain (37 nameable, plus 5 hidden behind overflow pills).
 - Acceptance criteria:
-  - [ ] `content/sources.json`: each of the 38 domains with its tier (`official` | `research` | `commercial`) and resolved URL where possible
-  - [ ] The source's 67 inline links mapped to entries; unresolvable markers recorded as such, not guessed
-  - [ ] Every Rate in T-006 resolves to at least one source entry
-  - [ ] Rates backed only by `commercial` are flagged `actionable: false`
-  - [ ] A test asserts no `actionable: false` Rate is returned by the calculator or crop-matcher data queries
+  - [x] `content/sources.json`: each of the 37 nameable domains with its tier (`official` | `research` | `commercial`) and resolved URL where possible
+  - [x] The source's 67 inline links mapped to entries; unresolvable markers recorded as such, not guessed
+  - [x] Every Rate in T-006 resolves to at least one source entry
+  - [x] Rates backed only by `commercial` are flagged `actionable: false`
+  - [x] A test asserts no `actionable: false` Rate is returned by the calculator or crop-matcher data queries
 - Test plan: Unit tests for the actionable-exclusion rule and for total-coverage (no Rate without a source).
 - Notes: Reviewer: yes (content accuracy). The source admits sugarcane, mango, and tapped-rubber rates come from product labels or secondary summaries — expect those to land `commercial` (D9).
+- **Verified:** 368 unit tests, 45 WebKit e2e, clean `npm run check`. A fresh reviewer then found real problems; all are fixed.
+  - URLs are not guessed: the PDF carries each citation pill as a link annotation. 67 pills = 67 annotations,
+    41 documents, 37 domains; every pill↔link pairing agrees on domain, and the reviewer re-checked p5 and p12
+    by rendering each annotation's rectangle over its pill, including the same-domain pairs.
+  - **The "38" in this task was wrong and is corrected** (also in DECISIONS D9, PRD, CONTEXT, README): 37 can be
+    named. 5 more sources hide behind two overflow pills (`uga +2`, `cgiar +3`) and are recorded as unresolved.
+  - **Review finding, fixed — actionability was resolved per row and let a commercial-only claim ride on another
+    cell's source.** The cassava cell mixes a Thai rate, a Cambodian note and CIAT guidance, with one pill beside
+    the CIAT line; both Thai lines inherited it. Resolution is now per piece of guidance. Cassava's Thai dolomite
+    rate (backed on p5 by a blogspot page) and Thai 15-15-15 rate (two unlinked names) are no longer actionable.
+  - **Review finding, fixed — `tci-thaijo` was tiered `research` on a `domain` basis, which was an inference.** It
+    is a hosting platform and the article is in a humanities journal. It is now `commercial` / `inferred-from-url`,
+    which makes tapped rubber non-actionable until someone reads the article.
+  - **Review finding, fixed — four corruptions passed every test** (a news aggregator promoted to official, a
+    manufacturer to research, two DOA URLs swapped, a Cambodian survey to official). All 37 tiers are now pinned,
+    every document is fingerprinted, and each pill is recorded with its position on its page and checked against
+    the raw page's pill order — needed because two DOA documents cited on the same page are otherwise
+    indistinguishable once swapped. Ten corruptions, including the reviewer's four, are each verified to fail.
+  - **Review finding, fixed — `sources.json` had been hand-patched after generation, with its generator outside
+    the repo.** The generator is now `tools/build-sources.py` and the judgements live in `tools/source-meta.json`;
+    regenerating reproduces the committed file byte for byte.
+  - **`fao` was read in full** rather than guessed: it is TAS 4401-2008, a Thai government standard, so `official`
+    is right. It does **not** contain the grade `16-8-8`, which the pamphlet lists for sandy-soil rice; flagged in
+    THAI-REVIEW.
+  - Crops the matcher may now use: rice (both soils), maize, durian, and cassava's CIAT regional line. Sugarcane,
+    mango, both rubber rows, the Thai cassava lines and vegetables are descriptive-only. The source's own caveat
+    names sugarcane, mango and tapped rubber as resting on labels or secondary summaries.
+  - Nothing was fetched to decide a tier. 15 tiers rest on the URL alone; all 15 are `commercial`, and a test
+    forbids ever promoting one on inference.
+- **Scope note:** the criterion that no non-actionable Rate reaches "the calculator or crop-matcher data
+  queries" is asserted for `cropsFor`, the only such query that exists today. The calculator half is carried
+  into T-013's criteria so it cannot be forgotten.
+- **Open for the owner:** `docs/content/TIER-REVIEW.md`. The decision with consequences is `tci-thaijo.org`:
+  reading that one article would restore tapped rubber to the matcher.
 
 ### T-008: Propose corpus additions for the G4 and G5 gaps
 - Status: todo
@@ -253,6 +287,7 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - [ ] Rejects a 0% nutrient grade rather than dividing by zero; rejects negative targets
   - [ ] **No elemental↔oxide conversion exists in the code at all**
   - [ ] One unit test per crop row in the source table, asserting the function agrees with the published rate
+  - [ ] **(carried from T-007)** A test asserts no `actionable: false` Rate is reachable from the calculator's data queries. T-007 asserted this for `cropsFor` only, because the calculator did not yet exist. The per-crop suite above covers actionable crops only, so sugarcane, mango and pre-tapping rubber are expected to be absent from it by design.
 - Test plan: Vitest, including the two source examples as exact-value tests, the division-by-zero and negative cases, and the per-crop suite.
 - Notes: Reviewer: yes (calculator). This is the highest-consequence code in the project — a bug here hands a farmer a wrong dose (D10).
 
@@ -351,6 +386,7 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - [ ] `commercial`-tier-only rates shown as descriptive text, not as actionable numbers
   - [ ] No `KH`-tagged row is reachable
   - [ ] Keyboard and touch operable; no hover-only reveal
+  - [ ] **(carried from T-007)** A crop for which `cropsFor()` returns no actionable guidance (sugarcane, mango, both rubber rows) shows an explicit "no reliable source" state with its descriptive text from `cropsForReading()`, instead of rendering a crop with no advice.
 - Test plan: e2e cycling all 8 crops, asserting the rate matches the JSON and that the KH table is unreachable. Unit test on the tier-filtering query.
 - Notes: Reviewer: yes (content accuracy). Mango's rate is per-tree (1–2 kg/tree), not per-rai — the UI must not assume every rate shares a unit.
 

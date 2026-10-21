@@ -27,7 +27,7 @@ good intentions.
 is agronomic advice whether or not it contains digits.
 
 ### D9 — Sources are tiered, and the tier is shown
-**Decision:** Build the bibliography the source lacks. Tag each of the 38 cited domains as
+**Decision:** Build the bibliography the source lacks. Tag each cited domain as
 government/research/international vs commercial/blog. Render a visible tier badge. Low-tier
 material may appear as descriptive text but is excluded from the calculator and crop matcher.
 **Why:** The source has 67 inline links, no bibliography, and mixes doa.go.th and irri.org with
@@ -35,6 +35,12 @@ rakbankerd, blogspot, wordpress, and product-label photos. It admits several Tha
 (sugarcane, mango, tapped rubber) come from labels or secondary summaries. A site promising
 ที่มาของข้อมูล that cites a blog for a sugarcane rate is worse than one that says
 "ไม่มีข้อมูลอ้างอิงที่เชื่อถือได้" for that crop.
+
+**Amendment (T-007), the count.** Planning said "38 cited domains". Reading the PDF's own link
+annotations gives **67 pills → 41 documents → 37 registrable domains**, with a further 5 sources
+hidden behind two overflow pills (`uga +2`, `cgiar +3`) that name nothing. 37 is what can be named;
+the earlier 38 was an estimate and is retired. The tier is three-valued (`official` | `research` |
+`commercial`) rather than the two bands above, so research can be told apart from government.
 
 ### D11 — Cambodian Table 5.1 is excluded from the UI, retained in the data
 **Decision:** The 9 rows of Cambodian rice recommendations by soil group stay in the content layer

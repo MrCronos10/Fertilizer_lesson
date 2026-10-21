@@ -43,6 +43,7 @@ for the data extraction in T-006 than for the prose.
 | 9   | `ch01` mobility rule   | The Thai immobile list is `(Fe, Ca, B, S, Mn)`; the Khmer edition omits `Mn`. Same resolution — Thai wins — but the deficiency explorer (T-019) is built on this rule, so it should be deliberate. |
 | 10  | `ch02` organic table   | `ปุ๋ยพืชสด (ปอเทือง)` gives one species, sunn hemp, as the NPK figure for the whole green-manure category. The number is the source's; the generalisation is the source's too.            |
 | 11  | `ch02` 2.8             | `ปูนขาว … ห้ามใส่พร้อมยูเรีย` is stated without a reason. It is correct (ammonia volatilisation), but a beginner reading a bare prohibition is likely to ignore it.                         |
+| 12  | `ch05` rice, sandy soil | The pamphlet lists `16-8-8` among sandy-soil rice grades (p5, and p12 where the row cites TAS 4401-2008). TAS 4401-2008 itself lists only `16-16-8` and `18-12-6` for loam, sand and sandy loam and does not contain `16-8-8` anywhere (checked by reading the standard in full). The extraction keeps the pamphlet's figure, since that is what the source prints; it is flagged because the cited standard does not back it. |
 
 ## Not flagged, and why
 

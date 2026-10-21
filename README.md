@@ -40,7 +40,7 @@ Built for **iPad Safari** and **macOS Safari** first — WebKit is the reference
 The rules that govern this project, in short:
 
 1. **No invented agronomy.** No fact, rate or formula appears unless it traces to a cited source page.
-2. **Source authority is visible.** The original pamphlet cites 38 domains with no bibliography,
+2. **Source authority is visible.** The original pamphlet's 67 inline links name 37 domains with no bibliography,
    mixing government and research sources with blogs and product labels. We build the bibliography
    it lacks, tier every domain, and show the tier. Low-tier material never becomes an actionable
    number.

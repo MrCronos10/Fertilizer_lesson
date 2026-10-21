@@ -180,6 +180,17 @@ export interface Guidance {
   readonly grades: readonly Npk[];
   readonly rate: Quantity | null;
   readonly unit: RateUnit | null;
+  /** Citation markers the page prints against *this* guidance (not the row). */
+  readonly citations: readonly string[];
+  /** Sources the cell names for this guidance without linking; ids in sources.json. */
+  readonly namedSources: readonly string[];
+  /**
+   * Whether this may feed the calculator or crop matcher (D9). False for
+   * guidance with no country attribution, for Cambodian guidance, and for
+   * guidance whose only backing is commercial. Derived by `isActionable` in
+   * lib/sources.ts; a test asserts the stored value agrees.
+   */
+  readonly actionable: boolean;
   /** The source's own wording, verbatim and untranslated. */
   readonly text: string;
 }

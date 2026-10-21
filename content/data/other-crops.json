@@ -42,6 +42,12 @@
             "max": 25
           },
           "unit": "kg/rai",
+          "citations": [],
+          "namedSources": [
+            "tas-4401-2008",
+            "rice-dept"
+          ],
+          "actionable": true,
           "text": "16-20-0, 18-22-0 or 20-20-0, 20–25 kg/rai"
         }
       ],
@@ -60,6 +66,12 @@
             "max": 10
           },
           "unit": "kg/rai",
+          "citations": [],
+          "namedSources": [
+            "tas-4401-2008",
+            "rice-dept"
+          ],
+          "actionable": true,
           "text": "Urea 5–10 kg/rai"
         }
       ]
@@ -102,6 +114,11 @@
             "max": 25
           },
           "unit": "kg/rai",
+          "citations": [
+            "fao"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "16-16-8, 18-12-6 or 16-8-8, 20–25 kg/rai"
         }
       ],
@@ -120,6 +137,11 @@
             "max": 10
           },
           "unit": "kg/rai",
+          "citations": [
+            "fao"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "Urea 5–10 kg/rai"
         }
       ]
@@ -165,6 +187,12 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [
+            "doa",
+            "ricethailand"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "15-15-15, 16-16-8, 16-8-8 or 20-10-5 by soil test"
         }
       ],
@@ -174,6 +202,12 @@
           "grades": [],
           "rate": null,
           "unit": null,
+          "citations": [
+            "doa",
+            "ricethailand"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "Split; 2nd dose at 20–25 days or ~30 cm tall"
         }
       ]
@@ -199,6 +233,11 @@
             "value": 100
           },
           "unit": "kg/rai",
+          "citations": [
+            "blogspot"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "Dolomite 100 kg/rai if pH < 5"
         }
       ],
@@ -217,6 +256,12 @@
             "max": 50
           },
           "unit": "kg/rai",
+          "citations": [],
+          "namedSources": [
+            "nakhon-sawan-fcrc",
+            "oae"
+          ],
+          "actionable": false,
           "text": "TH: 15-15-15 at 25–50 kg/rai at 30–45 days, 20 cm from plant."
         },
         {
@@ -240,6 +285,12 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [],
+          "namedSources": [
+            "nakhon-sawan-fcrc",
+            "oae"
+          ],
+          "actionable": false,
           "text": "KH: farmers use urea, DAP and 15-15-15 at 2 and 3–4 months."
         },
         {
@@ -256,6 +307,11 @@
             "max": 600
           },
           "unit": "kg/ha",
+          "citations": [
+            "cgiar"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "CIAT regional guidance: ~500–600 kg/ha of 15-15-15"
         }
       ],
@@ -290,6 +346,11 @@
             "max": 100
           },
           "unit": "kg/rai/yr",
+          "citations": [
+            "yara"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "15-15-15 at 60–100 kg/rai/yr in 2 equal splits, ~1 month after planting and 30–60 days later"
         }
       ]
@@ -314,6 +375,12 @@
           "grades": [],
           "rate": null,
           "unit": null,
+          "citations": [
+            "naikham",
+            "apkgroup"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "Organic fertilizer + rock phosphate in the planting hole"
         }
       ],
@@ -334,6 +401,12 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [
+            "naikham",
+            "apkgroup"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "20-8-20 (old zones) or 20-10-12 (new zones), early and late rainy season"
         }
       ]
@@ -364,6 +437,11 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [
+            "tci-thaijo"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "High-N/K formula, e.g. 30-5-18"
         }
       ]
@@ -397,6 +475,11 @@
             "max": 2
           },
           "unit": "kg/tree",
+          "citations": [
+            "rakbankerd"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "After harvest: 15-15-15 at 1–2 kg/tree + 10–20 kg organic fertilizer."
         },
         {
@@ -415,6 +498,11 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [
+            "rakbankerd"
+          ],
+          "namedSources": [],
+          "actionable": false,
           "text": "2–3 months before flowering: 12-24-12 or 8-24-24"
         }
       ]
@@ -454,6 +542,12 @@
             "max": 3
           },
           "unit": "kg/tree",
+          "citations": [
+            "doa",
+            "doae"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "After harvest: 15-15-15 or 16-16-16 at 1–3 kg/tree + 20–50 kg manure."
         },
         {
@@ -469,6 +563,12 @@
             "value": 1
           },
           "unit": "kg/tree",
+          "citations": [
+            "doa",
+            "doae"
+          ],
+          "namedSources": [],
+          "actionable": true,
           "text": "Fruit stage: 8-24-24 ~1 kg/tree"
         }
       ]
@@ -500,6 +600,11 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [],
+          "namedSources": [
+            "cdri-wp91"
+          ],
+          "actionable": false,
           "text": "Manure or compost + a little DAP / 15-15-15"
         }
       ],
@@ -520,6 +625,11 @@
           ],
           "rate": null,
           "unit": null,
+          "citations": [],
+          "namedSources": [
+            "cdri-wp91"
+          ],
+          "actionable": false,
           "text": "Urea or 15-15-15, small and frequent doses"
         },
         {
@@ -530,6 +640,11 @@
             "max": 330
           },
           "unit": "kg/ha",
+          "citations": [],
+          "namedSources": [
+            "cdri-wp91"
+          ],
+          "actionable": false,
           "text": "vegetable growers apply around 190–330 kg fertilizer/ha"
         }
       ]
