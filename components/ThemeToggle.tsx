@@ -47,8 +47,9 @@ export function ThemeToggle({ toDark, toLight }: { toDark: string; toLight: stri
 
   return (
     <button type="button" className="theme-toggle" aria-label={theme === "dark" ? toLight : toDark} onClick={flip}>
-      {/* The icon is a CSS mask, not an inline <svg>: an <svg> inside this button made WebKit
-          intermittently never fire `load` on chapter 3 (bisected; the same canary as T-014). */}
+      {/* The icon is a CSS mask, not the artboard's inline <svg>: with an <svg> inside this button,
+          WebKit stopped firing `load` on 59 of 60 chapter walks (T-027, re-tested after the font
+          fix); with the mask, 0 of 120. Same symptom as T-014's select. */}
       <span className={theme === "dark" ? "theme-icon theme-icon-sun" : "theme-icon theme-icon-moon"} aria-hidden="true" />
     </button>
   );

@@ -347,8 +347,7 @@ button.primary {
   /* --line, not the artboard's rgba(27,42,34,0.22): that is 1.54:1 against the page, under the 3:1
      WCAG 1.4.11 asks of a control's edge (T-025 raised --line for the same reason). */
   border: 1px solid var(--line);
-  /* No text, so no web font: a native control that inherited one stalled WebKit's `load` on
-     chapter 3 (the T-014 select bug, again; found by e2e/calculator.spec.ts's canary). */
+  /* No text, so it needs no web font; system font as for T-014's select (not proven necessary). */
   font-family: system-ui, -apple-system, sans-serif;
   border-radius: 10px;
   background: rgba(255, 255, 252, 0.94);
