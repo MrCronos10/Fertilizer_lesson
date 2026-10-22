@@ -52,6 +52,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         ))}
       </head>
       <body>
+        {/* One Thai and one Latin letter in each preloaded face, so every font file is first used
+            by the first layout. WebKit otherwise stalls `load` when a page first needs a face after
+            its preload has finished (T-027: 11 of 60 chapter walks stalled without this, 0 of 120
+            with it). Removing the preloads also cures it but costs chapter 4 its score (T-024). */}
+        <span className="font-warm visually-hidden" aria-hidden="true">
+          <span>{"\u0e01A"}</span>
+          <span>{"\u0e01A"}</span>
+          <span>{"\u0e01A"}</span>
+        </span>
         {children}
         {/* Only on Vercel: /_vercel/insights/script.js exists solely on Vercel's
             edge, so mounting this in a local production build requests a path

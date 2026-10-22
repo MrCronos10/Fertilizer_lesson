@@ -1073,3 +1073,9 @@ main:focus {
     box-shadow: 1px 0 0 var(--line);
   }
 }
+
+/* The font warm-up in app/layout.tsx: .visually-hidden, never display:none, because text that is not
+   laid out does not use its face. */
+.font-warm span:nth-child(1) { font-family: var(--font-body); font-weight: 400; }
+.font-warm span:nth-child(2) { font-family: var(--font-body); font-weight: 600; }
+.font-warm span:nth-child(3) { font-family: var(--font-ui); font-weight: 700; }
