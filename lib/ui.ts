@@ -103,7 +103,7 @@ export const UI_KEYS = [
   "defRuleNone",
   "defSceneLabel",
   "defNo3d",
-  /** The home redesign (T-027). New UI Thai copied verbatim from the design; see THAI-REVIEW.md U50-U61. */
+  /** The home redesign (T-027). New UI Thai copied verbatim from the design; see THAI-REVIEW.md U50-U66. */
   "homeTagline",
   "homeStart",
   "homeSeeAll",
@@ -116,6 +116,11 @@ export const UI_KEYS = [
   "themeToDark",
   "themeToLight",
   "logoLabel",
+  "homeTaglineShort",
+  "homeChapterCountShort",
+  "npkNameN",
+  "npkNameP",
+  "npkNameK",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

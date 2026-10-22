@@ -229,3 +229,8 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U59 | `themeToDark` | `สลับเป็นโหมดกลางคืน` | Accessible name of the theme button in light mode. |
 | U60 | `themeToLight` | `สลับเป็นโหมดกลางวัน` | Accessible name of the theme button in dark mode. |
 | U61 | `logoLabel` | `เครื่องหมายของเว็บไซต์` | Accessible name of the site mark. |
+| U62 | `homeTaglineShort` | `เว็บไซต์สอนพื้นฐานเรื่องปุ๋ยสำหรับผู้เริ่มต้น ใช้ภาพและการโต้ตอบแทนการอ่านตำรา` | Phone hero line: the phone artboard's shorter version of `homeTagline` (drops เนื้อหาภาษาไทย). |
+| U63 | `homeChapterCountShort` | `7 บท` | Phone chapter list caption: "7 chapters". |
+| U64 | `npkNameN` | `ไนโตรเจน` | N label name. **Not in the pamphlet or the current site**: the design's word. Agronomic, so it needs your check (D6). |
+| U65 | `npkNameP` | `ฟอสฟอรัส` | P label name. Same caveat as U64. |
+| U66 | `npkNameK` | `โพแทสเซียม` | K label name. Same caveat as U64. |

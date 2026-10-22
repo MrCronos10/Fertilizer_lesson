@@ -168,39 +168,69 @@ export function PlantScene({ animate, selected, onSelect }: Props) {
       <ambientLight intensity={0.9} />
       <directionalLight position={[2, 3, 4]} intensity={1.4} />
       <group ref={root}>
-        <mesh>
-          <cylinderGeometry args={[0.06, 0.08, 2.6, 12]} />
-          <meshStandardMaterial color="#5b7f3a" />
-        </mesh>
-
-        <Cluster
-          y={-0.7}
-          leaves={OLD_LEAVES}
-          size={[0.5, 0.06, 0.2]}
-          tilt={-0.25}
-          color="#2f6f3c"
-          selected={selected === "old"}
-          hitRadius={1.15}
-          hitRef={oldHit}
-          onTap={tap("old")}
-        />
-        <Cluster
-          y={0.95}
-          leaves={YOUNG_LEAVES}
-          size={[0.32, 0.05, 0.13]}
-          tilt={0.5}
-          color="#8ac45a"
-          selected={selected === "young"}
-          hitRadius={0.75}
-          hitRef={youngHit}
-          onTap={tap("young")}
-        />
+        <PlantModel selected={selected} oldHitRef={oldHit} youngHitRef={youngHit} onTapOld={tap("old")} onTapYoung={tap("young")} />
       </group>
     </>
   );
 }
 
 type TapEvent = { delta: number; stopPropagation: () => void };
+
+/** The deficiency explorer's colours; the home hero passes the redesign's own (Main.dc.html). */
+export const PLANT_COLORS = { stem: "#5b7f3a", old: "#2f6f3c", young: "#8ac45a" } as const;
+export type PlantColors = { readonly stem: string; readonly old: string; readonly young: string };
+
+/**
+ * The plant itself, shared by the deficiency explorer and the home hero (T-027), so the site has
+ * one plant, not two. A 2.6-unit stem centred on the origin, three old leaves low down, three
+ * young ones at the tip. Hit areas exist only where a caller can act on a tap.
+ */
+export function PlantModel({
+  colors = PLANT_COLORS,
+  selected = "unplaced",
+  oldHitRef,
+  youngHitRef,
+  onTapOld,
+  onTapYoung,
+}: {
+  colors?: PlantColors;
+  selected?: LeafGroupId;
+  oldHitRef?: React.RefObject<Mesh | null>;
+  youngHitRef?: React.RefObject<Mesh | null>;
+  onTapOld?: (e: TapEvent) => void;
+  onTapYoung?: (e: TapEvent) => void;
+}) {
+  return (
+    <>
+      <mesh>
+        <cylinderGeometry args={[0.06, 0.08, 2.6, 12]} />
+        <meshStandardMaterial color={colors.stem} />
+      </mesh>
+      <Cluster
+        y={-0.7}
+        leaves={OLD_LEAVES}
+        size={[0.5, 0.06, 0.2]}
+        tilt={-0.25}
+        color={colors.old}
+        selected={selected === "old"}
+        hitRadius={1.15}
+        hitRef={oldHitRef}
+        onTap={onTapOld}
+      />
+      <Cluster
+        y={0.95}
+        leaves={YOUNG_LEAVES}
+        size={[0.32, 0.05, 0.13]}
+        tilt={0.5}
+        color={colors.young}
+        selected={selected === "young"}
+        hitRadius={0.75}
+        hitRef={youngHitRef}
+        onTap={onTapYoung}
+      />
+    </>
+  );
+}
 
 function Cluster({
   y,
@@ -220,8 +250,8 @@ function Cluster({
   color: string;
   selected: boolean;
   hitRadius: number;
-  hitRef: React.RefObject<Mesh | null>;
-  onTap: (e: TapEvent) => void;
+  hitRef?: React.RefObject<Mesh | null>;
+  onTap?: (e: TapEvent) => void;
 }) {
   // A selected cluster is drawn bigger and lit, so the state is not carried by colour alone.
   return (
@@ -238,10 +268,12 @@ function Cluster({
         </mesh>
       ))}
       {/* Oversized and invisible: the target a fingertip finds, far over 44 pt. */}
-      <mesh ref={hitRef}>
-        <sphereGeometry args={[hitRadius, 16, 12]} />
-        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-      </mesh>
+      {hitRef ? (
+        <mesh ref={hitRef}>
+          <sphereGeometry args={[hitRadius, 16, 12]} />
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+        </mesh>
+      ) : null}
     </group>
   );
 }

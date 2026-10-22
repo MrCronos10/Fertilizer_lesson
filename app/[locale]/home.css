@@ -1,0 +1,1171 @@
+/* Home page (T-027), from the redesign canvas: Main.dc.html (landscape, ≥ 75em), Home-Portrait
+   (40em–75em), Home-Phone (< 40em), Home-Night (the night colours) and Home-Hero-Fallback (the
+   flat hero). Values are the artboards' own. Colours that are scene art, not design tokens, are
+   defined here as --h-* and swapped for night below, in the same two blocks globals.css uses.
+   <html data-hero="3d"> is set before paint when the live block can run; without it (no WebGL,
+   reduced motion, no JavaScript) the flat hero shows. */
+
+.home {
+  /* Field and sky */
+  --h-sky0: #8fb6c4;
+  --h-sky1: #cbdcc9;
+  --h-sky2: #f6daa8;
+  --h-hill-far: #6e8c72;
+  --h-hill-far-o: 0.55;
+  --h-hill-near: #537558;
+  --h-band1: #a9bc84;
+  --h-band2: #8ca86d;
+  --h-band3: #6b9257;
+  --h-band4: #4a7a48;
+  --h-band4-phone: #5a8a50;
+  --h-furrow: #c9a87c;
+  --h-tuft: #2f6f3e;
+  --h-tuft-o: 0.75;
+  --h-day: inline;
+  --h-night: none;
+  /* The flat hero's planes (Home-Hero-Fallback) */
+  --h-f-hill: #6e8c72;
+  --h-f-hill-ridge: #9bb69c;
+  --h-f-mid: #9fb87e;
+  --h-f-mid-ridge: #cfe0ae;
+  --h-f-near: #6b9257;
+  --h-f-near-ridge: #a6cb8a;
+  --h-f-fringe: #3f6e42;
+  --h-f-fringe-ridge: #72a071;
+  --h-f-fringe-tuft: #2a5631;
+  --h-f-shadow: 27, 42, 34;
+  /* The soil plate */
+  --h-soil0: #7a563a;
+  --h-soil1: #5a3d27;
+  --h-soil2: #3e2a1a;
+  --h-air: #dce7d6;
+  --h-strata: #a98563;
+  --h-pebble-display: inline;
+  --h-root: #c9a87c;
+  --h-stem: #2f6f3e;
+  --h-leaf-old: #4c8a50;
+  --h-leaf-young: #6fb169;
+  --h-leaf-tip: #8fc98a;
+  --h-seam: #3e2a1a;
+  --h-seam-o: 0.35;
+  --h-card-border: #fffffc;
+  --h-card-shadow: 0 22px 44px rgba(27, 42, 34, 0.34);
+  /* Copy and HTML over the scene */
+  --h-title: #15422f;
+  --h-lead: #27382e;
+  --h-lead-alt: #22332a;
+  --h-cited: #3c4c42;
+  --h-cta-shadow: 0 6px 18px rgba(27, 42, 34, 0.22);
+  --h-ghost-border: rgba(27, 42, 34, 0.38);
+  --h-ghost-bg: rgba(255, 255, 252, 0.94);
+  --h-ghost-ink: #1b2a22;
+  --h-label-bg: rgba(255, 255, 252, 0.95);
+  --h-label-border: rgba(27, 42, 34, 0.22);
+  --h-label-shadow: 0 8px 20px rgba(27, 42, 34, 0.16);
+  --h-label-shadow-alt: 0 8px 20px rgba(27, 42, 34, 0.18);
+  --h-label-name: #1b2a22;
+  --h-label-role: #3c4c42;
+  --h-chip-ink: #ffffff;
+  --h-hint: #2f4238;
+  --h-hint-pill: rgba(255, 255, 252, 0.92);
+  --h-hint-pill-ink: #1b2a22;
+  --h-leader: #1b2a22;
+  --h-pill-bg: rgba(255, 255, 252, 0.95);
+  --h-pill-border: rgba(27, 42, 34, 0.2);
+  /* Chapter path */
+  --h-path-bg: #ece9dc;
+  --h-path-top: rgba(27, 42, 34, 0.12);
+  --h-ground1: #dfe2cb;
+  --h-ground2: #cfd9bc;
+  --h-trail-edge: #a98563;
+  --h-trail-bed: #c9a87c;
+  --h-trail-dash: #eddcbd;
+  --h-trail-tuft: #6b9257;
+  --h-trail-tuft-display: inline;
+  --h-path-title: #15422f;
+  --h-path-count: #3c4c42;
+  --h-path-count-phone: #55645b;
+  --h-marker-ink: #1b2a22;
+  --h-dot-bg: #fffffc;
+  --h-dot-ink: #1f5e45;
+  --h-dot-border: #1f5e45;
+  --h-dot-current-bg: #1f5e45;
+  --h-dot-current-ink: #ffffff;
+  --h-dot-shadow: 0 6px 14px rgba(27, 42, 34, 0.26);
+  --h-row-line: rgba(27, 42, 34, 0.12);
+  /* Safety note */
+  --h-note-ink: #7a4210;
+
+  display: flex;
+  flex-direction: column;
+  /* Full bleed: undo main.page's gutter and safe-area padding; each band re-applies the insets itself. */
+  margin: calc(-1 * (var(--gutter) + env(safe-area-inset-top, 0px))) calc(-1 * (var(--gutter) + env(safe-area-inset-right, 0px)))
+    calc(-1 * (var(--gutter) + env(safe-area-inset-bottom, 0px))) calc(-1 * (var(--gutter) + env(safe-area-inset-left, 0px)));
+  --inset-l: env(safe-area-inset-left, 0px);
+  --inset-r: env(safe-area-inset-right, 0px);
+}
+
+/* Night (Home-Night.dc.html). Values the artboard does not draw (the portrait, phone and flat
+   variants of the field) follow the same roles. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .home {
+    --h-sky0: #091625;
+    --h-sky1: var(--sky-night);
+    --h-sky2: #3b4140;
+    --h-hill-far: #132c28;
+    --h-hill-far-o: 0.85;
+    --h-hill-near: #17372c;
+    --h-band1: #2c4434;
+    --h-band2: #243b2b;
+    --h-band3: #1c3123;
+    --h-band4: #15271c;
+    --h-band4-phone: #15271c;
+    --h-furrow: #6b5236;
+    --h-tuft: #3e7d55;
+    --h-tuft-o: 0.8;
+    --h-day: none;
+    --h-night: inline;
+    --h-f-hill: #132c28;
+    --h-f-hill-ridge: #17372c;
+    --h-f-mid: #243b2b;
+    --h-f-mid-ridge: #2c4434;
+    --h-f-near: #1c3123;
+    --h-f-near-ridge: #243b2b;
+    --h-f-fringe: #15271c;
+    --h-f-fringe-ridge: #1c3123;
+    --h-f-fringe-tuft: #3e7d55;
+    --h-f-shadow: 0, 0, 0;
+    --h-soil0: #3a2819;
+    --h-soil1: #271a10;
+    --h-soil2: #15100a;
+    --h-air: #18303b;
+    --h-strata: #6b5236;
+    --h-pebble-display: none;
+    --h-root: #8a6b45;
+    --h-stem: #2e6b40;
+    --h-leaf-old: #2b5f3a;
+    --h-leaf-young: #3d7f4c;
+    --h-leaf-tip: #59a066;
+    --h-seam: #0a0704;
+    --h-seam-o: 0.5;
+    --h-card-border: rgba(237, 239, 230, 0.45);
+    --h-card-shadow: 0 22px 44px rgba(0, 0, 0, 0.5);
+    --h-title: #edefe6;
+    --h-lead: #d4dbcf;
+    --h-lead-alt: #d4dbcf;
+    --h-cited: #bdc9bf;
+    --h-cta-shadow: none;
+    --h-ghost-border: rgba(237, 239, 230, 0.5);
+    --h-ghost-bg: rgba(20, 34, 28, 0.8);
+    --h-ghost-ink: #edefe6;
+    --h-label-bg: rgba(20, 34, 28, 0.94);
+    --h-label-border: rgba(237, 239, 230, 0.45);
+    --h-label-shadow: none;
+    --h-label-shadow-alt: none;
+    --h-label-name: #edefe6;
+    --h-label-role: #a9b8ae;
+    --h-chip-ink: #0e1914;
+    --h-hint: #bdc9bf;
+    --h-hint-pill: rgba(20, 34, 28, 0.94);
+    --h-hint-pill-ink: #edefe6;
+    --h-leader: #edefe6;
+    --h-pill-bg: rgba(20, 34, 28, 0.94);
+    --h-pill-border: rgba(237, 239, 230, 0.45);
+    --h-path-bg: #11201a;
+    --h-path-top: rgba(237, 239, 230, 0.2);
+    --h-ground1: #17291f;
+    --h-ground2: #1c3224;
+    --h-trail-edge: #4c3a26;
+    --h-trail-bed: #6b5236;
+    --h-trail-dash: #a98563;
+    --h-trail-tuft-display: none;
+    --h-path-title: #edefe6;
+    --h-path-count: #a9b8ae;
+    --h-path-count-phone: #a9b8ae;
+    --h-marker-ink: #edefe6;
+    --h-dot-bg: #16261f;
+    --h-dot-ink: #7fd1a8;
+    --h-dot-border: #7fd1a8;
+    --h-dot-current-bg: #7fd1a8;
+    --h-dot-current-ink: #0e1914;
+    --h-dot-shadow: none;
+    --h-row-line: rgba(237, 239, 230, 0.2);
+    --h-note-ink: var(--warn);
+  }
+}
+:root[data-theme="dark"] .home {
+  --h-sky0: #091625;
+  --h-sky1: var(--sky-night);
+  --h-sky2: #3b4140;
+  --h-hill-far: #132c28;
+  --h-hill-far-o: 0.85;
+  --h-hill-near: #17372c;
+  --h-band1: #2c4434;
+  --h-band2: #243b2b;
+  --h-band3: #1c3123;
+  --h-band4: #15271c;
+  --h-band4-phone: #15271c;
+  --h-furrow: #6b5236;
+  --h-tuft: #3e7d55;
+  --h-tuft-o: 0.8;
+  --h-day: none;
+  --h-night: inline;
+  --h-f-hill: #132c28;
+  --h-f-hill-ridge: #17372c;
+  --h-f-mid: #243b2b;
+  --h-f-mid-ridge: #2c4434;
+  --h-f-near: #1c3123;
+  --h-f-near-ridge: #243b2b;
+  --h-f-fringe: #15271c;
+  --h-f-fringe-ridge: #1c3123;
+  --h-f-fringe-tuft: #3e7d55;
+  --h-f-shadow: 0, 0, 0;
+  --h-soil0: #3a2819;
+  --h-soil1: #271a10;
+  --h-soil2: #15100a;
+  --h-air: #18303b;
+  --h-strata: #6b5236;
+  --h-pebble-display: none;
+  --h-root: #8a6b45;
+  --h-stem: #2e6b40;
+  --h-leaf-old: #2b5f3a;
+  --h-leaf-young: #3d7f4c;
+  --h-leaf-tip: #59a066;
+  --h-seam: #0a0704;
+  --h-seam-o: 0.5;
+  --h-card-border: rgba(237, 239, 230, 0.45);
+  --h-card-shadow: 0 22px 44px rgba(0, 0, 0, 0.5);
+  --h-title: #edefe6;
+  --h-lead: #d4dbcf;
+  --h-lead-alt: #d4dbcf;
+  --h-cited: #bdc9bf;
+  --h-cta-shadow: none;
+  --h-ghost-border: rgba(237, 239, 230, 0.5);
+  --h-ghost-bg: rgba(20, 34, 28, 0.8);
+  --h-ghost-ink: #edefe6;
+  --h-label-bg: rgba(20, 34, 28, 0.94);
+  --h-label-border: rgba(237, 239, 230, 0.45);
+  --h-label-shadow: none;
+  --h-label-shadow-alt: none;
+  --h-label-name: #edefe6;
+  --h-label-role: #a9b8ae;
+  --h-chip-ink: #0e1914;
+  --h-hint: #bdc9bf;
+  --h-hint-pill: rgba(20, 34, 28, 0.94);
+  --h-hint-pill-ink: #edefe6;
+  --h-leader: #edefe6;
+  --h-pill-bg: rgba(20, 34, 28, 0.94);
+  --h-pill-border: rgba(237, 239, 230, 0.45);
+  --h-path-bg: #11201a;
+  --h-path-top: rgba(237, 239, 230, 0.2);
+  --h-ground1: #17291f;
+  --h-ground2: #1c3224;
+  --h-trail-edge: #4c3a26;
+  --h-trail-bed: #6b5236;
+  --h-trail-dash: #a98563;
+  --h-trail-tuft-display: none;
+  --h-path-title: #edefe6;
+  --h-path-count: #a9b8ae;
+  --h-path-count-phone: #a9b8ae;
+  --h-marker-ink: #edefe6;
+  --h-dot-bg: #16261f;
+  --h-dot-ink: #7fd1a8;
+  --h-dot-border: #7fd1a8;
+  --h-dot-current-bg: #7fd1a8;
+  --h-dot-current-ink: #0e1914;
+  --h-dot-shadow: none;
+  --h-row-line: rgba(237, 239, 230, 0.2);
+  --h-note-ink: var(--warn);
+}
+
+.home p,
+.home li {
+  max-width: none;
+}
+
+/* ---------------------------------------------------------------- drawn scenery */
+
+.home .day {
+  display: var(--h-day);
+}
+.home .night {
+  display: var(--h-night);
+}
+.sky0 { stop-color: var(--h-sky0); }
+.sky1 { stop-color: var(--h-sky1); }
+.sky2 { stop-color: var(--h-sky2); }
+.sun-halo { fill: var(--accent); opacity: 0.16; }
+.sun { fill: var(--accent); }
+.stars { fill: var(--ink); }
+.moon-halo { fill: #c8d6e8; opacity: 0.1; }
+.moon { fill: #e6eddc; }
+.moon-shade { fill: var(--sky-night); opacity: 0.5; }
+.fireflies { fill: var(--accent); }
+.hill-far { fill: var(--h-hill-far); opacity: var(--h-hill-far-o); }
+.hill-near { fill: var(--h-hill-near); }
+.band1 { fill: var(--h-band1); }
+.band2 { fill: var(--h-band2); }
+.band3 { fill: var(--h-band3); }
+.band4 { fill: var(--h-band4); }
+.band4-phone { fill: var(--h-band4-phone); }
+.furrow { fill: none; stroke: var(--h-furrow); }
+.f1 { stroke-width: 2.5; opacity: 0.7; }
+.f2 { stroke-width: 2.5; opacity: 0.6; }
+.f3 { stroke-width: 3; opacity: 0.55; }
+.f1p { stroke-width: 2.5; opacity: 0.65; }
+.f2p { stroke-width: 2.5; opacity: 0.55; }
+.f3p { stroke-width: 3; opacity: 0.5; }
+.f-phone { stroke-width: 2; opacity: 0.6; }
+.tufts { fill: none; stroke: var(--h-tuft); stroke-width: 2.4; stroke-linecap: round; opacity: var(--h-tuft-o); }
+.art-portrait .tufts { opacity: 0.7; }
+.art-phone .tufts { stroke-width: 2; opacity: 0.7; }
+
+.f-hill { fill: var(--h-f-hill); }
+.f-hill-ridge { fill: none; stroke: var(--h-f-hill-ridge); stroke-width: 2.5; }
+.f-mid { fill: var(--h-f-mid); }
+.f-mid-ridge { fill: none; stroke: var(--h-f-mid-ridge); stroke-width: 3; }
+.f-mid-furrow { stroke-width: 2.5; opacity: 0.65; }
+.f-near { fill: var(--h-f-near); }
+.f-near-ridge { fill: none; stroke: var(--h-f-near-ridge); stroke-width: 3; }
+.f-near-furrow { stroke-width: 3; opacity: 0.5; }
+.f-fringe { fill: var(--h-f-fringe); }
+.f-fringe-ridge { fill: none; stroke: var(--h-f-fringe-ridge); stroke-width: 3; }
+.f-fringe-tufts { fill: none; stroke: var(--h-f-fringe-tuft); stroke-width: 2.8; stroke-linecap: round; }
+.plane-2 { filter: drop-shadow(0 -3px 6px rgba(var(--h-f-shadow), 0.14)); }
+.plane-3 { filter: drop-shadow(0 -5px 10px rgba(var(--h-f-shadow), 0.2)); }
+.plane-4 { filter: drop-shadow(0 -7px 14px rgba(var(--h-f-shadow), 0.24)); }
+.plane-6 { filter: drop-shadow(0 -9px 18px rgba(var(--h-f-shadow), 0.3)); }
+
+.soil0 { stop-color: var(--h-soil0); }
+.soil1 { stop-color: var(--h-soil1); }
+.soil2 { stop-color: var(--h-soil2); }
+.card-air { fill: var(--h-air); }
+.strata { fill: none; stroke: var(--h-strata); stroke-width: 2; }
+.s1 { opacity: 0.45; }
+.s2 { opacity: 0.35; }
+.s3 { opacity: 0.28; }
+.pebbles { fill: #8b6239; opacity: 0.5; display: var(--h-pebble-display); }
+.roots { fill: none; stroke: var(--h-root); stroke-linecap: round; }
+.p-n { fill: var(--n); }
+.p-p { fill: var(--p); }
+.p-k { fill: var(--k); }
+.stem { fill: none; stroke: var(--h-stem); stroke-width: 6; stroke-linecap: round; }
+.leaf-old { fill: var(--h-leaf-old); }
+.leaf-young { fill: var(--h-leaf-young); }
+.leaf-tip { fill: var(--h-leaf-tip); }
+.seam { fill: var(--h-seam); opacity: var(--h-seam-o); }
+
+/* ---------------------------------------------------------------- hero, phone first (Home-Phone) */
+
+.hero {
+  position: relative;
+  --band: 208px;
+}
+.hero-field {
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--band);
+  overflow: hidden;
+}
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.art-phone {
+  display: block;
+}
+.hero-inner {
+  position: relative;
+  padding-top: var(--band);
+  width: calc(100% - var(--inset-l) - var(--inset-r));
+  margin-inline: auto;
+}
+
+.hero-copy {
+  padding: 16px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hero-title {
+  font-size: 28px;
+  line-height: 1.4;
+  color: var(--h-title);
+  text-wrap: pretty;
+}
+.hero-lead {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--h-cited);
+}
+.hero-lead-long {
+  display: none;
+}
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.cta {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 12px;
+}
+.cta svg {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cta-primary {
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 17px;
+}
+.cta-primary svg {
+  width: 17px;
+  height: 17px;
+}
+.cta-secondary {
+  display: none;
+  min-height: 56px;
+  padding: 0 24px;
+  border: 1px solid var(--h-ghost-border);
+  background: var(--h-ghost-bg);
+  color: var(--h-ghost-ink);
+  font-weight: 600;
+  font-size: 17px;
+}
+.hero-cited {
+  display: none;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 470px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--h-cited);
+}
+.hero-cited svg {
+  flex: none;
+  margin-top: 5px;
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The block's slot: the live canvas, or the flat plate. */
+.hero-stage {
+  position: absolute;
+  left: calc(206 / 390 * 100%);
+  top: 16px;
+  width: calc(173 / 390 * 100%);
+  height: 179px;
+}
+.hero-stage .scene3d {
+  aspect-ratio: auto;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.soil-card {
+  position: absolute;
+  overflow: hidden;
+  border: 3px solid var(--h-card-border);
+  border-radius: 18px;
+  box-shadow: var(--h-card-shadow);
+  transform: rotate(-1.5deg);
+  aspect-ratio: 372 / 362;
+  /* Phone: the block's place in Home-Phone (216, 28; 150 wide), relative to the stage. */
+  left: calc((216 - 206) / 173 * 100%);
+  top: 12px;
+  width: calc(150 / 173 * 100%);
+}
+.soil-card svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+:root[data-hero="3d"] .soil-card {
+  display: none;
+}
+
+/* N, P, K: on a phone the design shows one pill; the three labels stay for screen readers
+   (the list is .visually-hidden until 40em). */
+.npk-labels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.npk-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--h-label-bg);
+  border: 1px solid var(--h-label-border);
+  box-shadow: var(--h-label-shadow);
+}
+.npk-chip {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  color: var(--h-chip-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 19px;
+}
+.npk-n { background: var(--n); }
+.npk-p { background: var(--p); }
+.npk-k { background: var(--k); }
+.npk-text {
+  min-width: 0;
+}
+.npk-name {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--h-label-name);
+}
+.npk-role {
+  display: block;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--h-label-role);
+}
+.npk-pill {
+  position: absolute;
+  left: 14px;
+  top: 158px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  background: var(--h-pill-bg);
+  border: 1px solid var(--h-pill-border);
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: var(--h-label-name);
+}
+.npk-pill-chips {
+  display: flex;
+  gap: 4px;
+}
+.npk-pill .npk-chip {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.hero-hint {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--h-hint);
+  pointer-events: none;
+}
+.hero-hint svg {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hero-leaders {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--h-leader);
+  stroke-width: 1.5;
+  opacity: 0.4;
+}
+
+/* ---------------------------------------------------------------- chapters, phone first: a list */
+
+.chapters {
+  order: 2;
+  position: relative;
+  padding: 18px calc(20px + var(--inset-r)) calc(24px + env(safe-area-inset-bottom, 0px)) calc(20px + var(--inset-l));
+}
+.chapters-inner {
+  position: relative;
+}
+.trail {
+  display: none;
+}
+.chapters-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 8px;
+}
+.chapters-title {
+  font-size: 19px;
+  line-height: 1.4;
+  color: var(--h-path-title);
+}
+.chapters-count {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--h-path-count-phone);
+}
+.chapters-count-long {
+  display: none;
+}
+.chapter-markers {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.chapter-markers::before {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: 26px;
+  bottom: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--h-trail-bed);
+}
+.marker-item + .marker-item {
+  border-top: 1px solid var(--h-row-line);
+}
+.marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  text-decoration: none;
+  color: var(--h-marker-ink);
+}
+.marker-dot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  box-sizing: border-box;
+  background: var(--h-dot-bg);
+  color: var(--h-dot-ink);
+  border: 2px solid var(--h-dot-border);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+}
+.marker-current .marker-dot {
+  background: var(--h-dot-current-bg);
+  color: var(--h-dot-current-ink);
+  border-color: var(--accent);
+}
+.marker-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.marker-current .marker-title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+.marker-here {
+  order: 3;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------------- safety note, phone first: a card */
+
+.safe-note {
+  order: 1;
+  margin: 0 calc(20px + var(--inset-r)) 0 calc(20px + var(--inset-l));
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--warn-bg);
+  border-left: 4px solid var(--warn);
+}
+.safe-note p {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.7;
+  font-weight: 600;
+  color: var(--h-note-ink);
+}
+.safe-note svg {
+  display: none;
+  flex: none;
+  fill: none;
+  stroke: var(--warn);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+/* ================================================================ iPad portrait (Home-Portrait, 834) */
+
+@media (min-width: 40em) {
+  .hero {
+    --band: 600px;
+  }
+  .art-phone {
+    display: none;
+  }
+  .art-portrait {
+    display: block;
+  }
+  .hero-inner {
+    padding-top: 0;
+    height: var(--band);
+  }
+  .hero-copy {
+    position: absolute;
+    left: calc(48 / 834 * 100%);
+    top: 36px;
+    width: calc(408 / 834 * 100%);
+    padding: 0;
+    gap: 18px;
+  }
+  .hero-title {
+    font-size: 46px;
+  }
+  .hero-lead {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--h-lead-alt);
+  }
+  .hero-lead-long {
+    display: block;
+  }
+  .hero-lead-short {
+    display: none;
+  }
+  .hero-actions {
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .cta-primary {
+    gap: 10px;
+    min-height: 56px;
+    padding: 0 26px;
+    font-size: 18px;
+    box-shadow: var(--h-cta-shadow);
+  }
+  .cta-primary svg {
+    width: 18px;
+    height: 18px;
+  }
+  .cta-secondary {
+    display: inline-flex;
+    min-height: 48px;
+    padding: 0 20px;
+    font-size: 16px;
+    border-color: var(--h-ghost-border);
+  }
+
+  /* Live block: Home-Portrait's 470–790 × 236–556, as a 360 × 372 canvas centred on it. */
+  .hero-stage {
+    left: calc(454 / 834 * 100%);
+    top: 203px;
+    width: calc(360 / 834 * 100%);
+    height: 372px;
+  }
+  .soil-card {
+    left: calc((470 - 454) / 360 * 100%);
+    top: 33px;
+    width: calc(320 / 360 * 100%);
+  }
+
+  .npk-labels.visually-hidden {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    pointer-events: none;
+  }
+  .npk-label {
+    position: absolute;
+    left: calc(48 / 834 * 100%);
+    width: calc(392 / 834 * 100%);
+    padding: 11px 14px;
+    box-shadow: var(--h-label-shadow-alt);
+    pointer-events: auto;
+  }
+  .npk-label:nth-child(1) { top: 398px; }
+  .npk-label:nth-child(2) { top: 466px; }
+  .npk-label:nth-child(3) { top: 534px; }
+  .npk-label .npk-chip {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  .npk-pill {
+    display: none;
+  }
+  :root[data-hero="3d"] .hero-hint {
+    display: inline-flex;
+    position: absolute;
+    left: calc(536 / 834 * 100%);
+    top: 568px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--h-hint-pill);
+    color: var(--h-hint-pill-ink);
+  }
+
+  /* Chapter path: Home-Portrait's switchback. */
+  .chapters {
+    order: 1;
+    height: 364px;
+    padding: 0;
+    background: var(--h-path-bg);
+    border-top: 1px solid var(--h-path-top);
+    overflow: hidden;
+  }
+  .chapters-inner {
+    position: absolute;
+    inset: 0 var(--inset-r) 0 var(--inset-l);
+  }
+  .trail {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .trail-portrait {
+    display: block;
+  }
+  .trail-ground.g1 { fill: var(--h-ground1); }
+  .trail-ground.g2 { fill: var(--h-ground2); }
+  .trail-edge { fill: none; stroke: var(--h-trail-edge); stroke-width: 30; stroke-linecap: round; opacity: 0.5; }
+  .trail-bed { fill: none; stroke: var(--h-trail-bed); stroke-width: 24; stroke-linecap: round; }
+  .trail-dash { fill: none; stroke: var(--h-trail-dash); stroke-width: 2.5; stroke-dasharray: 10 14; stroke-linecap: round; }
+  .trail-tufts { fill: none; stroke: var(--h-trail-tuft); stroke-width: 2.2; stroke-linecap: round; opacity: 0.6; display: var(--h-trail-tuft-display); }
+  .chapters-head {
+    position: absolute;
+    left: calc(48 / 834 * 100%);
+    right: calc(48 / 834 * 100%);
+    top: 16px;
+    margin: 0;
+    gap: 20px;
+  }
+  .chapters-title {
+    font-size: 24px;
+  }
+  .chapters-count {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--h-path-count);
+  }
+  .chapters-count-long {
+    display: inline;
+  }
+  .chapters-count-short {
+    display: none;
+  }
+  .chapter-markers {
+    position: absolute;
+    inset: 0;
+  }
+  .chapter-markers::before {
+    display: none;
+  }
+  .marker-item {
+    position: absolute;
+    left: var(--px);
+    top: var(--py);
+    width: min(180px, calc(180 / 834 * 100%));
+  }
+  .marker-item + .marker-item {
+    border-top: 0;
+  }
+  .marker {
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    text-align: center;
+  }
+  .marker-here {
+    order: 0;
+    height: auto;
+    min-height: 24px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+  .marker-dot {
+    width: 48px;
+    height: 48px;
+    font-size: 19px;
+  }
+  .marker-current .marker-dot {
+    width: 52px;
+    height: 52px;
+    border-width: 3px;
+    font-size: 20px;
+    box-shadow: var(--h-dot-shadow);
+  }
+  .marker-title {
+    flex: none;
+    font-size: 14px;
+  }
+  .marker-current .marker-title {
+    font-size: 15px;
+  }
+
+  /* Safety note: a full-width strip under the path. */
+  .safe-note {
+    order: 2;
+    display: flex;
+    align-items: center;
+    min-height: 84px;
+    margin: 0;
+    padding: 0 calc(40px + var(--inset-r)) env(safe-area-inset-bottom, 0px) calc(40px + var(--inset-l));
+    border-radius: 0;
+    border-left: 0;
+    border-top: 4px solid var(--warn);
+  }
+  .safe-note p {
+    font-size: 15px;
+  }
+  .safe-note svg {
+    display: block;
+  }
+}
+
+/* ================================================================ iPad landscape (Main, 1366) */
+
+@media (min-width: 75em) {
+  .hero-inner {
+    max-width: 1366px;
+  }
+  .art-portrait {
+    display: none;
+  }
+  .soil-card,
+  .hero-stage,
+  .npk-label {
+    transition: none;
+  }
+
+  /* The flat hero (Home-Hero-Fallback), the default until the live block is known to run. */
+  .hero {
+    --band: 556px;
+  }
+  .art-flat {
+    display: block;
+  }
+  .hero-copy {
+    left: calc(64 / 1366 * 100%);
+    top: 52px;
+    width: calc(544 / 1366 * 100%);
+    gap: 20px;
+  }
+  .hero-title {
+    font-size: 56px;
+  }
+  .hero-lead {
+    font-size: 19px;
+    max-width: 500px;
+  }
+  .hero-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+  .cta-primary {
+    padding: 0 28px;
+  }
+  .cta-secondary {
+    min-height: 56px;
+    padding: 0 24px;
+    font-size: 17px;
+  }
+  .hero-cited {
+    display: flex;
+  }
+  .hero-stage {
+    left: calc(722 / 1366 * 100%);
+    top: 106px;
+    width: calc(372 / 1366 * 100%);
+    height: auto;
+  }
+  .soil-card {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .npk-label {
+    left: calc(1122 / 1366 * 100%);
+    width: calc(220 / 1366 * 100%);
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .npk-label:nth-child(1) { top: 150px; }
+  .npk-label:nth-child(2) { top: 250px; }
+  .npk-label:nth-child(3) { top: 350px; }
+  .npk-label .npk-chip {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    font-size: 17px;
+  }
+  .npk-label .npk-name {
+    font-size: 14px;
+  }
+  .npk-label .npk-role {
+    font-size: 13px;
+  }
+
+  /* The live hero (Main.dc.html). */
+  :root[data-hero="3d"] .hero {
+    --band: 500px;
+  }
+  :root[data-hero="3d"] .art-flat {
+    display: none;
+  }
+  :root[data-hero="3d"] .art-landscape {
+    display: block;
+  }
+  :root[data-hero="3d"] .hero-copy {
+    top: 72px;
+    gap: 22px;
+  }
+  :root[data-hero="3d"] .hero-title {
+    font-size: 60px;
+  }
+  :root[data-hero="3d"] .hero-lead {
+    color: var(--h-lead);
+  }
+  :root[data-hero="3d"] .hero-stage {
+    left: calc(680 / 1366 * 100%);
+    top: 92px;
+    width: calc(360 / 1366 * 100%);
+    height: 372px;
+  }
+  :root[data-hero="3d"] .npk-label {
+    left: calc(1046 / 1366 * 100%);
+    width: calc(268 / 1366 * 100%);
+    gap: 12px;
+    padding: 12px 14px;
+    box-shadow: var(--h-label-shadow);
+  }
+  :root[data-hero="3d"] .npk-label:nth-child(1) { top: 140px; }
+  :root[data-hero="3d"] .npk-label:nth-child(2) { top: 244px; }
+  :root[data-hero="3d"] .npk-label:nth-child(3) { top: 348px; }
+  :root[data-hero="3d"] .npk-label .npk-chip {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 19px;
+  }
+  :root[data-hero="3d"] .npk-label .npk-name {
+    font-size: 15px;
+  }
+  :root[data-hero="3d"] .npk-label .npk-role {
+    font-size: 14px;
+  }
+  :root[data-hero="3d"] .hero-hint {
+    left: calc(700 / 1366 * 100%);
+    top: 444px;
+    width: calc(312 / 1366 * 100%);
+    padding: 0;
+    background: none;
+    color: var(--h-hint);
+  }
+  :root[data-hero="3d"] .hero-leaders {
+    display: block;
+  }
+
+  /* Chapter path: Main's winding trail, stretched to the width. */
+  .chapters {
+    height: 376px;
+  }
+  .trail-portrait {
+    display: none;
+  }
+  .trail-landscape {
+    display: block;
+  }
+  .chapters-head {
+    left: calc(64 / 1366 * 100%);
+    right: calc(64 / 1366 * 100%);
+    top: 24px;
+    gap: 24px;
+  }
+  .chapters-title {
+    font-size: 26px;
+  }
+  .marker-item {
+    left: var(--lx);
+    top: var(--ly);
+    width: min(160px, calc(160 / 1366 * 100%));
+  }
+  .marker {
+    gap: 8px;
+  }
+  .marker-here {
+    min-height: 26px;
+  }
+  .marker-current .marker-dot {
+    width: 54px;
+    height: 54px;
+  }
+
+  .safe-note {
+    padding-inline: calc(64px + var(--inset-l)) calc(64px + var(--inset-r));
+  }
+  .safe-note p {
+    line-height: 1.75;
+  }
+}

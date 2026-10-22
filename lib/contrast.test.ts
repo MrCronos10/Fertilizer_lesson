@@ -113,7 +113,9 @@ describe("theme token parity", () => {
   it("dark overrides every colour token except the deliberate carry-overs", () => {
     // --accent/--accent-ink are intentionally shared with light: accent-ink on
     // accent is 8.2:1 in both themes, and gold on the dark background is 9.9:1.
-    const carriedOver = ["--accent", "--accent-ink"];
+    // The redesign's soil and sky (T-027) are one set for both themes, by the owner's decision: the
+    // night scene's colours are scene art kept in the home stylesheet, and --sky-night is its own token.
+    const carriedOver = ["--accent", "--accent-ink", "--soil-light", "--soil", "--soil-deep", "--sky", "--sky-warm", "--sky-night"];
     const nonColour = ["--tap", "--gutter", "--radius"];
 
     const colourTokens = Object.keys(LIGHT).filter(

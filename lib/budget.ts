@@ -17,7 +17,8 @@ export const jsBudgetFor = (kind: RouteKind) => (kind === "3d" ? THREE_D_JS_BUDG
 export const CHAPTER_SLUGS = ["ch01", "ch02", "ch03", "ch04", "ch05", "ch06", "ch07"] as const;
 
 export const ROUTES: readonly { readonly path: string; readonly kind: RouteKind }[] = [
-  { path: "/th", kind: "text" },
+  // The home hero reuses the deficiency plant in its 3D soil block (T-027), loaded once the page is idle.
+  { path: "/th", kind: "3d" },
   // Chapter 1 carries the deficiency explorer's 3D plant (T-018).
   ...CHAPTER_SLUGS.map((slug) => ({ path: `/th/${slug}`, kind: (slug === "ch01" ? "3d" : "text") as RouteKind })),
   // Internal pages, not part of the lesson but served, so held to the same budget.

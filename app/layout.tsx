@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -18,8 +19,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="th">
+    // suppressHydrationWarning: THEME_SCRIPT and the home page's HERO_MODE_SCRIPT set data-theme and
+    // data-hero on <html> before React hydrates, on purpose.
+    <html lang="th" suppressHydrationWarning>
       <head>
+        {/* First in <head>, so a remembered theme applies before anything paints. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         {/* All six faces are preloaded. The Thai subsets were preloaded alone at first, on the
             thought that the Latin ones are rarely needed; Lighthouse (T-024) showed they are
             fetched on every page (digits, N, P, K, kg) but only once the stylesheet had been read,
