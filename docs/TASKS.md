@@ -657,6 +657,19 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Not verified:** a real phone (the only one I can give you is WebKit in a phone-sized window); iOS's on-screen keyboard covering a form field (the calculator's focus handling is the same as on iPad); the pictures in `test-results/phone/` were looked at for chapters 1 and 2 only.
   - **New Thai: none.**
 
+### T-027: Home page redesign (`/th`)
+- Status: in progress
+- Depends on: T-026
+- Goal: Rebuild `/th` from the Design canvas as one responsive route (iPad landscape, iPad portrait, phone, night), with a React Three Fiber hero reusing the deficiency plant and a real static fallback.
+- Acceptance criteria:
+  - [ ] One route, three layouts (landscape, portrait, phone) and day/night, from the artboards' values
+  - [ ] No text in the canvas; N/P/K labels, title, chapter path and markers are HTML; markers are real links
+  - [ ] Hero is procedural R3F geometry (D7), one WebGL context, disposed on route change (D16)
+  - [ ] Static hero fallback is the first paint, the no-WebGL view and the reduced-motion view
+  - [ ] Budget, Lighthouse and axe still pass; 44 px targets, safe areas and dvh kept
+- Test plan: unit (strings, budget), WebKit e2e at 1366, 834 and 390 in both themes, WebGL-off run, context count across navigation.
+- Notes: Decisions taken with the owner: `/th` becomes a "3d" route in `lib/budget.ts` with the canvas loaded after first paint (D3/D16 note); the hero soil block is decoration, an exception to D15; mockup's short ch1/ch2 titles are NOT used, the site's full titles are; no all-sources page exists, so the two sources links are TODO.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)
