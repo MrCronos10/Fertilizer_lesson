@@ -210,3 +210,26 @@ test.describe("at Main.dc.html's own width", () => {
     expect((await page.locator(".hero").boundingBox())!.height).toBe(556);
   });
 });
+
+test("if the 3D code cannot download, the page stays up on the flat plate", async ({ page }) => {
+  // Fail exactly the chunk that carries three.js; everything else loads.
+  await page.route("**/_next/static/chunks/*.js", async (route) => {
+    const response = await route.fetch();
+    if ((await response.text()).includes("WebGLRenderer")) return route.abort();
+    return route.fulfill({ response });
+  });
+  await page.goto("/th");
+  // The plate stands in from the first paint, while the live block is still on its way.
+  await expect(card(page)).toBeVisible();
+  await expect.poll(() => hero(page)).toBe("flat");
+  await expect(card(page)).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("เรียนรู้เรื่องปุ๋ย");
+  await expect(page.getByRole("navigation", { name: "สารบัญ" }).getByRole("link")).toHaveCount(7);
+});
+
+test("the plate gives way to the live block only once it has drawn", async ({ page }) => {
+  await page.goto("/th");
+  await expect(canvas(page)).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.dataset.scene)).toBe("ready");
+  await expect(card(page)).toBeHidden();
+});

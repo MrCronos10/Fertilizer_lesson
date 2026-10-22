@@ -127,11 +127,17 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 "--px": `${(at("portrait").x / PATH_FRAME.portrait) * 100}%`,
                 "--py": `${at("portrait").y}px`,
               } as CSSProperties;
-              const current = i === 0;
+              const current = at("landscape").current;
               return (
                 <li key={frontmatter.chapter} className="marker-item" style={style}>
                   <Link className={current ? "marker marker-current" : "marker"} href={`/${locale}/${chapterSlug(frontmatter.chapter)}`}>
-                    {current ? <span className="marker-here">{ui.homeHere}</span> : null}
+                    {/* aria-hidden: on the home page "you are here" is not true of chapter 1, so the link's name
+                        is the chapter heading alone. The design's word stays on screen (verbatim). */}
+                    {current ? (
+                      <span className="marker-here" aria-hidden="true">
+                        {ui.homeHere}
+                      </span>
+                    ) : null}
                     <span className="marker-dot" aria-hidden="true">
                       {frontmatter.chapter}
                     </span>

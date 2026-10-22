@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { nutrientGroupRows } from "./data";
 import { HERO_MODE_SCRIPT, PATH_MARKERS, heroMode, npkRoles } from "./home";
@@ -92,5 +94,16 @@ describe("PATH_MARKERS", () => {
       expect(PATH_MARKERS[layout][0]!.current).toBe(true);
       expect(PATH_MARKERS[layout].slice(1).every((m) => !m.current)).toBe(true);
     }
+  });
+});
+
+describe("home.css", () => {
+  it("scopes every rule to the home page, so its scene class names never reach a chapter", () => {
+    const css = readFileSync(join(process.cwd(), "app/[locale]/home.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/@[^{]+\{/g, "{"); // an at-rule's prelude is not a selector
+    const selectors = [...css.matchAll(/([^{}@]+)\{/g)].flatMap((m) => m[1]!.split(",").map((s) => s.trim()))
+      .filter(Boolean);
+    expect(selectors.length).toBeGreaterThan(100);
+    expect(selectors.filter((s) => !/(^|\s)\.home(\s|$|[.:\[])/.test(s))).toEqual([]);
   });
 });

@@ -291,138 +291,138 @@
 .home .night {
   display: var(--h-night);
 }
-.sky0 { stop-color: var(--h-sky0); }
-.sky1 { stop-color: var(--h-sky1); }
-.sky2 { stop-color: var(--h-sky2); }
-.sun-halo { fill: var(--accent); opacity: 0.16; }
-.sun { fill: var(--accent); }
-.stars { fill: var(--ink); }
-.moon-halo { fill: #c8d6e8; opacity: 0.1; }
-.moon { fill: #e6eddc; }
-.moon-shade { fill: var(--sky-night); opacity: 0.5; }
-.fireflies { fill: var(--accent); }
-.hill-far { fill: var(--h-hill-far); opacity: var(--h-hill-far-o); }
-.hill-near { fill: var(--h-hill-near); }
-.band1 { fill: var(--h-band1); }
-.band2 { fill: var(--h-band2); }
-.band3 { fill: var(--h-band3); }
-.band4 { fill: var(--h-band4); }
-.band4-phone { fill: var(--h-band4-phone); }
-.furrow { fill: none; stroke: var(--h-furrow); }
-.f1 { stroke-width: 2.5; opacity: 0.7; }
-.f2 { stroke-width: 2.5; opacity: 0.6; }
-.f3 { stroke-width: 3; opacity: 0.55; }
-.f1p { stroke-width: 2.5; opacity: 0.65; }
-.f2p { stroke-width: 2.5; opacity: 0.55; }
-.f3p { stroke-width: 3; opacity: 0.5; }
-.f-phone { stroke-width: 2; opacity: 0.6; }
-.tufts { fill: none; stroke: var(--h-tuft); stroke-width: 2.4; stroke-linecap: round; opacity: var(--h-tuft-o); }
-.art-portrait .tufts { opacity: 0.7; }
-.art-phone .tufts { stroke-width: 2; opacity: 0.7; }
+.home .sky0 { stop-color: var(--h-sky0); }
+.home .sky1 { stop-color: var(--h-sky1); }
+.home .sky2 { stop-color: var(--h-sky2); }
+.home .sun-halo { fill: var(--accent); opacity: 0.16; }
+.home .sun { fill: var(--accent); }
+.home .stars { fill: var(--ink); }
+.home .moon-halo { fill: #c8d6e8; opacity: 0.1; }
+.home .moon { fill: #e6eddc; }
+.home .moon-shade { fill: var(--sky-night); opacity: 0.5; }
+.home .fireflies { fill: var(--accent); }
+.home .hill-far { fill: var(--h-hill-far); opacity: var(--h-hill-far-o); }
+.home .hill-near { fill: var(--h-hill-near); }
+.home .band1 { fill: var(--h-band1); }
+.home .band2 { fill: var(--h-band2); }
+.home .band3 { fill: var(--h-band3); }
+.home .band4 { fill: var(--h-band4); }
+.home .band4-phone { fill: var(--h-band4-phone); }
+.home .furrow { fill: none; stroke: var(--h-furrow); }
+.home .f1 { stroke-width: 2.5; opacity: 0.7; }
+.home .f2 { stroke-width: 2.5; opacity: 0.6; }
+.home .f3 { stroke-width: 3; opacity: 0.55; }
+.home .f1p { stroke-width: 2.5; opacity: 0.65; }
+.home .f2p { stroke-width: 2.5; opacity: 0.55; }
+.home .f3p { stroke-width: 3; opacity: 0.5; }
+.home .f-phone { stroke-width: 2; opacity: 0.6; }
+.home .tufts { fill: none; stroke: var(--h-tuft); stroke-width: 2.4; stroke-linecap: round; opacity: var(--h-tuft-o); }
+.home .art-portrait .tufts { opacity: 0.7; }
+.home .art-phone .tufts { stroke-width: 2; opacity: 0.7; }
 
-.f-hill { fill: var(--h-f-hill); }
-.f-hill-ridge { fill: none; stroke: var(--h-f-hill-ridge); stroke-width: 2.5; }
-.f-mid { fill: var(--h-f-mid); }
-.f-mid-ridge { fill: none; stroke: var(--h-f-mid-ridge); stroke-width: 3; }
-.f-mid-furrow { stroke-width: 2.5; opacity: 0.65; }
-.f-near { fill: var(--h-f-near); }
-.f-near-ridge { fill: none; stroke: var(--h-f-near-ridge); stroke-width: 3; }
-.f-near-furrow { stroke-width: 3; opacity: 0.5; }
-.f-fringe { fill: var(--h-f-fringe); }
-.f-fringe-ridge { fill: none; stroke: var(--h-f-fringe-ridge); stroke-width: 3; }
-.f-fringe-tufts { fill: none; stroke: var(--h-f-fringe-tuft); stroke-width: 2.8; stroke-linecap: round; }
-.plane-2 { filter: drop-shadow(0 -3px 6px rgba(var(--h-f-shadow), 0.14)); }
-.plane-3 { filter: drop-shadow(0 -5px 10px rgba(var(--h-f-shadow), 0.2)); }
-.plane-4 { filter: drop-shadow(0 -7px 14px rgba(var(--h-f-shadow), 0.24)); }
-.plane-6 { filter: drop-shadow(0 -9px 18px rgba(var(--h-f-shadow), 0.3)); }
+.home .f-hill { fill: var(--h-f-hill); }
+.home .f-hill-ridge { fill: none; stroke: var(--h-f-hill-ridge); stroke-width: 2.5; }
+.home .f-mid { fill: var(--h-f-mid); }
+.home .f-mid-ridge { fill: none; stroke: var(--h-f-mid-ridge); stroke-width: 3; }
+.home .f-mid-furrow { stroke-width: 2.5; opacity: 0.65; }
+.home .f-near { fill: var(--h-f-near); }
+.home .f-near-ridge { fill: none; stroke: var(--h-f-near-ridge); stroke-width: 3; }
+.home .f-near-furrow { stroke-width: 3; opacity: 0.5; }
+.home .f-fringe { fill: var(--h-f-fringe); }
+.home .f-fringe-ridge { fill: none; stroke: var(--h-f-fringe-ridge); stroke-width: 3; }
+.home .f-fringe-tufts { fill: none; stroke: var(--h-f-fringe-tuft); stroke-width: 2.8; stroke-linecap: round; }
+.home .plane-2 { filter: drop-shadow(0 -3px 6px rgba(var(--h-f-shadow), 0.14)); }
+.home .plane-3 { filter: drop-shadow(0 -5px 10px rgba(var(--h-f-shadow), 0.2)); }
+.home .plane-4 { filter: drop-shadow(0 -7px 14px rgba(var(--h-f-shadow), 0.24)); }
+.home .plane-6 { filter: drop-shadow(0 -9px 18px rgba(var(--h-f-shadow), 0.3)); }
 
-.soil0 { stop-color: var(--h-soil0); }
-.soil1 { stop-color: var(--h-soil1); }
-.soil2 { stop-color: var(--h-soil2); }
-.card-air { fill: var(--h-air); }
-.strata { fill: none; stroke: var(--h-strata); stroke-width: 2; }
-.s1 { opacity: 0.45; }
-.s2 { opacity: 0.35; }
-.s3 { opacity: 0.28; }
-.pebbles { fill: #8b6239; opacity: 0.5; display: var(--h-pebble-display); }
-.roots { fill: none; stroke: var(--h-root); stroke-linecap: round; }
-.p-n { fill: var(--n); }
-.p-p { fill: var(--p); }
-.p-k { fill: var(--k); }
-.stem { fill: none; stroke: var(--h-stem); stroke-width: 6; stroke-linecap: round; }
-.leaf-old { fill: var(--h-leaf-old); }
-.leaf-young { fill: var(--h-leaf-young); }
-.leaf-tip { fill: var(--h-leaf-tip); }
-.seam { fill: var(--h-seam); opacity: var(--h-seam-o); }
+.home .soil0 { stop-color: var(--h-soil0); }
+.home .soil1 { stop-color: var(--h-soil1); }
+.home .soil2 { stop-color: var(--h-soil2); }
+.home .card-air { fill: var(--h-air); }
+.home .strata { fill: none; stroke: var(--h-strata); stroke-width: 2; }
+.home .s1 { opacity: 0.45; }
+.home .s2 { opacity: 0.35; }
+.home .s3 { opacity: 0.28; }
+.home .pebbles { fill: #8b6239; opacity: 0.5; display: var(--h-pebble-display); }
+.home .roots { fill: none; stroke: var(--h-root); stroke-linecap: round; }
+.home .p-n { fill: var(--n); }
+.home .p-p { fill: var(--p); }
+.home .p-k { fill: var(--k); }
+.home .stem { fill: none; stroke: var(--h-stem); stroke-width: 6; stroke-linecap: round; }
+.home .leaf-old { fill: var(--h-leaf-old); }
+.home .leaf-young { fill: var(--h-leaf-young); }
+.home .leaf-tip { fill: var(--h-leaf-tip); }
+.home .seam { fill: var(--h-seam); opacity: var(--h-seam-o); }
 
 /* ---------------------------------------------------------------- hero, phone first (Home-Phone) */
 
-.hero {
+.home .hero {
   position: relative;
   --band: 208px;
 }
-.hero-field {
+.home .hero-field {
   position: absolute;
   inset: 0 0 auto;
   height: var(--band);
   overflow: hidden;
 }
-.art {
+.home .art {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: none;
 }
-.art-phone {
+.home .art-phone {
   display: block;
 }
-.hero-inner {
+.home .hero-inner {
   position: relative;
   padding-top: var(--band);
   width: calc(100% - var(--inset-l) - var(--inset-r));
   margin-inline: auto;
 }
 
-.hero-copy {
+.home .hero-copy {
   padding: 16px 20px 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.hero-title {
+.home .hero-title {
   font-size: 28px;
   line-height: 1.4;
   color: var(--h-title);
   text-wrap: pretty;
 }
-.hero-lead {
+.home .hero-lead {
   font-size: 14px;
   line-height: 1.7;
   color: var(--h-cited);
 }
-.hero-lead-long {
+.home .hero-lead-long {
   display: none;
 }
-.hero-actions {
+.home .hero-actions {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.cta {
+.home .cta {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
   border-radius: 12px;
 }
-.cta svg {
+.home .cta svg {
   fill: none;
   stroke: currentcolor;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.cta-primary {
+.home .cta-primary {
   justify-content: center;
   gap: 8px;
   min-height: 52px;
@@ -432,11 +432,11 @@
   font-weight: 700;
   font-size: 17px;
 }
-.cta-primary svg {
+.home .cta-primary svg {
   width: 17px;
   height: 17px;
 }
-.cta-secondary {
+.home .cta-secondary {
   display: none;
   min-height: 56px;
   padding: 0 24px;
@@ -446,7 +446,7 @@
   font-weight: 600;
   font-size: 17px;
 }
-.hero-cited {
+.home .hero-cited {
   display: none;
   gap: 10px;
   align-items: flex-start;
@@ -455,7 +455,7 @@
   line-height: 1.75;
   color: var(--h-cited);
 }
-.hero-cited svg {
+.home .hero-cited svg {
   flex: none;
   margin-top: 5px;
   fill: none;
@@ -466,14 +466,14 @@
 }
 
 /* The block's slot: the live canvas, or the flat plate. */
-.hero-stage {
+.home .hero-stage {
   position: absolute;
   left: calc(206 / 390 * 100%);
   top: 16px;
   width: calc(173 / 390 * 100%);
   height: 179px;
 }
-.hero-stage .scene3d {
+.home .hero-stage .scene3d {
   aspect-ratio: auto;
   width: 100%;
   height: 100%;
@@ -482,7 +482,7 @@
   border-radius: 0;
   background: transparent;
 }
-.soil-card {
+.home .soil-card {
   position: absolute;
   overflow: hidden;
   border: 3px solid var(--h-card-border);
@@ -495,23 +495,25 @@
   top: 12px;
   width: calc(150 / 173 * 100%);
 }
-.soil-card svg {
+.home .soil-card svg {
   display: block;
   width: 100%;
   height: 100%;
 }
-:root[data-hero="3d"] .soil-card {
+/* The live block replaces the plate only once it has drawn (HeroScene3D sets data-scene), so the
+   stage is never empty while three.js downloads. */
+:root[data-scene="ready"] .home .soil-card {
   display: none;
 }
 
 /* N, P, K: on a phone the design shows one pill; the three labels stay for screen readers
    (the list is .visually-hidden until 40em). */
-.npk-labels {
+.home .npk-labels {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.npk-label {
+.home .npk-label {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -522,7 +524,7 @@
   border: 1px solid var(--h-label-border);
   box-shadow: var(--h-label-shadow);
 }
-.npk-chip {
+.home .npk-chip {
   flex: none;
   display: flex;
   align-items: center;
@@ -535,13 +537,13 @@
   font-weight: 700;
   font-size: 19px;
 }
-.npk-n { background: var(--n); }
-.npk-p { background: var(--p); }
-.npk-k { background: var(--k); }
-.npk-text {
+.home .npk-n { background: var(--n); }
+.home .npk-p { background: var(--p); }
+.home .npk-k { background: var(--k); }
+.home .npk-text {
   min-width: 0;
 }
-.npk-name {
+.home .npk-name {
   display: block;
   font-family: var(--font-ui);
   font-weight: 700;
@@ -549,13 +551,13 @@
   line-height: 1.5;
   color: var(--h-label-name);
 }
-.npk-role {
+.home .npk-role {
   display: block;
   font-size: 14px;
   line-height: 1.7;
   color: var(--h-label-role);
 }
-.npk-pill {
+.home .npk-pill {
   position: absolute;
   left: 14px;
   top: 158px;
@@ -571,18 +573,18 @@
   font-weight: 600;
   color: var(--h-label-name);
 }
-.npk-pill-chips {
+.home .npk-pill-chips {
   display: flex;
   gap: 4px;
 }
-.npk-pill .npk-chip {
+.home .npk-pill .npk-chip {
   width: 26px;
   height: 26px;
   border-radius: 8px;
   font-size: 14px;
 }
 
-.hero-hint {
+.home .hero-hint {
   display: none;
   align-items: center;
   justify-content: center;
@@ -592,14 +594,14 @@
   color: var(--h-hint);
   pointer-events: none;
 }
-.hero-hint svg {
+.home .hero-hint svg {
   fill: none;
   stroke: currentcolor;
   stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.hero-leaders {
+.home .hero-leaders {
   display: none;
   position: absolute;
   inset: 0;
@@ -615,44 +617,44 @@
 
 /* ---------------------------------------------------------------- chapters, phone first: a list */
 
-.chapters {
+.home .chapters {
   order: 2;
   position: relative;
   padding: 18px calc(20px + var(--inset-r)) calc(24px + env(safe-area-inset-bottom, 0px)) calc(20px + var(--inset-l));
 }
-.chapters-inner {
+.home .chapters-inner {
   position: relative;
 }
-.trail {
+.home .trail {
   display: none;
 }
-.chapters-head {
+.home .chapters-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 24px;
   margin-bottom: 8px;
 }
-.chapters-title {
+.home .chapters-title {
   font-size: 19px;
   line-height: 1.4;
   color: var(--h-path-title);
 }
-.chapters-count {
+.home .chapters-count {
   font-size: 12px;
   line-height: 1.6;
   color: var(--h-path-count-phone);
 }
-.chapters-count-long {
+.home .chapters-count-long {
   display: none;
 }
-.chapter-markers {
+.home .chapter-markers {
   position: relative;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.chapter-markers::before {
+.home .chapter-markers::before {
   content: "";
   position: absolute;
   left: 17px;
@@ -662,10 +664,10 @@
   border-radius: 2px;
   background: var(--h-trail-bed);
 }
-.marker-item + .marker-item {
+.home .marker-item + .marker-item {
   border-top: 1px solid var(--h-row-line);
 }
-.marker {
+.home .marker {
   position: relative;
   display: flex;
   align-items: center;
@@ -674,7 +676,7 @@
   text-decoration: none;
   color: var(--h-marker-ink);
 }
-.marker-dot {
+.home .marker-dot {
   flex: none;
   display: flex;
   align-items: center;
@@ -690,22 +692,22 @@
   font-weight: 700;
   font-size: 15px;
 }
-.marker-current .marker-dot {
+.home .marker-current .marker-dot {
   background: var(--h-dot-current-bg);
   color: var(--h-dot-current-ink);
   border-color: var(--accent);
 }
-.marker-title {
+.home .marker-title {
   flex: 1 1 auto;
   min-width: 0;
   font-size: 15px;
   line-height: 1.6;
 }
-.marker-current .marker-title {
+.home .marker-current .marker-title {
   font-family: var(--font-ui);
   font-weight: 700;
 }
-.marker-here {
+.home .marker-here {
   order: 3;
   flex: none;
   display: inline-flex;
@@ -722,7 +724,7 @@
 
 /* ---------------------------------------------------------------- safety note, phone first: a card */
 
-.safe-note {
+.home .safe-note {
   order: 1;
   margin: 0 calc(20px + var(--inset-r)) 0 calc(20px + var(--inset-l));
   padding: 10px 12px;
@@ -730,7 +732,7 @@
   background: var(--warn-bg);
   border-left: 4px solid var(--warn);
 }
-.safe-note p {
+.home .safe-note p {
   display: flex;
   gap: 12px;
   align-items: center;
@@ -739,7 +741,7 @@
   font-weight: 600;
   color: var(--h-note-ink);
 }
-.safe-note svg {
+.home .safe-note svg {
   display: none;
   flex: none;
   fill: none;
@@ -751,20 +753,20 @@
 /* ================================================================ iPad portrait (Home-Portrait, 834) */
 
 @media (min-width: 40em) {
-  .hero {
+  .home .hero {
     --band: 600px;
   }
-  .art-phone {
+  .home .art-phone {
     display: none;
   }
-  .art-portrait {
+  .home .art-portrait {
     display: block;
   }
-  .hero-inner {
+  .home .hero-inner {
     padding-top: 0;
     height: var(--band);
   }
-  .hero-copy {
+  .home .hero-copy {
     position: absolute;
     left: calc(48 / 834 * 100%);
     top: 36px;
@@ -772,36 +774,36 @@
     padding: 0;
     gap: 18px;
   }
-  .hero-title {
+  .home .hero-title {
     font-size: 46px;
   }
-  .hero-lead {
+  .home .hero-lead {
     font-size: 17px;
     line-height: 1.75;
     color: var(--h-lead-alt);
   }
-  .hero-lead-long {
+  .home .hero-lead-long {
     display: block;
   }
-  .hero-lead-short {
+  .home .hero-lead-short {
     display: none;
   }
-  .hero-actions {
+  .home .hero-actions {
     gap: 12px;
     align-items: flex-start;
   }
-  .cta-primary {
+  .home .cta-primary {
     gap: 10px;
     min-height: 56px;
     padding: 0 26px;
     font-size: 18px;
     box-shadow: var(--h-cta-shadow);
   }
-  .cta-primary svg {
+  .home .cta-primary svg {
     width: 18px;
     height: 18px;
   }
-  .cta-secondary {
+  .home .cta-secondary {
     display: inline-flex;
     min-height: 48px;
     padding: 0 20px;
@@ -810,19 +812,19 @@
   }
 
   /* Live block: Home-Portrait's 470–790 × 236–556, as a 360 × 372 canvas centred on it. */
-  .hero-stage {
+  .home .hero-stage {
     left: calc(454 / 834 * 100%);
     top: 203px;
     width: calc(360 / 834 * 100%);
     height: 372px;
   }
-  .soil-card {
+  .home .soil-card {
     left: calc((470 - 454) / 360 * 100%);
     top: 33px;
     width: calc(320 / 360 * 100%);
   }
 
-  .npk-labels.visually-hidden {
+  .home .npk-labels.visually-hidden {
     position: absolute;
     inset: 0;
     width: auto;
@@ -832,7 +834,7 @@
     white-space: normal;
     pointer-events: none;
   }
-  .npk-label {
+  .home .npk-label {
     position: absolute;
     left: calc(48 / 834 * 100%);
     width: calc(392 / 834 * 100%);
@@ -840,18 +842,18 @@
     box-shadow: var(--h-label-shadow-alt);
     pointer-events: auto;
   }
-  .npk-label:nth-child(1) { top: 398px; }
-  .npk-label:nth-child(2) { top: 466px; }
-  .npk-label:nth-child(3) { top: 534px; }
-  .npk-label .npk-chip {
+  .home .npk-label:nth-child(1) { top: 398px; }
+  .home .npk-label:nth-child(2) { top: 466px; }
+  .home .npk-label:nth-child(3) { top: 534px; }
+  .home .npk-label .npk-chip {
     width: 36px;
     height: 36px;
     font-size: 18px;
   }
-  .npk-pill {
+  .home .npk-pill {
     display: none;
   }
-  :root[data-hero="3d"] .hero-hint {
+  :root[data-hero="3d"] .home .hero-hint {
     display: inline-flex;
     position: absolute;
     left: calc(536 / 834 * 100%);
@@ -863,7 +865,7 @@
   }
 
   /* Chapter path: Home-Portrait's switchback. */
-  .chapters {
+  .home .chapters {
     order: 1;
     height: 364px;
     padding: 0;
@@ -871,26 +873,26 @@
     border-top: 1px solid var(--h-path-top);
     overflow: hidden;
   }
-  .chapters-inner {
+  .home .chapters-inner {
     position: absolute;
     inset: 0 var(--inset-r) 0 var(--inset-l);
   }
-  .trail {
+  .home .trail {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
   }
-  .trail-portrait {
+  .home .trail-portrait {
     display: block;
   }
-  .trail-ground.g1 { fill: var(--h-ground1); }
-  .trail-ground.g2 { fill: var(--h-ground2); }
-  .trail-edge { fill: none; stroke: var(--h-trail-edge); stroke-width: 30; stroke-linecap: round; opacity: 0.5; }
-  .trail-bed { fill: none; stroke: var(--h-trail-bed); stroke-width: 24; stroke-linecap: round; }
-  .trail-dash { fill: none; stroke: var(--h-trail-dash); stroke-width: 2.5; stroke-dasharray: 10 14; stroke-linecap: round; }
-  .trail-tufts { fill: none; stroke: var(--h-trail-tuft); stroke-width: 2.2; stroke-linecap: round; opacity: 0.6; display: var(--h-trail-tuft-display); }
-  .chapters-head {
+  .home .trail-ground.g1 { fill: var(--h-ground1); }
+  .home .trail-ground.g2 { fill: var(--h-ground2); }
+  .home .trail-edge { fill: none; stroke: var(--h-trail-edge); stroke-width: 30; stroke-linecap: round; opacity: 0.5; }
+  .home .trail-bed { fill: none; stroke: var(--h-trail-bed); stroke-width: 24; stroke-linecap: round; }
+  .home .trail-dash { fill: none; stroke: var(--h-trail-dash); stroke-width: 2.5; stroke-dasharray: 10 14; stroke-linecap: round; }
+  .home .trail-tufts { fill: none; stroke: var(--h-trail-tuft); stroke-width: 2.2; stroke-linecap: round; opacity: 0.6; display: var(--h-trail-tuft-display); }
+  .home .chapters-head {
     position: absolute;
     left: calc(48 / 834 * 100%);
     right: calc(48 / 834 * 100%);
@@ -898,71 +900,71 @@
     margin: 0;
     gap: 20px;
   }
-  .chapters-title {
+  .home .chapters-title {
     font-size: 24px;
   }
-  .chapters-count {
+  .home .chapters-count {
     font-size: 14px;
     line-height: 1.7;
     color: var(--h-path-count);
   }
-  .chapters-count-long {
+  .home .chapters-count-long {
     display: inline;
   }
-  .chapters-count-short {
+  .home .chapters-count-short {
     display: none;
   }
-  .chapter-markers {
+  .home .chapter-markers {
     position: absolute;
     inset: 0;
   }
-  .chapter-markers::before {
+  .home .chapter-markers::before {
     display: none;
   }
-  .marker-item {
+  .home .marker-item {
     position: absolute;
     left: var(--px);
     top: var(--py);
     width: min(180px, calc(180 / 834 * 100%));
   }
-  .marker-item + .marker-item {
+  .home .marker-item + .marker-item {
     border-top: 0;
   }
-  .marker {
+  .home .marker {
     flex-direction: column;
     gap: 6px;
     min-height: 0;
     text-align: center;
   }
-  .marker-here {
+  .home .marker-here {
     order: 0;
     height: auto;
     min-height: 24px;
     padding: 0 10px;
     font-size: 12px;
   }
-  .marker-dot {
+  .home .marker-dot {
     width: 48px;
     height: 48px;
     font-size: 19px;
   }
-  .marker-current .marker-dot {
+  .home .marker-current .marker-dot {
     width: 52px;
     height: 52px;
     border-width: 3px;
     font-size: 20px;
     box-shadow: var(--h-dot-shadow);
   }
-  .marker-title {
+  .home .marker-title {
     flex: none;
     font-size: 14px;
   }
-  .marker-current .marker-title {
+  .home .marker-current .marker-title {
     font-size: 15px;
   }
 
   /* Safety note: a full-width strip under the path. */
-  .safe-note {
+  .home .safe-note {
     order: 2;
     display: flex;
     align-items: center;
@@ -973,10 +975,10 @@
     border-left: 0;
     border-top: 4px solid var(--warn);
   }
-  .safe-note p {
+  .home .safe-note p {
     font-size: 15px;
   }
-  .safe-note svg {
+  .home .safe-note svg {
     display: block;
   }
 }
@@ -984,138 +986,145 @@
 /* ================================================================ iPad landscape (Main, 1366) */
 
 @media (min-width: 75em) {
-  .hero-inner {
+  .home .hero-inner {
     max-width: 1366px;
   }
-  .art-portrait {
+  .home .art-portrait {
     display: none;
   }
-  .soil-card,
-  .hero-stage,
-  .npk-label {
+  .home .soil-card,
+.home .hero-stage,
+.home .npk-label {
     transition: none;
   }
 
   /* The flat hero (Home-Hero-Fallback), the default until the live block is known to run. */
-  .hero {
+  .home .hero {
     --band: 556px;
   }
-  .art-flat {
+  .home .art-flat {
     display: block;
   }
-  .hero-copy {
+  .home .hero-copy {
     left: calc(64 / 1366 * 100%);
     top: 52px;
     width: calc(544 / 1366 * 100%);
     gap: 20px;
   }
-  .hero-title {
+  .home .hero-title {
     font-size: 56px;
   }
-  .hero-lead {
+  .home .hero-lead {
     font-size: 19px;
     max-width: 500px;
   }
-  .hero-actions {
+  .home .hero-actions {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     gap: 14px;
   }
-  .cta-primary {
+  .home .cta-primary {
     padding: 0 28px;
   }
-  .cta-secondary {
+  .home .cta-secondary {
     min-height: 56px;
     padding: 0 24px;
     font-size: 17px;
   }
-  .hero-cited {
+  .home .hero-cited {
     display: flex;
   }
-  .hero-stage {
+  .home .hero-stage {
     left: calc(722 / 1366 * 100%);
     top: 106px;
     width: calc(372 / 1366 * 100%);
     height: auto;
   }
-  .soil-card {
+  .home .soil-card {
     position: relative;
     left: 0;
     top: 0;
     width: 100%;
   }
-  .npk-label {
+  .home .npk-label {
     left: calc(1122 / 1366 * 100%);
     width: calc(220 / 1366 * 100%);
     gap: 10px;
     padding: 10px 12px;
   }
-  .npk-label:nth-child(1) { top: 150px; }
-  .npk-label:nth-child(2) { top: 250px; }
-  .npk-label:nth-child(3) { top: 350px; }
-  .npk-label .npk-chip {
+  .home .npk-label:nth-child(1) { top: 150px; }
+  .home .npk-label:nth-child(2) { top: 250px; }
+  .home .npk-label:nth-child(3) { top: 350px; }
+  .home .npk-label .npk-chip {
     width: 34px;
     height: 34px;
     border-radius: 9px;
     font-size: 17px;
   }
-  .npk-label .npk-name {
+  .home .npk-label .npk-name {
     font-size: 14px;
   }
-  .npk-label .npk-role {
+  .home .npk-label .npk-role {
     font-size: 13px;
   }
 
   /* The live hero (Main.dc.html). */
-  :root[data-hero="3d"] .hero {
+  :root[data-hero="3d"] .home .hero {
     --band: 500px;
   }
-  :root[data-hero="3d"] .art-flat {
+  :root[data-hero="3d"] .home .art-flat {
     display: none;
   }
-  :root[data-hero="3d"] .art-landscape {
+  :root[data-hero="3d"] .home .art-landscape {
     display: block;
   }
-  :root[data-hero="3d"] .hero-copy {
+  :root[data-hero="3d"] .home .hero-copy {
     top: 72px;
     gap: 22px;
   }
-  :root[data-hero="3d"] .hero-title {
+  :root[data-hero="3d"] .home .hero-title {
     font-size: 60px;
   }
-  :root[data-hero="3d"] .hero-lead {
+  :root[data-hero="3d"] .home .hero-lead {
     color: var(--h-lead);
   }
-  :root[data-hero="3d"] .hero-stage {
+  :root[data-hero="3d"] .home .hero-stage {
     left: calc(680 / 1366 * 100%);
     top: 92px;
     width: calc(360 / 1366 * 100%);
     height: 372px;
   }
-  :root[data-hero="3d"] .npk-label {
+  /* Until the block draws, the plate stands where Main draws the block (700, 112; 312 wide). */
+  :root[data-hero="3d"] .home .soil-card {
+    position: absolute;
+    left: calc((700 - 680) / 360 * 100%);
+    top: 20px;
+    width: calc(312 / 360 * 100%);
+  }
+  :root[data-hero="3d"] .home .npk-label {
     left: calc(1046 / 1366 * 100%);
     width: calc(268 / 1366 * 100%);
     gap: 12px;
     padding: 12px 14px;
     box-shadow: var(--h-label-shadow);
   }
-  :root[data-hero="3d"] .npk-label:nth-child(1) { top: 140px; }
-  :root[data-hero="3d"] .npk-label:nth-child(2) { top: 244px; }
-  :root[data-hero="3d"] .npk-label:nth-child(3) { top: 348px; }
-  :root[data-hero="3d"] .npk-label .npk-chip {
+  :root[data-hero="3d"] .home .npk-label:nth-child(1) { top: 140px; }
+  :root[data-hero="3d"] .home .npk-label:nth-child(2) { top: 244px; }
+  :root[data-hero="3d"] .home .npk-label:nth-child(3) { top: 348px; }
+  :root[data-hero="3d"] .home .npk-label .npk-chip {
     width: 38px;
     height: 38px;
     border-radius: 10px;
     font-size: 19px;
   }
-  :root[data-hero="3d"] .npk-label .npk-name {
+  :root[data-hero="3d"] .home .npk-label .npk-name {
     font-size: 15px;
   }
-  :root[data-hero="3d"] .npk-label .npk-role {
+  :root[data-hero="3d"] .home .npk-label .npk-role {
     font-size: 14px;
   }
-  :root[data-hero="3d"] .hero-hint {
+  :root[data-hero="3d"] .home .hero-hint {
     left: calc(700 / 1366 * 100%);
     top: 444px;
     width: calc(312 / 1366 * 100%);
@@ -1123,49 +1132,49 @@
     background: none;
     color: var(--h-hint);
   }
-  :root[data-hero="3d"] .hero-leaders {
+  :root[data-hero="3d"] .home .hero-leaders {
     display: block;
   }
 
   /* Chapter path: Main's winding trail, stretched to the width. */
-  .chapters {
+  .home .chapters {
     height: 376px;
   }
-  .trail-portrait {
+  .home .trail-portrait {
     display: none;
   }
-  .trail-landscape {
+  .home .trail-landscape {
     display: block;
   }
-  .chapters-head {
+  .home .chapters-head {
     left: calc(64 / 1366 * 100%);
     right: calc(64 / 1366 * 100%);
     top: 24px;
     gap: 24px;
   }
-  .chapters-title {
+  .home .chapters-title {
     font-size: 26px;
   }
-  .marker-item {
+  .home .marker-item {
     left: var(--lx);
     top: var(--ly);
     width: min(160px, calc(160 / 1366 * 100%));
   }
-  .marker {
+  .home .marker {
     gap: 8px;
   }
-  .marker-here {
+  .home .marker-here {
     min-height: 26px;
   }
-  .marker-current .marker-dot {
+  .home .marker-current .marker-dot {
     width: 54px;
     height: 54px;
   }
 
-  .safe-note {
+  .home .safe-note {
     padding-inline: calc(64px + var(--inset-l)) calc(64px + var(--inset-r));
   }
-  .safe-note p {
+  .home .safe-note p {
     line-height: 1.75;
   }
 }

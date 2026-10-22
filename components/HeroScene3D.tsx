@@ -1,7 +1,7 @@
 "use client";
 
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import {
   BufferGeometry,
   Color,
@@ -134,13 +134,22 @@ const linear = (hex: string) => {
   return [c.r, c.g, c.b] as const;
 };
 
-/** Paints a vertical gradient into the vertices, so the soil's three stops land exactly where drawn. */
-function withGradient(geometry: BufferGeometry, stops: readonly Stop[]) {
+/**
+ * Paints a vertical gradient into the vertices, so the soil's three stops land exactly where drawn.
+ * A theme change rewrites the same buffer rather than attaching a new one, whose predecessor's GPU
+ * buffer three.js would otherwise keep until the geometry is disposed.
+ */
+function paintGradient(geometry: BufferGeometry, stops: readonly Stop[]) {
   const pos = geometry.getAttribute("position");
   const colors: number[] = [];
   for (let i = 0; i < pos.count; i++) colors.push(...gradientAt(pos.getY(i), stops));
-  geometry.setAttribute("color", new Float32BufferAttribute(colors, 3));
-  return geometry;
+  const existing = geometry.getAttribute("color");
+  if (existing) {
+    (existing.array as Float32Array).set(colors);
+    existing.needsUpdate = true;
+  } else {
+    geometry.setAttribute("color", new Float32BufferAttribute(colors, 3));
+  }
 }
 
 function useGeometries() {
@@ -215,10 +224,12 @@ function SoilBlock({ animate, theme, leadersId }: { animate: boolean; theme: The
     () => [GROUND, MID, BOTTOM].map((y, i) => ({ y, color: linear(colors.soil[i]!) })),
     [colors],
   );
-  const faces = useMemo(
-    () => ({ upper: withGradient(g.upper, soilStops), lower: withGradient(g.lower, soilStops) }),
-    [g, soilStops],
-  );
+  // Before paint, so the first frame already has the theme's soil.
+  useLayoutEffect(() => {
+    paintGradient(g.upper, soilStops);
+    paintGradient(g.lower, soilStops);
+    invalidate();
+  }, [g, soilStops, invalidate]);
 
   const riders = useMemo(
     () =>
@@ -235,20 +246,23 @@ function SoilBlock({ animate, theme, leadersId }: { animate: boolean; theme: The
   useEffect(() => {
     const el = gl.domElement;
     const v = view.current;
-    let last: number | null = null;
+    // Only the first finger turns the block: a second one would feed its own position into the same delta.
+    let drag: { id: number; x: number } | null = null;
     const down = (e: PointerEvent) => {
+      if (drag) return;
       el.setPointerCapture?.(e.pointerId);
-      last = e.clientX;
+      drag = { id: e.pointerId, x: e.clientX };
       v.busy = true;
     };
     const move = (e: PointerEvent) => {
-      if (last === null) return;
-      v.yaw = dragYaw(v.yaw, e.clientX - last);
-      last = e.clientX;
+      if (drag?.id !== e.pointerId) return;
+      v.yaw = dragYaw(v.yaw, e.clientX - drag.x);
+      drag.x = e.clientX;
       invalidate();
     };
-    const up = () => {
-      last = null;
+    const up = (e: PointerEvent) => {
+      if (drag?.id !== e.pointerId) return;
+      drag = null;
       v.busy = false;
       invalidate();
     };
@@ -264,7 +278,28 @@ function SoilBlock({ animate, theme, leadersId }: { animate: boolean; theme: The
     };
   }, [gl, invalidate]);
 
-  const leaders = useLeaders(leadersId);
+  // The flat plate stands in until this canvas has drawn (home.css reads data-scene), so the hero is never empty.
+  const drawn = useRef(false);
+  useEffect(
+    () => () => {
+      delete document.documentElement.dataset.scene;
+    },
+    [],
+  );
+
+  // Off-screen, the particles and leader lines are work nobody sees: stop the loop until the block is back.
+  const setFrameloop = useThree((s) => s.setFrameloop);
+  useEffect(() => {
+    if (!animate || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([entry]) => setFrameloop(entry?.isIntersecting ? "always" : "never"));
+    io.observe(gl.domElement);
+    return () => {
+      io.disconnect();
+      setFrameloop("always");
+    };
+  }, [animate, gl, setFrameloop]);
+
+  const leaders = useLeaders(leadersId, gl.domElement);
   const scratch = useMemo(() => ({ p: new Vector3() }), []);
 
   useFrame((state, delta) => {
@@ -299,7 +334,11 @@ function SoilBlock({ animate, theme, leadersId }: { animate: boolean; theme: The
       }
     });
     root.current!.updateMatrixWorld();
-    leaders.update(root.current!, camera, state.gl.domElement);
+    leaders.update(root.current!, camera);
+    if (!drawn.current) {
+      drawn.current = true;
+      document.documentElement.dataset.scene = "ready";
+    }
   });
 
   return (
@@ -319,7 +358,7 @@ function SoilBlock({ animate, theme, leadersId }: { animate: boolean; theme: The
           <meshBasicMaterial attach="material-0" color={colors.air} toneMapped={false} />
           <meshBasicMaterial attach="material-1" color={colors.side} toneMapped={false} />
         </mesh>
-        {[faces.upper, faces.lower].map((face, i) => (
+        {[g.upper, g.lower].map((face, i) => (
           <mesh key={i} geometry={face} position-z={FRONT + 0.001}>
             <meshBasicMaterial vertexColors toneMapped={false} />
           </mesh>
@@ -373,43 +412,66 @@ function SoilBlock({ animate, theme, leadersId }: { animate: boolean; theme: The
 /**
  * Main.dc.html joins each label to the block with a line. The lines are HTML (an SVG over the
  * page), not part of the scene, so they are drawn here by projecting each end point every frame:
- * they stay on the block while it turns. Hidden by the stylesheet outside the landscape layout,
- * and then skipped.
+ * they stay on the block while it turns. Where the labels and the canvas sit is measured only
+ * when something resizes, never per frame. Hidden by the stylesheet outside the landscape
+ * layout, and then skipped.
  */
-function useLeaders(id: string) {
-  const state = useRef({ last: "" });
+function useLeaders(id: string, canvas: HTMLCanvasElement) {
+  const box = useRef<{ paths: Map<HTMLElement, SVGPathElement>; starts: Map<HTMLElement, { x: number; y: number }>; canvas: DOMRect | null; offset: { x: number; y: number } }>({
+    paths: new Map(),
+    starts: new Map(),
+    canvas: null,
+    offset: { x: 0, y: 0 },
+  });
   const scratch = useMemo(() => new Vector3(), []);
+
+  useEffect(() => {
+    const svg = document.getElementById(id);
+    if (!svg) return;
+    const measure = () => {
+      const b = box.current;
+      b.canvas = null;
+      if (svg.getClientRects().length === 0) return; // hidden at this width
+      const s = svg.getBoundingClientRect();
+      const c = canvas.getBoundingClientRect();
+      b.canvas = c;
+      b.offset = { x: c.left - s.left, y: c.top - s.top };
+      for (const e of ELEMENTS) {
+        const label = document.querySelector<HTMLElement>(`[data-label="${e}"]`);
+        const path = svg.querySelector<SVGPathElement>(`[data-leader="${e}"]`);
+        if (!label || !path) continue;
+        const l = label.getBoundingClientRect();
+        b.paths.set(label, path);
+        b.starts.set(label, { x: l.left - s.left, y: l.top - s.top + l.height / 2 });
+        path.dataset.element = e;
+      }
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(svg);
+    ro.observe(canvas);
+    document.querySelectorAll("[data-label]").forEach((el) => ro.observe(el));
+    return () => ro.disconnect();
+  }, [id, canvas]);
+
   return useMemo(
     () => ({
-      update(group: Group, camera: THREE_Camera, canvas: HTMLCanvasElement) {
-        const svg = document.getElementById(id);
-        if (!svg || svg.getClientRects().length === 0) return;
-        const box = svg.getBoundingClientRect();
-        const c = canvas.getBoundingClientRect();
-        const parts: string[] = [];
-        for (const e of ELEMENTS) {
-          const label = document.querySelector<HTMLElement>(`[data-label="${e}"]`);
-          const path = svg.querySelector<SVGPathElement>(`[data-leader="${e}"]`);
-          if (!label || !path) continue;
-          const l = label.getBoundingClientRect();
-          const [x, y] = toScene(...LEADER_ENDS[e]);
+      update(group: Group, camera: THREE_Camera) {
+        const b = box.current;
+        if (!b.canvas) return;
+        const { width, height } = b.canvas;
+        for (const [label, path] of b.paths) {
+          const start = b.starts.get(label)!;
+          const [x, y] = toScene(...LEADER_ENDS[path.dataset.element as Element]);
           scratch.set(x, y, FRONT).applyMatrix4(group.matrixWorld).project(camera);
-          const ex = c.left - box.left + ((scratch.x + 1) / 2) * c.width;
-          const ey = c.top - box.top + ((1 - scratch.y) / 2) * c.height;
-          const sx = l.left - box.left;
-          const sy = l.top - box.top + l.height / 2;
-          const d = `M${sx.toFixed(1)} ${sy.toFixed(1)} L${(sx - 34).toFixed(1)} ${sy.toFixed(1)} L${ex.toFixed(1)} ${ey.toFixed(1)}`;
-          parts.push(d);
+          const ex = b.offset.x + ((scratch.x + 1) / 2) * width;
+          const ey = b.offset.y + ((1 - scratch.y) / 2) * height;
+          const d = `M${start.x.toFixed(1)} ${start.y.toFixed(1)} L${(start.x - 34).toFixed(1)} ${start.y.toFixed(1)} L${ex.toFixed(1)} ${ey.toFixed(1)}`;
           if (path.getAttribute("d") !== d) path.setAttribute("d", d);
-        }
-        const all = parts.join("|");
-        if (all !== state.current.last) {
-          state.current.last = all;
-          svg.dataset.ready = "true";
         }
       },
     }),
-    [id, scratch],
+    [scratch],
   );
 }
 

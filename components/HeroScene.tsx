@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useLayoutEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { Component, useEffect, useLayoutEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import { heroMode, type HeroMode } from "@/lib/home";
 import { webglAvailableOnce } from "@/lib/webgl";
 import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
@@ -24,6 +24,33 @@ function useIdle(enabled: boolean): boolean {
   return idle;
 }
 
+/**
+ * The island catches a scene that throws, but not the import that brings the island: a chunk
+ * that fails to download (offline, or a deploy that renamed it) would otherwise reach the root
+ * and take the whole home page down. Here it only costs the reader the flat hero.
+ */
+class ChunkBoundary extends Component<{ onFail: () => void; children: ReactNode }, { failed: boolean }> {
+  override state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  override componentDidCatch() {
+    this.props.onFail();
+  }
+  override render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
+/**
+ * WebGL support without a second probe: HERO_MODE_SCRIPT already made a context and released it
+ * before paint, and a "3d" verdict can only mean it worked. After a client-side navigation (no
+ * script ran) or a "flat" verdict (which may only mean reduced motion), probe as usual.
+ */
+function webglSupported(): boolean {
+  return document.documentElement.dataset.hero === "3d" || webglAvailableOnce();
+}
+
 /** Rendered by the island when the scene cannot run after all (lost context, a throw): back to the flat hero. */
 function GiveUp({ onGiveUp }: { onGiveUp: () => void }) {
   useEffect(onGiveUp, [onGiveUp]);
@@ -36,13 +63,11 @@ function GiveUp({ onGiveUp }: { onGiveUp: () => void }) {
  * data-hero>` right after a client-side navigation (where that script does not run), when the
  * reader changes their motion setting, or when the scene fails.
  */
+const subscribeNever = () => () => {};
+
 export function HeroScene({ label, leadersId }: { label: string; leadersId: string }): ReactNode {
   const reducedMotion = usePrefersReducedMotion();
-  const webgl = useSyncExternalStore(
-    () => () => {},
-    webglAvailableOnce,
-    () => null,
-  );
+  const webgl = useSyncExternalStore(subscribeNever, webglSupported, () => null);
   const [failed, setFailed] = useState(false);
   const mode: HeroMode | null = failed ? "flat" : webgl === null ? null : heroMode({ webgl, reducedMotion });
 
@@ -52,5 +77,10 @@ export function HeroScene({ label, leadersId }: { label: string; leadersId: stri
 
   const idle = useIdle(mode === "3d");
   if (mode !== "3d" || !idle) return null;
-  return <HeroScene3D label={label} leadersId={leadersId} fallback={<GiveUp onGiveUp={() => setFailed(true)} />} />;
+  const giveUp = () => setFailed(true);
+  return (
+    <ChunkBoundary onFail={giveUp}>
+      <HeroScene3D label={label} leadersId={leadersId} fallback={<GiveUp onGiveUp={giveUp} />} />
+    </ChunkBoundary>
+  );
 }
