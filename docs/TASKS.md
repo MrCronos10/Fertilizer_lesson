@@ -669,6 +669,12 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - [ ] Budget, Lighthouse and axe still pass; 44 px targets, safe areas and dvh kept
 - Test plan: unit (strings, budget), WebKit e2e at 1366, 834 and 390 in both themes, WebGL-off run, context count across navigation.
 - Notes: Decisions taken with the owner: `/th` becomes a "3d" route in `lib/budget.ts` with the canvas loaded after first paint (D3/D16 note); the hero soil block is decoration, an exception to D15; mockup's short ch1/ch2 titles are NOT used, the site's full titles are; no all-sources page exists, so the two sources links are TODO.
+- **Paused 2026-10-23. Where it stands (resume here):**
+  - Built and committed on this branch (`86a8c53`, WIP): the home route (landscape/portrait/phone, night, flat fallback), the R3F soil block reusing `PlantModel`, the shared header with the theme button, `/th` moved to the 3D budget. Unit 876/876 green; `e2e/home.spec.ts` green on all three projects.
+  - **Open blocker, root cause found but not yet fixed:** three existing e2e load canaries (`citations` walk, `calculator` and `bag` "reaches load") time out on this branch (~15% of runs; `main` 0/90). WebKit leaves `readyState` at `interactive` and never fires `load`. Cause, proven by experiment: the six `<link rel="preload">` fonts in `app/layout.tsx` plus a font subset first *used* after its preload finished. Forcing all font loads at DOMContentLoaded made it stall 55/60; removing the preloads made it 0/60, even with that forcing. The header change only shifted which subsets are needed late. Same family as T-014's select bug.
+  - **Next step:** decide the fix. Removing the preloads is proven for `load`, but T-024 added them for CLS/LCP, so re-run Lighthouse first. Do it on a fresh port: ports 3300 and 3000 already have stale `next start` servers that predate this session (not mine, left running), and the last Lighthouse run hit the 3300 one and measured the wrong build. The rerun on :3320 timed out in Lighthouse itself, so those numbers are still missing.
+  - Also fixed on this branch: the theme button border is `--line` (the mockup's 0.22 was 1.54:1, under WCAG 1.4.11); the icon is a CSS mask; the phone N/P/K list uses `.visually-hidden`.
+  - Still to do after the fix: full e2e run, Lighthouse, `/code-review`, push the branch for a Vercel preview, then fill in Verified.
 
 ---
 
