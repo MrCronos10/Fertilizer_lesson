@@ -75,6 +75,8 @@ calculator, crop matcher, quiz, and timeline are 2D DOM/SVG.
 numbers you tap is strictly worse than a large legible 2D label: on iPad, text inside a WebGL
 canvas is blurrier, unselectable, invisible to VoiceOver, and untestable by Playwright. This also
 eliminates the static-fallback problem for five of seven features.
+**Amended (T-027):** the home hero reuses the same plant in a soil block. It is the same scene and
+the same single context, not a third one; its flat 2.5D plate is the static fallback.
 
 ### D15 — The feature slate is re-ranked to content strength
 **Decision:** Promote the deficiency explorer to a hero 3D feature. Demote basal-vs-top-dressing to
@@ -84,6 +86,8 @@ symptom table plus the mobility rule behind it and was fourth on the list. The s
 was the most visually appealing idea and has no source text behind it at all — building it means
 inventing the pedagogy. The timeline has ~4 lines, which honestly supports a labelled picture and
 not a scrubbable animation.
+**Exception (T-027):** the home hero draws a soil block with roots, as decoration only. It teaches
+nothing the source does not: its labels are the pamphlet's own p2 captions.
 
 ### D10 — The calculator is oxide-only and deliberately small
 **Decision:** One job: target nutrient (kg/rai) + fertilizer grade → kg of product per rai, showing
