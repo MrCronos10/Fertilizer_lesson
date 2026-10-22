@@ -35,6 +35,21 @@
   --warn: #8a4b12;
   --warn-bg: #fbefd2;
 
+  /* Soil & sky — the field scene. Same in light and dark: the redesign
+     defines no separate night soil, and night sky is its own token. */
+  --soil-light: #a98563;
+  --soil: #6b4a2f;
+  --soil-deep: #3e2a1a;
+  --sky: #8fb6c4;
+  --sky-warm: #f6daa8;
+  --sky-night: #15304a;
+
+  /* Nutrient colours. Differ in hue and lightness (not a red/green pair)
+     and are always shown with the letter N, P or K. */
+  --n: #2f6f3e;
+  --p: #8456b0;
+  --k: #b5541e;
+
   /* Type. --font-ui ships weight 700 only; at any other weight it falls
      through to Sarabun by design. */
   --font-ui: "Noto Sans Thai", "Sarabun", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -63,6 +78,9 @@
     --brand-ink: #0e1914;
     --warn: #f2c87a;
     --warn-bg: #3a2d12;
+    --n: #7cc68d;
+    --p: #c4a0e8;
+    --k: #f0a368;
     --ring: #f2b632;
     color-scheme: dark;
   }
@@ -80,6 +98,9 @@
   --brand-ink: #0e1914;
   --warn: #f2c87a;
   --warn-bg: #3a2d12;
+  --n: #7cc68d;
+  --p: #c4a0e8;
+  --k: #f0a368;
   --ring: #f2b632;
   color-scheme: dark;
 }
