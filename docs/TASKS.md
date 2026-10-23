@@ -883,6 +883,25 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: U82** in `docs/content/THAI-REVIEW.md`, from the artboards.
   - **Not verified:** a real iPad.
 
+### T-042: Deficiency explorer — final checks and review
+- Status: done (the real-device look and the Thai review of U76–U82 are yours)
+- Depends on: T-041
+- Goal: Close the explorer (T-037 to T-041): a two-axis review of the whole diff from `7230e91`, fixes, the full checks, and a preview to try.
+- Acceptance criteria:
+  - [x] Standards and spec reviews by fresh subagents; findings fixed or left on purpose, below
+  - [x] Full WebKit e2e, the canary and Lighthouse (3 runs) green
+  - [x] A preview deployed for the owner
+- **Verified:** typecheck, lint, 902 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1123 passed, 0 failed; canary 60 of 60; Lighthouse (3 runs, median): every route 96 or more, accessibility 100 (the explorer 97).
+  - **Fixed from the review:** the portrait bar (24 px sides, 18 px title), 22 px under it, the back arrow at 16 px, 13 px pages in the answer's source line, the portrait sources' 1.75 line height; the explorer button is `display: flex`, not the global `inline-flex` (the load-stall trigger; the flex row had made it flex in effect, now it is said); a duplicated rule merged; an unused field removed; the page builds its chapter links with `chapterSlug`; a note ties the hotspot colours to the scene's halo.
+  - **Left on purpose:**
+    - **Colours through the site's tokens, as chapter 1 does (T-028 to T-036).** The artboard's headings (#15422F), panel fill (#ECE9DC), rule text (#3C4C42) and strip text (#7A4210) are drawn with `--brand`, `--soft`, the ink and `--warn`, so the page follows the dark theme. Its borders at 0.3 alpha are about 1.9:1 on the panel, under the 3:1 a control's edge needs (WCAG 1.4.11), so `--line` (0.55) stays.
+    - The sources box lists the source's links and its unnamed extras (the site's sources format), where the artboard has the name and badge only.
+    - The bar centres its title on a three-column grid (the artboard spaces three items apart: the same look while the side links are equal width).
+    - The scene's middle leaves use the plant's old-leaf green, not the artboard's lighter #3F7B46: the plant's colours are shared with the home hero.
+    - The tier badge keeps the site's size (24 px), not the portrait artboard's 26.
+    - The group strings are still built per component (a shared helper would touch chapter 1's explorer too).
+  - **Not verified:** a real iPad or phone; VoiceOver.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

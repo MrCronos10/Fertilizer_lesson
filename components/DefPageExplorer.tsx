@@ -12,7 +12,7 @@ import type { LeafAnchors } from "./PlantScene";
 import { TierBadge } from "./TierBadge";
 
 /** What the answer panel's source line needs, read on the server so the bibliography stays out of this chunk. */
-export type PageSource = { readonly name: string; readonly tier: Tier; readonly unnamed: number };
+export type PageSource = { readonly name: string; readonly tier: Tier };
 
 /**
  * The deficiency explorer page's interactive half (T-037): the picture, the leaf picker and the answer panel.
@@ -121,7 +121,7 @@ export function DefPageExplorer({
                 {source.name}
               </a>
               <TierBadge tier={source.tier} ui={ui} />
-              <span className="muted">
+              <span className="muted def-answer-pages">
                 {ui.pamphletPages}: {pages}
               </span>
             </p>

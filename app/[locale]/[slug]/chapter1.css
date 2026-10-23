@@ -617,6 +617,7 @@
   text-decoration: none;
 }
 .chapter-redesign .chapter-nav .chapter-explore {
+  display: flex; /* not the global inline-flex: inline-flex on a link is the WebKit load-stall trigger (T-029) */
   padding-inline: 22px;
   background: var(--brand);
   border-color: var(--brand);

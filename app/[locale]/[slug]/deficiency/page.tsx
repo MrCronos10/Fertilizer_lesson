@@ -4,13 +4,17 @@ import { notFound } from "next/navigation";
 import { DefPageExplorer } from "@/components/DefPageExplorer";
 import { TierBadge } from "@/components/TierBadge";
 import { citationEntry } from "@/lib/citations";
+import { chapterSlug } from "@/lib/content";
 import { RULE_PAGE, deficiencyGroups, ruleScope } from "@/lib/deficiency";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
 import { readUiStrings } from "@/lib/ui";
 import "./deficiency.css";
 
 /** The one chapter this page belongs to: the symptom lines are chapter 1's (pamphlet p2 and p3). */
-const CHAPTER = "ch01";
+const CHAPTER_NUMBER = 1;
+const CHAPTER = chapterSlug(CHAPTER_NUMBER);
+/** Where the next link goes: chapter 3, the bag reader. */
+const NEXT_CHAPTER = chapterSlug(3);
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -85,7 +89,7 @@ export default async function DeficiencyPage({ params }: { params: Params }) {
     <>
       {rules}
       <p className="def-strip">{ui.homeSafeNote}</p>
-      <Link className="def-next" href={`/${locale}/ch03`}>
+      <Link className="def-next" href={`/${locale}/${NEXT_CHAPTER}`}>
         {ui.defNext}
       </Link>
     </>
@@ -95,7 +99,7 @@ export default async function DeficiencyPage({ params }: { params: Params }) {
     <article className="def-page">
       <header className="def-bar">
         <Link className="def-back" href={`/${locale}/${CHAPTER}`}>
-          {ui.chapterWord} 1
+          {ui.chapterWord} {CHAPTER_NUMBER}
         </Link>
         <h1>{ui.defTableCaption}</h1>
         <a className="def-bar-sources" href="#sources">
@@ -105,7 +109,7 @@ export default async function DeficiencyPage({ params }: { params: Params }) {
       <DefPageExplorer
         ui={ui}
         groups={groups}
-        source={{ name: uga.name, tier: uga.tier, unnamed: uga.unnamed }}
+        source={{ name: uga.name, tier: uga.tier }}
         left={sources}
         right={right}
       />
