@@ -65,7 +65,8 @@ test("no prose sits outside a block that names its page", async ({ page }) => {
   const stray = await page.evaluate(() => {
     const article = document.querySelector("article")!;
     return [...article.children]
-      .filter((el) => !el.matches("section[data-section], h1, nav, a.jump-sources, #sources"))
+      // The redesign's header band and sources bar (T-048) carry no prose of their own.
+      .filter((el) => !el.matches("section[data-section], h1, nav, a.jump-sources, div.jump-sources, header.chapter-band, #sources"))
       .map((el) => `${el.tagName} ${(el.textContent ?? "").slice(0, 40)}`);
   });
   expect(stray).toEqual([]);

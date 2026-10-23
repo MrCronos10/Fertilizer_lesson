@@ -450,9 +450,36 @@
    for the four-column tables; the 70ch measure above would squeeze them. */
 @media (min-width: 75em) {
   .chapter-redesign > .chapter-card,
+  .chapter-redesign > .chapter-section,
   .chapter-redesign > .sources-card {
     max-width: 860px;
   }
+}
+
+/* A chapter of page-referenced sections (chapter 4, T-048): each section is a card like chapter 1's; a warning
+   section takes the soil-test strip's colours and a warning sign, so it does not rest on colour alone. */
+.chapter-redesign .chapter-section {
+  gap: 12px;
+  padding: var(--card-pad);
+  border-radius: 14px;
+  border-top: 5px solid var(--brand);
+}
+.chapter-redesign .chapter-section li {
+  font-size: var(--card-p);
+  line-height: 1.85;
+}
+.chapter-redesign .chapter-section-warn {
+  border-color: var(--warn);
+  border-top-color: var(--warn);
+}
+.chapter-redesign .chapter-section-warn::before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  background: var(--warn);
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L22 20 H2 Z'/%3E%3Cpath d='M12 10 v4 M12 17 v.5'/%3E%3C/svg%3E");
 }
 
 /* ---- Reading column ------------------------------------------------------------------------------------------ */
