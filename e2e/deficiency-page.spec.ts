@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { collectPageProblems } from "./console";
 
 const ROUTE = "/th/ch01/deficiency";
@@ -93,20 +93,54 @@ test("the sources box names the one real source with its tier, its unnamed extra
   expect(await box.locator("a").count()).toBeGreaterThan(0);
 });
 
-test("two columns at 1366, one below, and no sideways scroll at any width", async ({ page }) => {
+const BLOCKS = [".def-picture", ".def-choice", ".def-answer-wrap", ".def-rules", ".def-sources", ".def-strip", ".def-next"] as const;
+const boxes = (page: Page) =>
+  page.evaluate((sel) => Object.fromEntries(sel.map((s) => {
+    const r = document.querySelector(s)!.getBoundingClientRect();
+    return [s, { x: r.x, y: r.y, w: r.width, h: r.height }];
+  })), [...BLOCKS]) as Promise<Record<(typeof BLOCKS)[number], { x: number; y: number; w: number; h: number }>>;
+
+test("landscape (1366): picture, picker and sources on the left, answer, rules, strip and next on the right", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 900 });
   await page.goto(ROUTE);
-  const left = (await page.locator(".def-col-left").boundingBox())!;
-  const right = (await page.locator(".def-col-right").boundingBox())!;
-  expect(left.width).toBeLessThanOrEqual(826.5);
-  expect(right.x).toBeGreaterThan(left.x + left.width);
-  for (const width of [834, 390, 320]) {
+  const b = await boxes(page);
+  expect(b[".def-picture"].w).toBeCloseTo(826, 0);
+  for (const s of [".def-choice", ".def-sources"] as const) expect(Math.round(b[s].x), s).toBe(Math.round(b[".def-picture"].x));
+  for (const s of [".def-answer-wrap", ".def-rules", ".def-strip", ".def-next"] as const)
+    expect(b[s].x, s).toBeGreaterThan(b[".def-picture"].x + b[".def-picture"].w);
+  expect(b[".def-answer-wrap"].y).toBeCloseTo(b[".def-picture"].y, 0);
+});
+
+test("portrait (834): the artboard's order, picture 738 x 520, and the sources beside a 282 px strip", async ({ page }) => {
+  await page.setViewportSize({ width: 834, height: 1194 });
+  await page.goto(ROUTE);
+  const b = await boxes(page);
+  expect(b[".def-picture"]).toMatchObject({ x: 48, w: 738 });
+  expect(b[".def-picture"].h).toBeCloseTo(520, 0);
+  // Top to bottom: picture, picker, answer, rules, then the sources and strip side by side, then the next link.
+  const order = [".def-picture", ".def-choice", ".def-answer-wrap", ".def-rules", ".def-sources", ".def-next"] as const;
+  for (let i = 1; i < order.length; i++) expect(b[order[i]!].y, order[i]).toBeGreaterThan(b[order[i - 1]!].y + b[order[i - 1]!].h - 1);
+  expect(b[".def-strip"].w).toBeCloseTo(282, 0);
+  expect(b[".def-strip"].y).toBeCloseTo(b[".def-sources"].y, 0);
+  expect(b[".def-strip"].h).toBeCloseTo(b[".def-sources"].h, 0);
+  expect(b[".def-strip"].x + b[".def-strip"].w).toBeCloseTo(786, 0);
+  // The answer carries its own source line here (the landscape page shows it in the sources box instead).
+  await expect(page.locator(".def-answer-source")).toBeVisible();
+});
+
+test("phone (390): one column in the same order, the artboards' picture shape, and no sideways scroll down to 320", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(ROUTE);
+  const b = await boxes(page);
+  expect(b[".def-picture"].w / b[".def-picture"].h).toBeCloseTo(826 / 582, 1);
+  for (let i = 1; i < BLOCKS.length; i++) {
+    expect(b[BLOCKS[i]!].y, BLOCKS[i]).toBeGreaterThan(b[BLOCKS[i - 1]!].y + b[BLOCKS[i - 1]!].h - 1);
+    expect(Math.round(b[BLOCKS[i]!].x), BLOCKS[i]).toBe(16);
+  }
+  for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `${width}`).toBe(true);
   }
-  await page.setViewportSize({ width: 834, height: 1100 });
-  const stacked = (await page.locator(".def-col-right").boundingBox())!;
-  expect(stacked.y).toBeGreaterThan(left.y + 100);
 });
 
 test("only chapter 1 has this page: another chapter or locale gets the not-found page and a noindex tag", async ({ request, page }) => {

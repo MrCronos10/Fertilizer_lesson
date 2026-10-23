@@ -226,6 +226,42 @@ test("a focused hotspot shows the site's focus ring", async ({ page }) => {
   expect(await hotspot(page, OLD).evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("solid");
 });
 
+test("portrait (834): the portrait artboard's labels, left and right of their hotspots, inside the frame", async ({ page }) => {
+  await page.setViewportSize({ width: 834, height: 1194 });
+  await page.goto(ROUTE);
+  await expect(hotspot(page, OLD)).toBeVisible();
+  const frame = (await page.locator(".def-picture").boundingBox())!;
+  const old = (await page.locator(".def-callout-old").boundingBox())!;
+  const young = (await page.locator(".def-callout-young").boundingBox())!;
+  expect(old.width).toBeCloseTo(152, 0);
+  expect(young.width).toBeCloseTo(160, 0);
+  expect(old.x + old.width).toBeLessThan((await hotspot(page, OLD).boundingBox())!.x);
+  expect(young.x).toBeGreaterThan((await hotspot(page, YOUNG).boundingBox())!.x);
+  for (const box of [old, young]) {
+    expect(box.x).toBeGreaterThanOrEqual(frame.x);
+    expect(box.x + box.width).toBeLessThanOrEqual(frame.x + frame.width);
+  }
+  await expect(page.locator(".def-picture .def-hint")).toBeVisible();
+});
+
+test("phone (390): the hotspots stay, 44 px and inside the frame; the labels and hint step aside", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(ROUTE);
+  await expect(hotspot(page, OLD)).toBeVisible();
+  const frame = (await page.locator(".def-picture").boundingBox())!;
+  for (const name of [OLD, YOUNG]) {
+    const b = (await hotspot(page, name).boundingBox())!;
+    expect(b.width).toBeGreaterThanOrEqual(44);
+    expect(b.x).toBeGreaterThanOrEqual(frame.x);
+    expect(b.x + b.width).toBeLessThanOrEqual(frame.x + frame.width);
+    expect(b.y + b.height).toBeLessThanOrEqual(frame.y + frame.height);
+  }
+  await expect(page.locator(".def-callout-old")).toBeHidden();
+  await expect(page.locator(".def-picture .def-hint")).toBeHidden();
+  await hotspot(page, YOUNG).click();
+  await expect(page.locator(".def-answer")).toHaveAttribute("data-group", "young");
+});
+
 test("without WebGL there are no hotspots, labels or hint, only the flat plant and the picker", async ({ page }) => {
   await page.addInitScript(() => {
     const original = HTMLCanvasElement.prototype.getContext;
