@@ -35,7 +35,7 @@ export function BagReaderIsland({
         <div className="bag-body">
           <div className="bag-tiles">
             {tiles.map((t) => (
-              <label key={t.id} className="bag-tile">
+              <label key={t.id} className="bag-tile" data-nutrient={t.id}>
                 {/* The radio carries the whole name (symbol, number, then the word "percent"), so the
                     visible symbol and number are hidden from assistive tech rather than read twice. */}
                 <input
@@ -63,8 +63,14 @@ export function BagReaderIsland({
 
       <div role="status" aria-live="polite" aria-atomic="true" className="bag-panel">
         {tile ? (
-          <div key={tile.id} className="panel">
-            <p className="bag-role">{tile.role}</p>
+          <div key={tile.id} className="panel bag-answer" data-nutrient={tile.id}>
+            {/* The redesign (T-045) shows the symbol as a badge in the nutrient's colour before the p2 wording. */}
+            <p className="bag-answer-head">
+              <span className="bag-badge" lang="en" aria-hidden="true">
+                {tile.symbol}
+              </span>
+              <span className="bag-role">{tile.role}</span>
+            </p>
             <p>
               {ui.bagWord} {weightKg} {ui.calcKg}{" "}
               {tile.amountKg > 0 ? (
