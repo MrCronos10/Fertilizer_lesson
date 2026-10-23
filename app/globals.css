@@ -288,19 +288,153 @@ button.primary {
   transform: translateY(0);
 }
 
+/* Site header (T-027), from the redesign: Home-Phone below 40em, Home-Portrait to 75em, Main
+   above; Home-Night for the dark colours. */
 .site-header {
-  border-bottom: 1px solid var(--line);
-  padding-block-end: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: env(safe-area-inset-top, 0px) calc(16px + env(safe-area-inset-right, 0px)) 0
+    calc(16px + env(safe-area-inset-left, 0px));
+  border-bottom: 1px solid rgba(27, 42, 34, 0.18);
+  background: var(--bg);
+}
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  text-decoration: none;
+}
+.site-mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+.site-mark circle {
+  fill: #1f5e45;
 }
 .site-title {
-  /* Same column as .stack, so the title lines up with the content on wide screens. */
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--brand);
+}
+.site-tools {
   display: flex;
-  max-width: 70ch;
-  margin-inline: auto;
+  align-items: center;
+  gap: 4px;
+}
+.site-link {
+  display: none;
   align-items: center;
   min-height: var(--tap);
-  color: var(--brand);
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
   text-decoration: none;
+  color: var(--brand);
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  /* --line, not the artboard's rgba(27,42,34,0.22): that is 1.54:1 against the page, under the 3:1
+     WCAG 1.4.11 asks of a control's edge (T-025 raised --line for the same reason). */
+  border: 1px solid var(--line);
+  /* No text, so it needs no web font; system font as for T-014's select (not proven necessary). */
+  font-family: system-ui, -apple-system, sans-serif;
+  border-radius: 10px;
+  background: rgba(255, 255, 252, 0.94);
+  color: #1b2a22;
+}
+/* Main / Home-Night's moon and sun (20 px, 1.6 stroke), painted in the button's colour. */
+.theme-icon {
+  width: 19px;
+  height: 19px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.theme-icon-moon {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M16.5 11.8 A 7 7 0 0 1 8.2 3.5 A 7.4 7.4 0 1 0 16.5 11.8 Z'/%3E%3C/svg%3E");
+}
+.theme-icon-sun {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='10' cy='10' r='4.2'/%3E%3Cpath d='M10 1.6v2.2M10 16.2v2.2M18.4 10h-2.2M3.8 10H1.6M15.9 4.1l-1.6 1.6M5.7 14.3l-1.6 1.6M15.9 15.9l-1.6-1.6M5.7 5.7L4.1 4.1'/%3E%3C/svg%3E");
+}
+@media (min-width: 40em) {
+  .site-header {
+    min-height: 64px;
+    padding-inline: calc(24px + env(safe-area-inset-left, 0px)) calc(24px + env(safe-area-inset-right, 0px));
+  }
+  .site-brand {
+    gap: 10px;
+  }
+  .site-mark {
+    width: 28px;
+    height: 28px;
+  }
+  .site-title {
+    font-size: 19px;
+  }
+  .site-link {
+    display: inline-flex;
+  }
+  .theme-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+@media (min-width: 75em) {
+  .site-header {
+    gap: 24px;
+    padding-inline: calc(40px + env(safe-area-inset-left, 0px)) calc(40px + env(safe-area-inset-right, 0px));
+  }
+  .site-brand {
+    gap: 12px;
+  }
+  .site-mark {
+    width: 30px;
+    height: 30px;
+  }
+  .site-title {
+    font-size: 20px;
+  }
+  .site-tools {
+    gap: 8px;
+  }
+  .site-link {
+    padding: 0 16px;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .site-header {
+    border-bottom-color: rgba(237, 239, 230, 0.28);
+  }
+  :root:not([data-theme="light"]) .site-mark circle {
+    fill: #1b3328;
+  }
+  :root:not([data-theme="light"]) .theme-toggle {
+    border-color: rgba(237, 239, 230, 0.45);
+    background: rgba(20, 34, 28, 0.94);
+    color: var(--accent);
+  }
+}
+:root[data-theme="dark"] .site-header {
+  border-bottom-color: rgba(237, 239, 230, 0.28);
+}
+:root[data-theme="dark"] .site-mark circle {
+  fill: #1b3328;
+}
+:root[data-theme="dark"] .theme-toggle {
+  border-color: rgba(237, 239, 230, 0.45);
+  background: rgba(20, 34, 28, 0.94);
+  color: var(--accent);
 }
 
 main:focus {
@@ -938,3 +1072,9 @@ main:focus {
     box-shadow: 1px 0 0 var(--line);
   }
 }
+
+/* The font warm-up in app/layout.tsx: .visually-hidden, never display:none, because text that is not
+   laid out does not use its face. */
+.font-warm span:nth-child(1) { font-family: var(--font-body); font-weight: 400; }
+.font-warm span:nth-child(2) { font-family: var(--font-body); font-weight: 600; }
+.font-warm span:nth-child(3) { font-family: var(--font-ui); font-weight: 700; }

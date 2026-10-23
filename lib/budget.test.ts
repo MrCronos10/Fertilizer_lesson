@@ -37,6 +37,6 @@ describe("the budget covers every route", () => {
   it("holds 3D routes to 600 KB and every other route to 180 KB", () => {
     expect(jsBudgetFor("text")).toBe(180 * 1024);
     expect(jsBudgetFor("3d")).toBe(600 * 1024);
-    expect(ROUTES.filter((r) => r.kind === "3d").map((r) => r.path)).toEqual(["/th/ch01", "/specimen-3d", "/specimen-3d-b"]);
+    expect(ROUTES.filter((r) => r.kind === "3d").map((r) => r.path)).toEqual(["/th", "/th/ch01", "/specimen-3d", "/specimen-3d-b"]);
   });
 });

@@ -657,6 +657,30 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Not verified:** a real phone (the only one I can give you is WebKit in a phone-sized window); iOS's on-screen keyboard covering a form field (the calculator's focus handling is the same as on iPad); the pictures in `test-results/phone/` were looked at for chapters 1 and 2 only.
   - **New Thai: none.**
 
+### T-027: Home page redesign (`/th`)
+- Status: done (real-iPad look and the Thai review are yours)
+- Depends on: T-026
+- Goal: Rebuild `/th` from the Design canvas as one responsive route (iPad landscape, iPad portrait, phone, night), with a React Three Fiber hero reusing the deficiency plant and a real static fallback.
+- Acceptance criteria:
+  - [x] One route, three layouts (landscape ≥ 75em, portrait 40–75em, phone < 40em) and day/night, from the artboards' values
+  - [x] No text in the canvas; N/P/K labels, title, chapter path and markers are HTML; markers are real links
+  - [x] Hero is procedural R3F geometry (D7), one WebGL context, disposed on route change (D16)
+  - [x] Static hero fallback is the first paint, the no-WebGL view and the reduced-motion view
+  - [x] Budget, Lighthouse and axe still pass; 44 px targets, safe areas and dvh kept
+- Test plan: unit (strings, budget), WebKit e2e at 1366, 834 and 390 in both themes, WebGL-off run, context count across navigation.
+- Notes: Decisions taken with the owner: `/th` becomes a "3d" route in `lib/budget.ts` with the canvas loaded after first paint (D3/D16 note); the hero soil block is decoration, an exception to D15; mockup's short ch1/ch2 titles are NOT used, the site's full titles are; no all-sources page exists, so the two sources links are TODO.
+- **Verified:** typecheck, lint, 877 unit tests and the production build green; WebKit e2e green at iPad portrait, iPad landscape and Mac (942 passed, 0 failed). Lighthouse (median of 3, Chrome): performance 96–99 and accessibility 100 on all eight lesson routes; LCP on Fast 4G 1.36–1.57 s.
+  - **What was built:** `app/[locale]/page.tsx` + `home.css` (one route, every layout; all scene colours as `--h-*` with night overrides, scoped under `.home`); `components/HomeArt.tsx` (the field per layout, the flat 2.5D plate, the chapter trail: SVG, decoration); `components/HeroScene3D.tsx` (the soil block from Main's own coordinates: extruded block, three-stop soil gradient, strata, roots as tubes, N/P/K particles riding the roots, the shared `PlantModel` from `PlantScene.tsx`); `components/HeroScene.tsx` (chooses live or flat, loads three.js on idle); `components/SiteHeader.tsx` + `ThemeToggle.tsx` (shared header, remembered theme); `lib/home.ts`, `lib/hero-scene.ts`, `lib/theme.ts` (pure, unit-tested).
+  - **How the hero is chosen:** an inline script runs before the hero is parsed and sets `<html data-hero>`: "3d" only with WebGL and without reduced motion. Without JavaScript the attribute is never set and the flat hero shows. The flat plate stays until the canvas has drawn (`data-scene="ready"`), so the stage is never empty while three.js downloads; a failed download falls back to the flat hero (tested by blocking the chunk).
+  - **A real defect found on the way, and fixed:** after the new header, the chapter load canaries (citations walk, chapter 3 in the calculator and bag specs) stalled about 15% of the time: WebKit left `readyState` at "interactive" and never fired `load`, with nothing outstanding. `main` passed 90 of 90. Bisected over about 30 builds: the trigger is the six font preloads combined with a face first used after its preload finished, and the header only shifted which faces a chapter needs late. Removing the preloads cures it (0 of 60) but costs chapter 4 its score (performance 86: the font swap, as T-024 found). Kept the preloads and added `.font-warm`: a visually hidden span in the root layout that uses each face in the first layout. Same build, same machine: 11 of 60 walks stalled without it, 0 of 120 with it. `e2e/fonts-load.spec.ts` walks the chapters twice as an extra canary. Same family as T-014's select bug.
+  - **Code review (fresh reviewer):** ten findings, all fixed. Besides the two above: leader lines measured the page every frame (now on resize only); the canvas kept rendering off-screen (now paused); a second WebGL probe per load (now reuses the script's verdict); two fingers made the block jump (now one finger drives); theme changes leaked a GPU colour buffer (now rewritten in place); `home.css` class names could reach chapters after a client navigation (now scoped, with a unit test that fails on an unscoped rule).
+  - **Mutation-tested:** removed the chunk boundary (the download test fails on all three viewports); unscoped one rule (the scope test fails); removed `.font-warm` (11 of 60 stalls).
+  - **Deliberate departures from the mockup:** the theme button's border is `--line`, not the mockup's 0.22 alpha (1.54:1, under WCAG 1.4.11's 3:1); its icon is a CSS mask, not an inline SVG (an `<svg>` inside the button is a second, independent trigger of the same WebKit `load` stall: 59 of 60 walks stalled with it even after the font fix, 0 of 60 with the mask); "คุณอยู่ที่นี่" stays on screen but is not part of chapter 1's link name (on the home page it is not true); the night colours of the portrait, phone and flat fields are not drawn in any artboard, so they follow the landscape night roles.
+  - **Preview (iPad):** https://fertilizer-lesson-if8sa5yez-kuypavthai-4289s-projects.vercel.app/th
+  - **Not verified:** a real iPad (the preview link is the way); VoiceOver reading the new header and labels; two-finger handling was fixed by reading the code, not by a touch test (Playwright cannot drive two pointers on WebKit reliably).
+  - **New Thai: U50–U66** in `docs/content/THAI-REVIEW.md`, all copied verbatim from the design. **U64–U66 (ไนโตรเจน, ฟอสฟอรัส, โพแทสเซียม) are in neither the pamphlet nor the current site**, so they need your check under D6.
+  - **TODO left in code:** the header's sources link and the strip's all-sources link, until an all-sources page exists.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

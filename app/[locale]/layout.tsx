@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
 import { readUiStrings } from "@/lib/ui";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export function generateStaticParams() {
   return SUPPORTED_LOCALES.map((locale) => ({ locale }));
@@ -24,11 +24,7 @@ export default async function LocaleLayout({
       <a className="skip-link" href="#content">
         {ui.skipToContent}
       </a>
-      <header className="site-header page">
-        <Link className="site-title ui" href={`/${locale}`}>
-          {ui.siteTitle}
-        </Link>
-      </header>
+      <SiteHeader locale={locale} ui={ui} />
       <main id="content" className="page" tabIndex={-1}>
         {children}
       </main>

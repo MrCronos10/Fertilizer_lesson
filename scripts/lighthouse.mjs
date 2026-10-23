@@ -20,7 +20,8 @@ const FAST_4G = { throttling: { rttMs: 150, throughputKbps: 9 * 1024, cpuSlowdow
 const STRICT_SLOW = process.env.LH_STRICT_SLOW === "1";
 
 // ch01 carries the 3D plant (a lazy three.js chunk): it is held to the score budgets, but not to
-// the text-route LCP budget, which D16 scopes to text routes.
+// the text-route LCP budget, which D16 scopes to text routes. The home page also carries three.js
+// (T-027), but only once it is idle, after its text has painted, so it keeps the LCP budget.
 const ROUTES = [
   { path: "/th", text: true },
   { path: "/th/ch01", text: false },

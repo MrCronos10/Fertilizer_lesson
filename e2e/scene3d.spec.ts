@@ -197,7 +197,7 @@ test("chapter 1 (the deficiency explorer) is a 3D route: within 600 KB and carry
 });
 
 test("three.js is absent from every non-3D route", async ({ page }) => {
-  for (const route of ["/th", "/th/ch02", "/th/ch03", "/th/ch04", "/th/ch05", "/th/ch06", "/th/ch07", "/specimen"]) {
+  for (const route of ["/th/ch02", "/th/ch03", "/th/ch04", "/th/ch05", "/th/ch06", "/th/ch07", "/specimen"]) {
     const scripts = await scriptsLoaded(page, route);
     expect(scripts.length, `${route} loaded scripts`).toBeGreaterThan(0);
     expect(

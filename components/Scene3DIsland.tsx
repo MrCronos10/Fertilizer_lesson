@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Component, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from "react";
 import type { WebGLRenderer } from "three";
 import { MAX_DPR, webglAvailableOnce } from "@/lib/webgl";
+import { usePrefersReducedMotion } from "./usePrefersReducedMotion";
 
 type Props = {
   /** Accessible name for the canvas; the caller owns the words (no copy lives here). */
@@ -13,22 +14,6 @@ type Props = {
   /** Receives whether idle animation is allowed (false under prefers-reduced-motion). */
   children: (animate: boolean) => ReactNode;
 };
-
-const QUERY = "(prefers-reduced-motion: reduce)";
-
-function subscribe(onChange: () => void) {
-  const query = window.matchMedia(QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-}
-
-function usePrefersReducedMotion(): boolean {
-  return useSyncExternalStore(
-    subscribe,
-    () => window.matchMedia(QUERY).matches,
-    () => false,
-  );
-}
 
 /**
  * The probe can pass and the real Canvas still throw (context limit, low memory), and

@@ -103,8 +103,9 @@ test("respects safe-area padding on the shell", async ({ page }) => {
 test("text routes ship at most 180 KB gzipped JS, counting every script a real page loads", async ({ page }) => {
   // Measured in the browser, not from <script> tags: a lazily imported chunk (the
   // calculator on ch03) is fetched after hydration and would be missed by the HTML.
-  // ch01 carries the 3D deficiency explorer (T-018), so it is held to the 3D budget in e2e/scene3d.spec.ts.
-  for (const route of ["/th", ...CHAPTERS.filter((c) => c !== "ch01").map((c) => `/th/${c}`)]) {
+  // ch01 carries the 3D deficiency explorer (T-018) and the home page its soil block (T-027), so both are held
+  // to the 3D budget in e2e/scene3d.spec.ts.
+  for (const route of [...CHAPTERS.filter((c) => c !== "ch01").map((c) => `/th/${c}`)]) {
     const loaded: Promise<number>[] = [];
     const onResponse = (response: import("@playwright/test").Response) => {
       if (/\.js(\?|$)/.test(response.url())) loaded.push(response.body().then((b) => gzipSync(b).length));

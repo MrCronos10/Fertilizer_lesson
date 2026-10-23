@@ -212,3 +212,25 @@ The pamphlet prints answers after an arrow and **no wrong options**, so the quiz
 | U49 | `sectionUncited` | `เอกสารต้นฉบับไม่ได้ระบุแหล่งอ้างอิงภายนอกสำหรับข้อความนี้` | Line under a block (4R, safety, mistakes, environment, the chapter 7 summary) whose text the pamphlet prints no outside source for: "the pamphlet names no outside source for this text". |
 
 Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Extension EB0209`) above are **still open** and unchanged: the chapter 4 text is the pamphlet's, word for word, and cannot be edited without your decision.
+
+## Home page, T-027: new UI strings copied verbatim from the redesign
+
+| # | Key | Thai | Used for |
+| --- | --- | --- | --- |
+| U50 | `homeTagline` | `เว็บไซต์สอนพื้นฐานเรื่องปุ๋ยสำหรับผู้เริ่มต้น เนื้อหาภาษาไทย ใช้ภาพและการโต้ตอบแทนการอ่านตำรา` | Hero line under the title. |
+| U51 | `homeStart` | `เริ่มเรียน บทที่ 1` | Primary button to chapter 1. |
+| U52 | `homeSeeAll` | `ดูสารบัญทั้ง 7 บท` | Secondary button to the chapter path. |
+| U53 | `homeCited` | `ตัวเลขทุกตัวบนเว็บไซต์อ้างอิงกลับไปยังหน้าของแหล่งข้อมูลต้นฉบับได้` | Line under the buttons: every number cites the source page. |
+| U54 | `homeDragHint` | `ลากเพื่อหมุนดูรอบต้น` | Hint under the 3D scene: "drag to rotate around the plant". |
+| U55 | `homeChapterCount` | `7 บท · เริ่มที่บทที่ 1` | Chapter path caption: "7 chapters, start at chapter 1". |
+| U56 | `homeHere` | `คุณอยู่ที่นี่` | Badge on chapter 1: "you are here". |
+| U57 | `homeMacro` | `ธาตุอาหารหลัก` | Phone pill beside N P K (the pamphlet's own p2 words). |
+| U58 | `homeSafeNote` | `อัตราปุ๋ยที่แสดงบนเว็บไซต์เป็น จุดเริ่มต้น เท่านั้น แนะนำให้ ตรวจวิเคราะห์ดิน ก่อนใช้ปุ๋ยจริง` | Safety strip: rates are a starting point; test the soil first. Differs from `soilTestNote`. |
+| U59 | `themeToDark` | `สลับเป็นโหมดกลางคืน` | Accessible name of the theme button in light mode. |
+| U60 | `themeToLight` | `สลับเป็นโหมดกลางวัน` | Accessible name of the theme button in dark mode. |
+| U61 | `logoLabel` | `เครื่องหมายของเว็บไซต์` | Accessible name of the site mark. |
+| U62 | `homeTaglineShort` | `เว็บไซต์สอนพื้นฐานเรื่องปุ๋ยสำหรับผู้เริ่มต้น ใช้ภาพและการโต้ตอบแทนการอ่านตำรา` | Phone hero line: the phone artboard's shorter version of `homeTagline` (drops เนื้อหาภาษาไทย). |
+| U63 | `homeChapterCountShort` | `7 บท` | Phone chapter list caption: "7 chapters". |
+| U64 | `npkNameN` | `ไนโตรเจน` | N label name. **Not in the pamphlet or the current site**: the design's word. Agronomic, so it needs your check (D6). |
+| U65 | `npkNameP` | `ฟอสฟอรัส` | P label name. Same caveat as U64. |
+| U66 | `npkNameK` | `โพแทสเซียม` | K label name. Same caveat as U64. |
