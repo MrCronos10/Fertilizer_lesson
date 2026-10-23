@@ -64,3 +64,13 @@ test("the footer offers the contents as an outlined button and the next chapter 
   await expect(nav.locator('a[rel="next"]')).toBeVisible();
   for (const a of await nav.locator("a").all()) expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44);
 });
+
+test("the opening paragraph fills the 700 px column in landscape (no 62-character cap) and keeps it in portrait", async ({ page }) => {
+  await page.setViewportSize({ width: 1366, height: 900 });
+  await page.goto("/th/ch01");
+  const lead = page.locator(".reading-column > p").first();
+  expect((await lead.boundingBox())!.width).toBeGreaterThanOrEqual(690);
+  await page.setViewportSize({ width: 834, height: 1100 });
+  expect(await lead.evaluate((el) => getComputedStyle(el).maxWidth)).not.toBe("none");
+  expect((await lead.boundingBox())!.width).toBeLessThan(640);
+});

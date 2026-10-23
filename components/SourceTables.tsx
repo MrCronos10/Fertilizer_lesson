@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import {
   compoundGradeRows,
   deficiencyRows,
@@ -18,7 +19,8 @@ import type { UiStrings } from "@/lib/ui";
 
 /** The three macronutrients' own colours, shared by the chips and the role text (the artboard's N/P/K). */
 const NPK_CLASS = { N: "npk-n", P: "npk-p", K: "npk-k" } as const;
-const GROUP_TONE: Record<string, string> = { macronutrients: "tone-n", secondary: "tone-soil", micronutrients: "tone-soil-light" };
+/** Each group's coloured edge, as the token the stylesheet reads through `--edge`. */
+const GROUP_EDGE: Record<string, string> = { macronutrients: "var(--n)", secondary: "var(--soil)", micronutrients: "var(--soil-light)" };
 
 /** "N = <caption>; P = …": the words are the pamphlet's, only the symbol before each "=" is coloured. */
 function Role({ role, coloured }: { role: string; coloured: boolean }) {
@@ -62,7 +64,7 @@ function NutrientGroups({ ui }: { ui: UiStrings }) {
           {rows.map((row) => {
             const npk = row.id === "macronutrients";
             return (
-              <tr key={row.id} data-row={row.id} data-source-page={row.sourcePage} className={GROUP_TONE[row.id]}>
+              <tr key={row.id} data-row={row.id} data-source-page={row.sourcePage} style={{ "--edge": GROUP_EDGE[row.id] } as CSSProperties}>
                 <th scope="row">{row.labels.th.group}</th>
                 <td>
                   {npk ? (

@@ -1,0 +1,634 @@
+/* Chapter 1 (T-028 to T-032), from Chapter-01-Landscape.dc.html (1366) and Chapter-01-Portrait.dc.html (834). The phone
+   has no artboard: it is the portrait one reflowed (T-031).
+
+   Mobile first. The custom properties on .chapter-redesign hold one value per layout: the phone's here, the portrait
+   artboard's from 40em, the landscape artboard's from 75em. The rules below read them and are written once.
+   Every selector sits under .chapter-redesign (lib/chapter1.test.ts pins that), so none of this reaches a chapter that
+   has not been redesigned. */
+
+.chapter-redesign {
+  max-width: none;
+
+  --pad-l: calc(var(--gutter) + env(safe-area-inset-left, 0px));
+  --pad-r: calc(var(--gutter) + env(safe-area-inset-right, 0px));
+
+  /* hero */
+  --hero-min: 0px;
+  --hero-top: 170px;
+  --back-top: 12px;
+  --back-left: var(--pad-l);
+  --back-pad: 14px;
+  --title-w: 100%;
+  --title-pad: 20px var(--pad-l) 20px var(--pad-l);
+  --title-radius: 22px;
+  --h1-size: 26px;
+  --step-w: 46px;
+  /* the sources bar */
+  --bar-pad-l: var(--pad-l);
+  --bar-pad-r: var(--pad-r);
+  --bar-pad-y: 6px;
+  --bar-gap: 4px 16px;
+  /* the columns */
+  --cols-max: 640px;
+  --col-gap: 26px;
+  --lead-size: 17px;
+  --lead-max: 62ch;
+  --card-pad: 16px;
+  --card-h2: 19px;
+  --card-p: 16px;
+  /* the explorer card */
+  --def-pad: 16px;
+  --def-gap: 16px;
+  --choice-gap: 10px;
+  --choice-pad: 10px 16px 14px;
+  --row-gap: 18px;
+  --scene-w: 236px;
+  --scene-ratio: 236 / 248;
+  --panel-pad: 16px;
+  --panel-gap: 10px;
+  --rule-size: 16px;
+  --strip-pad: 12px 16px;
+  --sources-h2: 20px;
+}
+@media (min-width: 40em) {
+  .chapter-redesign {
+    --hero-min: 420px;
+    --hero-top: 0px;
+    --back-top: 20px;
+    --back-left: calc(24px + env(safe-area-inset-left, 0px));
+    --back-pad: 16px;
+    --title-w: 578px;
+    --title-pad: 26px 32px 24px calc(32px + env(safe-area-inset-left, 0px));
+    --title-radius: 26px;
+    --h1-size: 32px;
+    --bar-pad-l: 97px;
+    --bar-pad-r: 97px;
+    --bar-pad-y: 0px;
+    --bar-gap: 16px;
+    --lead-size: 18px;
+    --card-pad: 18px 20px;
+    --def-pad: 20px;
+  }
+}
+@media (min-width: 75em) {
+  .chapter-redesign {
+    --back-top: 24px;
+    --back-left: calc(40px + env(safe-area-inset-left, 0px));
+    --back-pad: 18px;
+    --title-w: 760px;
+    --title-pad: 28px var(--pad-l) 26px calc(40px + env(safe-area-inset-left, 0px));
+    --title-radius: 28px;
+    --h1-size: 40px;
+    --step-w: 64px;
+    --bar-pad-l: 64px;
+    --bar-pad-r: 64px;
+    --cols-max: 1238px;
+    --col-gap: 24px;
+    --lead-max: none;
+    --card-pad: 18px 22px;
+    --card-h2: 20px;
+    --card-p: 17px;
+    --def-pad: 18px;
+    --def-gap: 14px;
+    --choice-gap: 8px;
+    --choice-pad: 10px 14px 14px;
+    --row-gap: 16px;
+    --scene-w: 200px;
+    --scene-ratio: 200 / 226;
+    --panel-pad: 14px;
+    --panel-gap: 9px;
+    --rule-size: 15px;
+    --strip-pad: 12px 14px;
+    --sources-h2: 19px;
+  }
+}
+
+/* ---- Hero ---------------------------------------------------------------------------------------------------- */
+/* Edge to edge: the hero and the bar cancel the page padding (safe areas included) and give it back to their contents. */
+.chapter-redesign > .chapter-hero,
+.chapter-redesign > .jump-sources {
+  margin-inline: calc(-1 * var(--pad-l)) calc(-1 * var(--pad-r));
+}
+.chapter-redesign > :not(.chapter-hero, .jump-sources) {
+  width: 100%;
+  max-width: 70ch;
+  margin-inline: auto;
+}
+.chapter-redesign .chapter-hero {
+  position: relative;
+  min-height: var(--hero-min);
+  padding-top: var(--hero-top);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  margin-top: calc(-1 * (var(--gutter) + env(safe-area-inset-top, 0px)));
+}
+.chapter-redesign .chapter-hero-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* The portrait artboard draws its own picture, not a crop of the wide one; phones show it too. */
+.chapter-redesign .art-landscape {
+  display: none;
+}
+@media (min-width: 75em) {
+  .chapter-redesign .art-landscape {
+    display: block;
+  }
+  .chapter-redesign .art-portrait {
+    display: none;
+  }
+}
+.chapter-redesign .chapter-back {
+  position: absolute;
+  top: calc(var(--back-top) + env(safe-area-inset-top, 0px));
+  left: var(--back-left);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 0 var(--back-pad);
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+/* The arrows are CSS masks, not inline <svg>: an inline <svg> inside a link here made WebKit leave `load`
+   unfired on chapter 1 (33 of 45 walks), the same as the theme button's icon in T-027. */
+.chapter-redesign .chapter-icon {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.chapter-redesign .chapter-icon-back {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 9H4M8.5 4.5L4 9l4.5 4.5'/%3E%3C/svg%3E");
+}
+.chapter-redesign .chapter-icon-down {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3v11M4.5 9.5L9 14l4.5-4.5'/%3E%3C/svg%3E");
+}
+.chapter-redesign .chapter-title-card {
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, var(--title-w));
+  padding: var(--title-pad);
+  background: var(--bg);
+  border-top-right-radius: var(--title-radius);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chapter-redesign .chapter-title-card h1 {
+  margin: 0;
+  font-size: var(--h1-size);
+  color: var(--brand);
+  text-wrap: pretty;
+}
+.chapter-redesign .chapter-where {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .chapter-where {
+    flex-wrap: nowrap;
+  }
+}
+.chapter-redesign .chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+}
+.chapter-redesign .chapter-steps {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+.chapter-redesign .chapter-steps span {
+  flex: 0 1 var(--step-w);
+  min-width: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  opacity: 0.45;
+}
+.chapter-redesign .chapter-steps span[data-done] {
+  background: var(--accent);
+  opacity: 1;
+}
+
+/* ---- Sources bar --------------------------------------------------------------------------------------------- */
+.chapter-redesign > .jump-sources {
+  box-sizing: border-box;
+  min-height: 56px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--bar-gap);
+  padding: var(--bar-pad-y) var(--bar-pad-r) var(--bar-pad-y) var(--bar-pad-l);
+  background: var(--soft);
+}
+@media (min-width: 40em) {
+  .chapter-redesign > .jump-sources {
+    flex-wrap: nowrap;
+  }
+}
+.chapter-redesign > .jump-sources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.chapter-redesign .tier-legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ---- Columns ------------------------------------------------------------------------------------------------- */
+.chapter-redesign > .chapter-columns {
+  max-width: var(--cols-max);
+}
+.chapter-redesign .chapter-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (min-width: 75em) {
+  .chapter-redesign .chapter-columns {
+    grid-template-columns: minmax(0, 700px) minmax(0, 1fr);
+    gap: 54px;
+    padding-block-start: 14px;
+  }
+}
+.chapter-redesign .reading-column,
+.chapter-redesign .side-column {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--col-gap);
+  min-width: 0;
+}
+.chapter-redesign .reading-column > p:first-child {
+  margin: 0;
+  max-width: var(--lead-max);
+  font-size: var(--lead-size);
+  line-height: 1.85;
+}
+
+/* ---- Reading column ------------------------------------------------------------------------------------------ */
+.chapter-redesign .cite-line {
+  margin: -10px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+/* No `display: inline-flex` here: with it on these links WebKit left `load` unfired on chapter 1 (27 to 36 of 45
+   walks), the same family as the inline <svg> in T-027 and T-028. The row is already flex, so the link is a flex item;
+   padding centres its text in the 44 px target. */
+.chapter-redesign .cite-line > a {
+  box-sizing: border-box;
+  min-height: var(--tap);
+  padding-block: 10px;
+  color: var(--brand);
+  overflow-wrap: anywhere;
+}
+.chapter-redesign .cite-line .cite-more {
+  font-size: 13px;
+  color: var(--muted);
+}
+.chapter-redesign .cite-line .tier {
+  padding-block: 1px;
+}
+.chapter-redesign .chapter-card {
+  box-sizing: border-box;
+  padding: var(--card-pad);
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--brand);
+  display: grid;
+  gap: 12px;
+}
+.chapter-redesign .chapter-card h2 {
+  margin: 0;
+  font-size: var(--card-h2);
+  color: var(--brand);
+}
+.chapter-redesign .chapter-card > p {
+  margin: 0;
+  font-size: var(--card-p);
+  line-height: 1.85;
+}
+.chapter-redesign .chapter-card > p strong {
+  font-weight: 700;
+}
+.chapter-redesign .chapter-card > p strong:first-of-type {
+  color: var(--k);
+}
+.chapter-redesign .chapter-card > p strong:last-of-type {
+  color: var(--p);
+}
+.chapter-redesign .chapter-card .cite-line {
+  margin: 0;
+}
+/* The p2 table: a coloured edge per group (--edge, set by the component), and the N / P / K chips. */
+.chapter-redesign .nutrient-groups .source-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.chapter-redesign .nutrient-groups tbody tr:nth-child(2) {
+  background: var(--soft);
+}
+.chapter-redesign .nutrient-groups tbody th {
+  border-inline-start: 4px solid var(--edge, var(--line));
+}
+.chapter-redesign .npk-chips {
+  display: flex;
+  gap: 5px;
+}
+.chapter-redesign .npk-chips > span {
+  display: inline-flex;
+  gap: 5px;
+}
+.chapter-redesign .npk-chip {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--brand-ink);
+}
+.chapter-redesign .npk-chip.npk-n {
+  background: var(--n);
+}
+.chapter-redesign .npk-chip.npk-p {
+  background: var(--p);
+}
+.chapter-redesign .npk-chip.npk-k {
+  background: var(--k);
+}
+.chapter-redesign strong.npk-n {
+  color: var(--n);
+}
+.chapter-redesign strong.npk-p {
+  color: var(--p);
+}
+.chapter-redesign strong.npk-k {
+  color: var(--k);
+}
+
+/* ---- Side column: the explorer card -------------------------------------------------------------------------- */
+.chapter-redesign .def-card {
+  box-sizing: border-box;
+  padding: var(--def-pad);
+  border-radius: 14px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  gap: var(--def-gap);
+}
+.chapter-redesign .def-card .def-choice {
+  gap: var(--choice-gap);
+  padding: var(--choice-pad);
+  border-radius: 12px;
+  background: var(--panel);
+}
+.chapter-redesign .def-card .def-choice legend {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--brand);
+}
+.chapter-redesign .def-card .def-option {
+  min-height: 48px;
+  gap: 9px;
+  border-width: 2px;
+  font-size: 15px;
+  background: var(--panel);
+  color: var(--ink);
+}
+.chapter-redesign .def-card .def-option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+.chapter-redesign .def-card .def-option:has(input:checked) {
+  background: var(--soft);
+  color: var(--ink);
+  border-color: var(--brand);
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+/* The plant sits above the answer on a phone, and beside it from 40em. */
+.chapter-redesign .def-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--row-gap);
+  align-items: stretch;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .def-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+.chapter-redesign .def-scene {
+  flex: none;
+  width: min(100%, var(--scene-w));
+}
+.chapter-redesign .def-card .scene3d,
+.chapter-redesign .def-card .scene3d-fallback {
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+.chapter-redesign .def-card .scene3d {
+  aspect-ratio: var(--scene-ratio);
+}
+.chapter-redesign .def-card .scene3d-fallback {
+  overflow-wrap: anywhere;
+}
+.chapter-redesign .def-card .def-panel {
+  flex: none;
+  min-width: 0;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .def-card .def-panel {
+    flex: 1 1 11rem;
+  }
+}
+.chapter-redesign .def-card .def-panel .panel {
+  height: 100%;
+  box-sizing: border-box;
+  gap: var(--panel-gap);
+  padding: var(--panel-pad);
+  border-radius: 12px;
+  font-size: 15px;
+}
+.chapter-redesign .def-card .def-list > div {
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.5rem;
+}
+.chapter-redesign .def-card .def-rule {
+  margin: 0;
+  font-size: var(--rule-size);
+  font-weight: 400;
+  line-height: 1.8;
+}
+.chapter-redesign .def-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--brand-ink);
+  background: var(--muted);
+}
+.chapter-redesign .def-badge[data-badge="old"] {
+  background: var(--k);
+}
+.chapter-redesign .def-badge[data-badge="young"] {
+  background: var(--p);
+}
+/* The flat plant (T-032): the 3D plant's stand-in without WebGL. The chosen group is ringed, the other dimmed. */
+.chapter-redesign .flat-fallback {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  background: none;
+  border: 0;
+}
+.chapter-redesign .flat-plant {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 236 / 248;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+.chapter-redesign .flat-fallback figcaption {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.chapter-redesign .flat-plant .fp-ring {
+  opacity: 0;
+}
+.chapter-redesign .flat-plant[data-leaf="old"] .fp-old .fp-ring,
+.chapter-redesign .flat-plant[data-leaf="young"] .fp-young .fp-ring {
+  opacity: 0.24;
+}
+.chapter-redesign .flat-plant[data-leaf="old"] .fp-young,
+.chapter-redesign .flat-plant[data-leaf="young"] .fp-old {
+  opacity: 0.35;
+}
+
+/* ---- Side column: sources ------------------------------------------------------------------------------------ */
+/* Portrait and phone: a plain section under a rule. Landscape: a card. */
+.chapter-redesign .sources-card {
+  box-sizing: border-box;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--line);
+  gap: 12px;
+}
+.chapter-redesign .sources-card h2 {
+  margin: 0;
+  font-size: var(--sources-h2);
+  color: var(--brand);
+}
+@media (min-width: 75em) {
+  .chapter-redesign .sources-card {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--panel);
+  }
+}
+.chapter-redesign .safe-strip {
+  margin: 0;
+  box-sizing: border-box;
+  padding: var(--strip-pad);
+  border-radius: 10px;
+  background: var(--warn-bg);
+  border-inline-start: 4px solid var(--warn);
+  font-size: 14px;
+  line-height: 1.75;
+  font-weight: 600;
+  color: var(--warn);
+}
+
+/* ---- Footer -------------------------------------------------------------------------------------------------- */
+/* The contents as an outlined button, the next chapter as the primary one. */
+.chapter-redesign .chapter-nav {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 16px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .chapter-nav {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 75em) {
+  .chapter-redesign .chapter-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+}
+.chapter-redesign .chapter-nav a {
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.chapter-redesign .chapter-nav a[rel="next"] {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
