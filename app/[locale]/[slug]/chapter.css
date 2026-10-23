@@ -23,6 +23,17 @@
   --title-pad: 20px var(--pad-l) 20px var(--pad-l);
   --title-radius: 22px;
   --h1-size: 26px;
+  /* the header band of chapters after the first (T-044); the phone has no artboard, the card sits under the scene */
+  --band-top: 104px;
+  --band-min: 0px;
+  --band-bar-pad: var(--pad-l);
+  --band-card-w: 100%;
+  --band-card-pad: 16px var(--pad-l) 14px var(--pad-l);
+  --band-card-dir: column;
+  --band-card-gap: 8px;
+  --band-h1: 26px;
+  --band-badge-h: 26px;
+  --band-badge-size: 12px;
   --step-w: 46px;
   /* the sources bar */
   --bar-pad-l: var(--pad-l);
@@ -62,6 +73,13 @@
     --title-pad: 26px 32px 24px calc(32px + env(safe-area-inset-left, 0px));
     --title-radius: 26px;
     --h1-size: 32px;
+    /* Bag-Calculator-Portrait.dc.html */
+    --band-top: 0px;
+    --band-min: 180px;
+    --band-bar-pad: 24px;
+    --band-card-w: 560px;
+    --band-card-pad: 18px 48px 16px;
+    --band-h1: 30px;
     --bar-pad-l: 97px;
     --bar-pad-r: 97px;
     --bar-pad-y: 0px;
@@ -81,6 +99,16 @@
     --title-radius: 28px;
     --h1-size: 40px;
     --step-w: 64px;
+    /* Bag-Calculator-Landscape.dc.html */
+    --band-min: 160px;
+    --band-bar-pad: 40px;
+    --band-card-w: 700px;
+    --band-card-pad: 16px 40px 14px;
+    --band-card-dir: row;
+    --band-card-gap: 14px;
+    --band-h1: 32px;
+    --band-badge-h: 28px;
+    --band-badge-size: 13px;
     --bar-pad-l: 64px;
     --bar-pad-r: 64px;
     --cols-max: 1238px;
@@ -107,10 +135,11 @@
 /* ---- Hero ---------------------------------------------------------------------------------------------------- */
 /* Edge to edge: the hero and the bar cancel the page padding (safe areas included) and give it back to their contents. */
 .chapter-redesign > .chapter-hero,
+.chapter-redesign > .chapter-band,
 .chapter-redesign > .jump-sources {
   margin-inline: calc(-1 * var(--pad-l)) calc(-1 * var(--pad-r));
 }
-.chapter-redesign > :not(.chapter-hero, .jump-sources) {
+.chapter-redesign > :not(.chapter-hero, .chapter-band, .jump-sources) {
   width: 100%;
   max-width: 70ch;
   margin-inline: auto;
@@ -237,6 +266,94 @@
   opacity: 1;
 }
 
+/* ---- Header band (T-044) ------------------------------------------------------------------------------------
+   Chapters after the first, from the Bag-Calculator artboards: a bar (back to the contents, "chapter N of 7"), then a
+   short band with the chapter's scene under a card holding the badge and the title. */
+.chapter-redesign .chapter-band {
+  margin-top: calc(-1 * (var(--gutter) + env(safe-area-inset-top, 0px)));
+}
+.chapter-redesign .chapter-band-bar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding-inline: calc(var(--band-bar-pad) + env(safe-area-inset-left, 0px)) calc(var(--band-bar-pad) + env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
+}
+/* A block link with a mask arrow: no inline <svg> and no inline-flex on a link (the WebKit load stall, T-028/T-029). */
+.chapter-redesign .chapter-band-back {
+  display: block;
+  min-height: var(--tap);
+  line-height: var(--tap);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: none;
+}
+.chapter-redesign .chapter-band-back::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-inline-end: 8px;
+  vertical-align: -3px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 9H4M8.5 4.5L4 9l4.5 4.5'/%3E%3C/svg%3E");
+}
+.chapter-redesign .chapter-band-count {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.chapter-redesign .chapter-band-art {
+  position: relative;
+  overflow: hidden;
+  min-height: var(--band-min);
+  padding-top: var(--band-top);
+  display: flex;
+  align-items: flex-end;
+}
+/* No `display` here: .art-landscape / .art-portrait choose which picture shows (absolute already makes it a block). */
+.chapter-redesign .chapter-band-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.chapter-redesign .chapter-band-card {
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, var(--band-card-w));
+  padding: var(--band-card-pad);
+  background: var(--bg);
+  border-top-right-radius: 24px;
+  display: flex;
+  flex-direction: var(--band-card-dir);
+  align-items: flex-start;
+  gap: var(--band-card-gap);
+}
+@media (min-width: 75em) {
+  .chapter-redesign .chapter-band-card {
+    align-items: center;
+  }
+}
+.chapter-redesign .chapter-band-card h1 {
+  margin: 0;
+  font-size: var(--band-h1);
+  line-height: 1.4;
+  color: var(--brand);
+  text-wrap: pretty;
+}
+.chapter-redesign .chapter-band-card .chapter-badge {
+  flex: none;
+  height: var(--band-badge-h);
+  font-size: var(--band-badge-size);
+}
+
 /* ---- Sources bar --------------------------------------------------------------------------------------------- */
 .chapter-redesign > .jump-sources {
   box-sizing: border-box;
@@ -286,6 +403,15 @@
     grid-template-columns: minmax(0, 700px) minmax(0, 1fr);
     gap: 54px;
     padding-block-start: 14px;
+  }
+  /* A chapter of tools (chapter 3): Bag-Calculator-Landscape's 620 px column beside the rest, 40 px apart. */
+  .chapter-redesign > .chapter-columns[data-layout="tools"] {
+    max-width: 1286px;
+  }
+  .chapter-redesign .chapter-columns[data-layout="tools"] {
+    grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+    gap: 40px;
+    padding-block-start: 10px;
   }
 }
 .chapter-redesign .reading-column,

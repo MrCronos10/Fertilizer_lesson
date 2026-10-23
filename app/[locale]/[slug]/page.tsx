@@ -3,6 +3,8 @@ import "./chapter.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChapterBody } from "@/components/ChapterBody";
+import { bandScene } from "@/components/BandScenes";
+import { ChapterBand } from "@/components/ChapterBand";
 import { ChapterHero } from "@/components/ChapterHero";
 import { citationEntry } from "@/lib/citations";
 import { Sources } from "@/components/Citations";
@@ -72,7 +74,18 @@ export default async function ChapterPage({ params }: { params: Params }) {
     <article className={redesigned ? "stack chapter-redesign" : "stack"}>
       {redesigned ? (
         <>
-          <ChapterHero locale={locale} ui={ui} chapter={chapter.frontmatter.chapter} total={total} heading={chapter.frontmatter.heading} />
+          {chapter.frontmatter.chapter === 1 ? (
+            <ChapterHero locale={locale} ui={ui} chapter={chapter.frontmatter.chapter} total={total} heading={chapter.frontmatter.heading} />
+          ) : (
+            <ChapterBand
+              locale={locale}
+              ui={ui}
+              chapter={chapter.frontmatter.chapter}
+              total={total}
+              title={chapter.frontmatter.title}
+              scene={bandScene(chapter.frontmatter.chapter)}
+            />
+          )}
           {sourcesBar}
         </>
       ) : (
