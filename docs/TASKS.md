@@ -748,6 +748,19 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Derived, not drawn:** the phone layout. Its values (a 170 px picture strip, a 26 px heading, stacked plant and answer) are mine, from the portrait artboard; look at it on a phone.
   - **Not verified:** a real iPad or phone; VoiceOver; the nutrient table still scrolls sideways inside its own box on a phone, as every table on the site does.
 
+### T-032: Chapter 1 redesign — the 3D plant in the new layout
+- Status: done (the real-iPad look is yours)
+- Depends on: T-030
+- Goal: The existing 3D plant sits in the redesigned card without losing the one-context rule, the gestures, the still frame under reduced motion or its fallback; the artboard's flat plant becomes the fallback.
+- Acceptance criteria:
+  - [x] One live WebGL context, released on leaving, none leaked on return (existing specs, unchanged, pass)
+  - [x] Without WebGL the box shows the artboard's flat plant, ringing the chosen leaves, with the existing note as its caption
+  - [x] The leaves keep their side room in the 200 × 226 and 236 × 248 boxes; both leaf targets stay at least 44 px at full zoom-out
+- **Verified:** typecheck, lint, 881 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1002 passed, 0 failed. Canary (20 repeats × 3): 60 of 60.
+  - **What was built:** `FlatPlant.tsx` (artboard SVG, no text), its use as the explorer's fallback, and `cameraDistance` in `lib/gestures.ts` (unit-tested): the field of view is vertical, so a box taller than wide cut off the spinning leaves; the camera now backs off by 1 / aspect there. `zoom` itself is unchanged.
+  - **New Thai: U75** (`defFlatLabel`), copied from the artboard.
+  - **Not verified:** a real iPad (WebGL on its GPU, two-finger gestures); VoiceOver on the flat plant.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

@@ -32,3 +32,13 @@ export function clampPan(v: number): number {
 export function isTap(totalMovePx: number): boolean {
   return totalMovePx < TAP_SLOP_PX;
 }
+
+/**
+ * How far the camera sits for a given zoom in a box of `aspect` (width / height). The field of view is
+ * vertical, so a box taller than wide sees less to the sides; chapter 1's 200 x 226 box (T-032) cut off
+ * the spinning leaves. Backing off by 1 / aspect gives such a box at least a square box's side room. `zoom`
+ * itself, which the gestures clamp and e2e reads, is unchanged.
+ */
+export function cameraDistance(zoom: number, aspect: number): number {
+  return aspect >= 1 ? zoom : zoom / aspect;
+}

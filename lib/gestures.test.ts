@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PAN_LIMIT, TAP_SLOP_PX, YAW_PER_PX, ZOOM, clampPan, clampZoom, dragYaw, isTap, pinchZoom } from "./gestures";
+import { PAN_LIMIT, TAP_SLOP_PX, YAW_PER_PX, ZOOM, clampPan, cameraDistance, clampZoom, dragYaw, isTap, pinchZoom } from "./gestures";
 
 describe("zoom", () => {
   it("clamps to the camera limits", () => {
@@ -37,5 +37,16 @@ describe("drag, pan and tap", () => {
     expect(isTap(0)).toBe(true);
     expect(isTap(TAP_SLOP_PX - 0.01)).toBe(true);
     expect(isTap(TAP_SLOP_PX)).toBe(false);
+  });
+});
+
+describe("cameraDistance", () => {
+  it("is the zoom itself in a box as wide as it is tall, or wider", () => {
+    expect(cameraDistance(4, 1)).toBe(4);
+    expect(cameraDistance(4, 4 / 3)).toBe(4);
+  });
+  it("backs off in a box taller than it is wide, so the leaves keep a square box's side room", () => {
+    expect(cameraDistance(4, 200 / 226)).toBeCloseTo(4 * (226 / 200), 6);
+    expect(cameraDistance(4, 0.5)).toBe(8);
   });
 });

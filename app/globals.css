@@ -1344,6 +1344,41 @@ strong.npk-k {
   color: var(--warn);
 }
 
+/* The flat plant (T-032): the 3D plant's stand-in without WebGL. The chosen group is ringed, the other dimmed. */
+.flat-fallback {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  background: none;
+  border: 0;
+}
+.flat-plant {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 236 / 248;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+.flat-fallback figcaption {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.flat-plant .fp-ring {
+  opacity: 0;
+}
+.flat-plant[data-leaf="old"] .fp-old .fp-ring,
+.flat-plant[data-leaf="young"] .fp-young .fp-ring {
+  opacity: 0.24;
+}
+.flat-plant[data-leaf="old"] .fp-young,
+.flat-plant[data-leaf="young"] .fp-old {
+  opacity: 0.35;
+}
+
 /* Chapter 1 at portrait (40-75em, Chapter-01-Portrait.dc.html at 834) and on a phone (no artboard: the portrait one
    reflowed). The rules above are the landscape ones; these override them for the narrower ranges. */
 .chapter-hero .art-landscape {

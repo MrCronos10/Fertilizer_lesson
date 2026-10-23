@@ -106,5 +106,6 @@
   "sourceLabel": "ที่มา",
   "moreFrom": "และอีก",
   "moreUnit": "แหล่ง",
-  "defBadgeNone": "ไม่ระบุ"
+  "defBadgeNone": "ไม่ระบุ",
+  "defFlatLabel": "ภาพต้นพืช แสดงตำแหน่งใบแก่ด้านล่างและใบอ่อนหรือยอดด้านบน"
 }
