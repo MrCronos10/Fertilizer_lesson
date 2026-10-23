@@ -66,7 +66,12 @@ export function mdxComponents(ui: UiStrings, slots: { sources?: ReactNode } = {}
     Section,
     Callout,
     // Chapter 1's two columns (T-029, T-030); anything after them runs the full width.
-    ChapterColumns: ({ children }: { children: ReactNode }) => <div className="chapter-columns">{children}</div>,
+    /** "tools" is the even split of a chapter whose columns hold its interactive tools (chapter 3, T-044). */
+    ChapterColumns: ({ layout, children }: { layout?: "tools"; children: ReactNode }) => (
+      <div className="chapter-columns" data-layout={layout}>
+        {children}
+      </div>
+    ),
     ReadingColumn: ({ children }: { children: ReactNode }) => <div className="reading-column">{children}</div>,
     SideColumn: ({ children }: { children: ReactNode }) => (
       <div className="side-column">

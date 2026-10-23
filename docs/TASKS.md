@@ -935,14 +935,22 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **The footer:** one `chapter-primary` class, on the explorer button in chapter 1 and on the next-chapter link elsewhere; every footer link is `display: flex`, not the global `inline-flex`. A chapter other than 1 first shows it in T-044, whose e2e checks it.
 
 ### T-044: Short chapter header, and chapter 3's page shell
-- Status: ready (Opus)
+- Status: done
 - Depends on: T-043
 - Goal: The header band of chapters after the first, from Bag-Calculator-Landscape and Bag-Calculator-Portrait: the bar (back to the contents, "บทที่ 3 จาก 7"), the 160 px band with the artboard's bag scene (inline art, no text in it), the badge and the title. Chapter 3 opts in. Its bag reader and calculator sit in the new page unchanged; it gets the sources card and the footer.
 - Acceptance criteria:
-  - [ ] The band matches the artboard at 1366 and 834, and has a phone layout; the scene is decorative (hidden from screen readers)
-  - [ ] One h1, the back link and the chapter count; 44 px targets; no sideways scroll at 320
-  - [ ] The band takes a scene per chapter, so T-047–T-050 only add their own
-  - [ ] The bag reader and calculator still pass their existing specs; the canary and Lighthouse pass
+  - [x] The band matches the artboard at 1366 and 834, and has a phone layout; the scene is decorative (hidden from screen readers)
+  - [x] One h1, the back link and the chapter count; 44 px targets; no sideways scroll at 320
+  - [x] The band takes a scene per chapter, so T-047–T-050 only add their own
+  - [x] The bag reader and calculator still pass their existing specs; the canary and Lighthouse pass
+- **Verified:** typecheck, lint, 909 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1141 passed, 0 failed (`e2e/chapter-band.spec.ts` adds 18); canary 60 of 60; Lighthouse (3 runs): chapter 3 performance 96, accessibility 100; every route 96 or more.
+  - **How:** `ChapterBand` (bar, band, card) for every redesigned chapter but the first; `bandScene(n)` gives each chapter's picture, and `lib/band.test.ts` fails if a redesigned chapter has none, if a scene has text in it or is not hidden from assistive technology, or if two scenes share an id. Chapter 3's two drawings are the artboards', copied. Its columns use a "tools" split, 620 px and the rest, 40 px apart.
+  - **The title:** the band's h1 is the chapter's title ("วิธีอ่านตัวเลขบนกระสอบ") with "บทที่ 3" on the badge, as the Bag-Calculator and Quiz artboards draw it; chapter 1's hero keeps its full heading.
+  - **Phone (no artboard):** the card sits under 104 px of the picture, full width.
+  - **Departure: the sources bar stays.** Chapter 1's bar ("ไปที่ที่มาของข้อมูล" and the tier legend) sits under the band, though the chapter 3 artboard has none. On a phone the site header hides its sources link, and the legend says the chapter's source tiers.
+  - **Departure: the content keeps the pamphlet's words.** The artboard's intro line about oxide units is not built (it is not in the pamphlet). The chapter's own paragraph and its three points stay, the points above the calculator.
+  - **Found on the way:** a `display` on the scene overrode the rule that hides the portrait picture in landscape, so both drew. The note in the stylesheet says why it has none.
+  - **Not verified:** a real iPad.
 
 ### T-045: Chapter 3 bag reader to the artboard
 - Status: ready (Opus)
