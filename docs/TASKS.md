@@ -700,9 +700,23 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Not verified:** a real iPad; VoiceOver; portrait and phone layouts of this hero (T-031 in the plan); a fresh code reviewer (runs once over T-028–T-030).
 
 ### T-029: Chapter 1 redesign — reading column
-- Status: todo
+- Status: done (the real-iPad look and the Thai review are yours)
 - Depends on: T-028
-- Goal: Two-column landscape layout; body text with source line and tier badge; nutrient table with N/P/K chips; "อาการขาดธาตุ" card; back/next footer.
+- Goal: Two-column landscape layout; body text with source line and tier badge; nutrient table with N/P/K chips; "อาการขาดธาตุ" card; footer. Decisions taken with the owner: keep the symptom table, the yellow-leaf warning and the numbers block, below the columns; the card heading has no colon; the 3D plant stays; no link to the not-yet-built Deficiency screen.
+- Acceptance criteria:
+  - [x] 700 px reading column beside the side column at ≥ 75em, one column below, no sideways scroll
+  - [x] Source lines ("ที่มา", name, tier badge, "และอีก 2 แหล่ง") under the paragraph and the card, 44 px links
+  - [x] p2 table words unchanged; N/P/K chips and group edges from the artboard
+  - [x] "อาการขาดธาตุ" as the card's h2; "ใบแก่" and "ใบอ่อน/ยอด" coloured
+  - [x] Nothing removed from the chapter; footer has the contents button and the primary next-chapter button
+- **Verified:** typecheck, lint, 878 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 972 passed, 0 failed (the new `e2e/chapter1-reading.spec.ts` adds 18).
+  - **What was built:** `<ChapterColumns>`, `<ReadingColumn>`, `<SideColumn>`, `<Card>` and a block `<Cite>` in the chapter MDX; chips and group edges in `SourceTables.tsx`; styles in `globals.css`. The side column holds the existing explorer and the sources list for now (T-030 restyles them).
+  - **Moved citations, for the owner:** the DOA source used to sit mid-paragraph, right after the definition sentence; it is now a line under the whole paragraph, as the artboard draws it. The card's UGA line moved the same way. Say if the DOA line should be tied to the first sentence only.
+  - **Guards changed on purpose:** `lib/content.test.ts` (zero rewording) now omits the label "อาการขาดธาตุ :" in `docs/content/raw/manifest.json`, whose `omitWhy` records why; `lib/deficiency.test.ts` pins the card heading to the p3 caption instead of the bold lead-in; `lib/chapter1.test.ts` compares each cell's text with the chip markup stripped.
+  - **A real defect found, and fixed:** the same WebKit stalled-`load` as T-027 and T-028 came back on chapter 1 (27 to 36 of 45 walks). Bisected by removing one thing at a time: not the 3D plant, not the chips, not the tier badge; the trigger was `display: inline-flex` on the source-line links. With the row's own flex and padding instead: 0 of 60.
+  - **New Thai: U71–U73** in `docs/content/THAI-REVIEW.md`, copied from the artboard.
+  - **Departures from the artboard:** the table's second row uses `--soft` (follows the theme); the chips use `--brand-ink` for their letters so they stay readable in dark.
+  - **Not verified:** a real iPad; VoiceOver; portrait and phone polish (ticket 4); a fresh code reviewer (once, over T-028–T-030).
 
 ### T-030: Chapter 1 redesign — side column (leaf picker and sources)
 - Status: todo

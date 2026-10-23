@@ -238,3 +238,6 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U68 | `chapterWord` | `บทที่` | "Chapter", used before the number in the badge and the progress line. |
 | U69 | `chapterFrom` | `จาก` | "of", for "บทที่ 1 จาก 7". |
 | U70 | `tierLegend` | `ระดับแหล่งข้อมูลในบทนี้` | Label before the tier badges in the sources bar: "source tiers in this chapter". |
+| U71 | `sourceLabel` | `ที่มา` | Label before a block's source line: "Source". From the Chapter-01 artboards. |
+| U72 | `moreFrom` | `และอีก` | "and another", before the number of further sources. |
+| U73 | `moreUnit` | `แหล่ง` | "sources", after that number: "และอีก 2 แหล่ง". |

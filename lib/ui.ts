@@ -126,6 +126,10 @@ export const UI_KEYS = [
   "chapterWord",
   "chapterFrom",
   "tierLegend",
+  /** The source line under a block (T-029): "ที่มา …" and "และอีก 2 แหล่ง", copied from the Chapter-01 artboards. */
+  "sourceLabel",
+  "moreFrom",
+  "moreUnit",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

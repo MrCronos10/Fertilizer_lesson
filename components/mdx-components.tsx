@@ -29,7 +29,7 @@ export function Callout({ type, children }: { type?: string; children: ReactNode
   );
 }
 
-export function mdxComponents(ui: UiStrings) {
+export function mdxComponents(ui: UiStrings, slots: { sources?: ReactNode } = {}) {
   /**
    * A block of a chapter, named so it can be found, styled and checked: it states the
    * pamphlet page its text is on, and a test confirms that text really is on that page.
@@ -65,6 +65,21 @@ export function mdxComponents(ui: UiStrings) {
     TimingDiagram: () => <TimingDiagram ui={ui} />,
     Section,
     Callout,
+    // Chapter 1's two columns (T-029, T-030); anything after them runs the full width.
+    ChapterColumns: ({ children }: { children: ReactNode }) => <div className="chapter-columns">{children}</div>,
+    ReadingColumn: ({ children }: { children: ReactNode }) => <div className="reading-column">{children}</div>,
+    SideColumn: ({ children }: { children: ReactNode }) => (
+      <div className="side-column">
+        {children}
+        {slots.sources}
+      </div>
+    ),
+    Card: ({ heading, children }: { heading: string; children: ReactNode }) => (
+      <section className="chapter-card">
+        <h2>{heading}</h2>
+        {children}
+      </section>
+    ),
     // The questions are chapter 7's own frontmatter, passed through untouched.
     Quiz: ({ chapter }: { chapter: number }) => {
       const items = readChapters("th").find((c) => c.frontmatter.chapter === chapter)?.frontmatter.quiz ?? [];

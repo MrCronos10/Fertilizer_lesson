@@ -12,6 +12,8 @@ import { readUiStrings } from "./ui";
 const ui = readUiStrings("th");
 const raw = (page: number) => readFileSync(join(process.cwd(), `docs/content/raw/p${String(page).padStart(2, "0")}.txt`), "utf8");
 const plain = (html: string) => html.replace(/<[^>]+>/g, "|").replace(/\|+/g, "|");
+/** One string per cell with inline markup (the N/P/K chips and colours) stripped: the words are what the table must keep. */
+const cells = (tr: string) => `|${tr.split(/<\/t[hd]>/).slice(0, -1).map((c) => c.replace(/<[^>]+>/g, "").trim()).join("|")}|`;
 const render = (id: string) => renderToStaticMarkup(makeSourceTable(ui)({ id }));
 
 describe("p2 nutrient-group table", () => {
@@ -23,7 +25,7 @@ describe("p2 nutrient-group table", () => {
     expect((html.match(/<tr data-row=/g) ?? []).length).toBe(3);
     for (const row of rows) {
       const tr = new RegExp(`<tr data-row="${row.id}"[^>]*>(.*?)</tr>`).exec(html)?.[1] ?? "";
-      expect(plain(tr), row.id).toBe(`|${row.labels.th.group}|${row.elements.join(", ")}|${row.labels.th.role}|`);
+      expect(cells(tr), row.id).toBe(`|${row.labels.th.group}|${row.elements.join(", ")}|${row.labels.th.role}|`);
     }
   });
 
