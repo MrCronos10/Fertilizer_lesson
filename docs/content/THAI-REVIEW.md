@@ -234,3 +234,7 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U64 | `npkNameN` | `ไนโตรเจน` | N label name. **Not in the pamphlet or the current site**: the design's word. Agronomic, so it needs your check (D6). |
 | U65 | `npkNameP` | `ฟอสฟอรัส` | P label name. Same caveat as U64. |
 | U66 | `npkNameK` | `โพแทสเซียม` | K label name. Same caveat as U64. |
+| U67 | `chapterBack` | `หน้าแรก` | Chapter 1 hero: pill back to the home page ("Home"). From the Chapter-01 artboards. |
+| U68 | `chapterWord` | `บทที่` | "Chapter", used before the number in the badge and the progress line. |
+| U69 | `chapterFrom` | `จาก` | "of", for "บทที่ 1 จาก 7". |
+| U70 | `tierLegend` | `ระดับแหล่งข้อมูลในบทนี้` | Label before the tier badges in the sources bar: "source tiers in this chapter". |
