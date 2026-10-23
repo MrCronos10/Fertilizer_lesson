@@ -93,6 +93,12 @@ export default async function ChapterPage({ params }: { params: Params }) {
             {ui.nextChapter}: {next.frontmatter.title}
           </Link>
         ) : null}
+        {/* The Chapter-01 artboards' primary button: on into the deficiency explorer (T-041). */}
+        {redesigned ? (
+          <Link className="chapter-explore" href={`/${locale}/${chapterSlug(chapter.frontmatter.chapter)}/deficiency`}>
+            {ui.defExplore}
+          </Link>
+        ) : null}
       </nav>
     </article>
   );

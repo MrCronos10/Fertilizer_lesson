@@ -142,6 +142,8 @@ export const UI_KEYS = [
   "defPickOld",
   "defPickYoung",
   "defHint",
+  /** Chapter 1's button into the deficiency explorer (T-041), from the Chapter-01 artboards' footer. */
+  "defExplore",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

@@ -870,6 +870,19 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Tab order below 75em:** the sources box (in the left column in the markup) is drawn after the rules; its links come before the answer's in tab order. Kept, so landscape's columns stay simple; noted for the iPad check.
   - **Not verified:** a real iPad in portrait; a real phone.
 
+### T-041: Chapter 1 — the way into the deficiency explorer
+- Status: done
+- Depends on: T-040
+- Goal: The Chapter-01 artboards' footer button, "สำรวจอาการขาดธาตุแบบ 3 มิติ", from chapter 1 to `/th/ch01/deficiency`.
+- Acceptance criteria:
+  - [x] The button is the footer's primary one (brand fill, 16 px bold, 22 px sides, 48 px tall, a mask arrow), last in the row; no other chapter has it
+  - [x] It opens the explorer, and Back returns to chapter 1
+  - [x] Chapter 1's 3D plant to the explorer's and back never holds two live WebGL contexts (D16)
+- **Verified:** typecheck, lint, 902 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1123 passed, 0 failed (`e2e/chapter1-explore-link.spec.ts` is new); canary 60 of 60; Lighthouse (3 runs, median): every route 96 or more, accessibility 100.
+  - **Departure: the next chapter stays.** The artboards' footer holds only the contents and the explorer button. The link to chapter 2 is kept, as an outlined button (it was the primary one since T-034), so the chapter sequence is not lost. From 40em the footer is one wrapping row and the explorer button keeps its words on one line at the right end.
+  - **New Thai: U82** in `docs/content/THAI-REVIEW.md`, from the artboards.
+  - **Not verified:** a real iPad.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)
