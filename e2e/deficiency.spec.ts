@@ -212,7 +212,12 @@ test("without WebGL the choice, the panel and the table all still work, and a no
   const group = await open(page);
   await expect(page.locator(".scene3d-fallback")).toHaveText("เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน");
   await expect(page.locator("canvas")).toHaveCount(0);
+  // The artboard's flat plant stands in for the 3D one (T-032) and follows the choice.
+  const flat = page.getByRole("img", { name: "ภาพต้นพืช แสดงตำแหน่งใบแก่ด้านล่างและใบอ่อนหรือยอดด้านบน" });
+  await expect(flat).toBeVisible();
+  await expect(flat).toHaveAttribute("data-leaf", "old");
   await group.getByLabel("ใบอ่อน/ยอด", { exact: true }).check();
+  await expect(flat).toHaveAttribute("data-leaf", "young");
   await expect(page.locator('.def-panel [data-row="b"] dd')).toHaveText(ROWS.b![1]);
   await expect(page.locator("table tbody tr")).not.toHaveCount(0);
 });

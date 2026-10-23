@@ -3,7 +3,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import { Box3, Vector3, type Group, type Mesh } from "three";
-import { ZOOM, clampPan, clampZoom, dragYaw, isTap, pinchZoom } from "@/lib/gestures";
+import { ZOOM, cameraDistance, clampPan, clampZoom, dragYaw, isTap, pinchZoom } from "@/lib/gestures";
 import type { LeafGroupId } from "@/lib/deficiency";
 
 type Props = {
@@ -128,7 +128,7 @@ export function PlantScene({ animate, selected, onSelect }: Props) {
       root.current.rotation.y = v.yaw;
       root.current.position.set(v.panX, v.panY, 0);
     }
-    camera.position.z = v.zoom;
+    camera.position.z = cameraDistance(v.zoom, state.size.width / state.size.height);
 
     // Publish where each tap target sits on screen so e2e can check size and aim at it.
     const canvas = state.gl.domElement;

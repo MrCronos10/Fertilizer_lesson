@@ -132,6 +132,8 @@ export const UI_KEYS = [
   "moreUnit",
   /** The answer card's badge when the pamphlet gives no leaf position (T-030), from the Chapter-01 artboards. */
   "defBadgeNone",
+  /** The flat plant's accessible name, when it stands in for the 3D one (T-032), from the Chapter-01 artboards. */
+  "defFlatLabel",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { RULE_PAGE, type LeafGroup, type LeafGroupId } from "@/lib/deficiency";
 import type { UiStrings } from "@/lib/ui";
 import { NearViewport } from "./NearViewport";
+import { FlatPlant } from "./FlatPlant";
 import { PlantExplorer } from "./PlantExplorer";
 
 /**
@@ -44,7 +45,12 @@ export function DeficiencyExplorer({ ui, groups }: { ui: UiStrings; groups: read
           <NearViewport placeholder={<div className="scene3d" aria-hidden="true" />}>
             <PlantExplorer
               label={ui.defSceneLabel}
-              fallback={<p className="scene3d-fallback">{ui.defNo3d}</p>}
+              fallback={
+                <figure className="scene3d-fallback flat-fallback">
+                  <FlatPlant selected={selected} label={ui.defFlatLabel} />
+                  <figcaption>{ui.defNo3d}</figcaption>
+                </figure>
+              }
               selected={selected}
               onSelect={setSelected}
             />
