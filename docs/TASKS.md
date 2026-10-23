@@ -971,13 +971,23 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad.
 
 ### T-046: Chapter 3 calculator to the artboard
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-044
 - Goal: "คำนวณว่าต้องใช้ปุ๋ยกี่กิโลกรัมต่อไร่": the target rate, the grade on the bag (N, P₂O₅, K₂O) and "คิดจากธาตุใด", restyled to the artboards. The arithmetic and its source are unchanged; the result keeps its "starting point, test the soil" framing.
 - Acceptance criteria:
-  - [ ] Sizes, colours and layout as drawn at 1366 and 834; works on a phone
-  - [ ] Labelled fields, oxide units only, errors announced; 44 px targets
-  - [ ] Its existing calculation specs pass unchanged
+  - [x] Sizes, colours and layout as drawn at 1366 and 834; works on a phone
+  - [x] Labelled fields, oxide units only, errors announced; 44 px targets
+  - [x] Its existing calculation specs pass unchanged
+- **Verified:** typecheck, lint, 909 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1171 passed, 0 failed (`e2e/calc-redesign.spec.ts` is new; one iCloud copy of a spec also ran and was deleted before the commit); the chapter 3 load test 30 of 30; canary 60 of 60; Lighthouse (3 runs): chapter 3 performance 99, accessibility 100.
+  - **The artboards' card:**
+    - **Card:** a soft panel, padding 20, radius 14, with a 21 px title.
+    - **Fields and choices:** fields and choices 48 px tall with a 10 px radius; field groups as white boxes with a 14 px legend; the three grade fields on one row at every width.
+    - **Selection and result:** the chosen element marked by a brand border and an inset ring (not by colour alone); the result as a card with a 5 px brand edge.
+  - **Colours** through the site's tokens, as in chapter 1, so the calculator follows the dark theme (checked in a dark screenshot).
+  - **Departures, all deliberate:**
+    - **Calculation:** the calculator still calculates on its button, and keeps its order (element, rate, grade) and its pick-a-published-grade menu. The artboard recalculates live in another order and has no menu. This keeps the calculation and its specs unchanged, as the ticket asks.
+    - **Picker font:** the native picker keeps the system font, the T-014 load-stall rule. A test pins it.
+  - **Not verified:** a real iPad.
 
 ### T-047: Chapter 2 redesign
 - Status: ready (Sonnet)
