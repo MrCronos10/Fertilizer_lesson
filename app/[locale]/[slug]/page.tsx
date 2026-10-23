@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./chapter1.css";
+import "./chapter.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChapterBody } from "@/components/ChapterBody";
@@ -7,6 +7,7 @@ import { ChapterHero } from "@/components/ChapterHero";
 import { citationEntry } from "@/lib/citations";
 import { Sources } from "@/components/Citations";
 import { chapterSlug, readChapters } from "@/lib/content";
+import { EXPLORER_CHAPTER } from "@/lib/deficiency";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
 import type { Tier } from "@/lib/sources";
 import { TierBadge } from "@/components/TierBadge";
@@ -44,7 +45,8 @@ export default async function ChapterPage({ params }: { params: Params }) {
   const ui = readUiStrings(locale as "th");
   const { chapter, previous, next, total } = found;
 
-  const redesigned = chapter.frontmatter.chapter === 1;
+  const redesigned = chapter.frontmatter.redesign;
+  const explorer = redesigned && chapter.frontmatter.chapter === EXPLORER_CHAPTER;
   const tiers = TIERS.filter((t) => chapter.frontmatter.citations.some((id) => citationEntry(id).tier === t));
   const sourcesBar = redesigned ? (
     <div className="jump-sources">
@@ -89,13 +91,18 @@ export default async function ChapterPage({ params }: { params: Params }) {
         ) : null}
         <Link href={`/${locale}`}>{ui.contents}</Link>
         {next ? (
-          <Link rel="next" href={`/${locale}/${chapterSlug(next.frontmatter.chapter)}`}>
+          // The primary button, unless the explorer's is there (T-041, T-043).
+          <Link
+            rel="next"
+            className={redesigned && !explorer ? "chapter-primary" : undefined}
+            href={`/${locale}/${chapterSlug(next.frontmatter.chapter)}`}
+          >
             {ui.nextChapter}: {next.frontmatter.title}
           </Link>
         ) : null}
         {/* The Chapter-01 artboards' primary button: on into the deficiency explorer (T-041). */}
-        {redesigned ? (
-          <Link className="chapter-explore" href={`/${locale}/${chapterSlug(chapter.frontmatter.chapter)}/deficiency`}>
+        {explorer ? (
+          <Link className="chapter-explore chapter-primary" href={`/${locale}/${chapterSlug(chapter.frontmatter.chapter)}/deficiency`}>
             {ui.defExplore}
           </Link>
         ) : null}

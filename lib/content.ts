@@ -33,6 +33,8 @@ export interface ChapterFrontmatter {
   readonly tables: readonly string[];
   /** False for the two shared table-only chapters, which have no Thai prose. */
   readonly proseFromSource: boolean;
+  /** The chapter uses the redesign (T-043): the hero or header band, cards, the sources card. Absent means false. */
+  readonly redesign: boolean;
   readonly quiz?: readonly QuizItem[];
 }
 
@@ -72,6 +74,7 @@ function validate(file: string, value: unknown): ChapterFrontmatter {
   if (typeof fm["chapter"] !== "number" || !Number.isInteger(fm["chapter"]))
     fail(file, "chapter must be an integer");
   if (typeof fm["proseFromSource"] !== "boolean") fail(file, "proseFromSource must be a boolean");
+  if (fm["redesign"] !== undefined && typeof fm["redesign"] !== "boolean") fail(file, "redesign must be a boolean");
 
   const sourcePages = fm["sourcePages"];
   if (
@@ -108,6 +111,7 @@ function validate(file: string, value: unknown): ChapterFrontmatter {
     citations: strList("citations"),
     tables: strList("tables"),
     proseFromSource: fm["proseFromSource"],
+    redesign: fm["redesign"] === true,
     ...(quiz ? { quiz: quiz as readonly QuizItem[] } : {}),
   };
 }
