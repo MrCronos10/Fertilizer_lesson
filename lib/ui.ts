@@ -130,6 +130,8 @@ export const UI_KEYS = [
   "sourceLabel",
   "moreFrom",
   "moreUnit",
+  /** The answer card's badge when the pamphlet gives no leaf position (T-030), from the Chapter-01 artboards. */
+  "defBadgeNone",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

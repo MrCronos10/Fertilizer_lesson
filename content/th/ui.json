@@ -105,5 +105,6 @@
   "tierLegend": "ระดับแหล่งข้อมูลในบทนี้",
   "sourceLabel": "ที่มา",
   "moreFrom": "และอีก",
-  "moreUnit": "แหล่ง"
+  "moreUnit": "แหล่ง",
+  "defBadgeNone": "ไม่ระบุ"
 }
