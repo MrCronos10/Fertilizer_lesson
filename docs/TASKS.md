@@ -761,6 +761,17 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: U75** (`defFlatLabel`), copied from the artboard.
   - **Not verified:** a real iPad (WebGL on its GPU, two-finger gestures); VoiceOver on the flat plant.
 
+### T-033: Chapter 1 redesign — final verification and handover
+- Status: done (the real-iPad look, the Thai review and the code review's outcome are in T-034)
+- Depends on: T-028–T-032
+- Goal: One honest record of the finished Chapter 1 redesign (T-028–T-032): what was checked, what was not, what is the owner's.
+- **Verified (main at the merge of T-032):** typecheck, lint, 881 unit tests, production build; WebKit e2e at iPad portrait, iPad landscape and Mac: 1002 passed, 0 failed; load-stall canary 60 of 60; Lighthouse (median of 3, Chrome): chapter 1 performance 98 and accessibility 100; every route within budget (performance 96–99, accessibility 100, LCP on Fast 4G 1.35–1.57 s).
+  - **Preview (iPad):** https://fertilizer-lesson-o5ze4sv87-kuypavthai-4289s-projects.vercel.app/th/ch01
+  - **The WebKit load stall came back on every ticket that touched chapter 1** (T-028: inline `<svg>` in links; T-029: `display: inline-flex` on the source-line links). Each time `e2e/fonts-load.spec.ts` caught it and bisecting named the cause. Rule for the rest of the redesign: no inline `<svg>` and no `inline-flex` on links in a chapter; draw icons as CSS masks; run the canary with `--repeat-each=20` after any such change.
+  - **Owner's list:** (1) look at the preview on the iPad (landscape and portrait) and a phone; (2) Thai strings U50–U75 in `docs/content/THAI-REVIEW.md`, especially U64–U66 (nutrient names, not in the pamphlet); (3) the Department of Agriculture source line moved from after the first sentence to under the paragraph, as the artboard draws it; say if it should be tied to the first sentence only; (4) the phone layout is derived, not drawn.
+  - **Left out on purpose:** the "สำรวจอาการขาดธาตุแบบ 3 มิติ" link (its screen does not exist yet); the header's and the safety strip's "sources" links (no all-sources page yet); the artboard's "PLACEHOLDER" source row and its "no leaf position" wording (the site's own text stays).
+  - **Not verified:** a real iPad or phone; VoiceOver on the new header, cards, picker and flat plant; two-finger gestures on a real touch screen.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)
