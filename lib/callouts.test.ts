@@ -24,6 +24,21 @@ describe("placeCallout", () => {
     expect(young).toEqual({ x1: 629, y1: 181, x2: 582, y2: 190 });
   });
 
+  it("in the portrait frame (738 wide) lands on Deficiency-Portrait.dc.html's numbers, the same picture scaled", () => {
+    const frame = { w: 738, h: 520 };
+    const near = (got: Record<string, number>, want: Record<string, number>) =>
+      Object.entries(want).forEach(([k, v]) => expect(Math.abs(got[k]! - v), k).toBeLessThanOrEqual(1));
+    const old = placeCallout("old", { x: 258, y: 356 }, frame, { w: 152, h: 62 });
+    expect(old.hotspot).toEqual({ x: 222, y: 320, size: 72 });
+    near(old.label, { x: 24, y: 328 });
+    const young = placeCallout("young", { x: 452, y: 176 }, frame, { w: 160, h: 62 });
+    expect(young.hotspot).toEqual({ x: 418, y: 142, size: 68 });
+    near(young.label, { x: 562, y: 118 });
+    // The artboard's lines, M176 352 L220 354 and M562 162 L520 170, drawn 1:1 in this frame.
+    near(old.leader, { x1: 176, y1: 352, x2: 220, y2: 354 });
+    near(young.leader, { x1: 562, y1: 162, x2: 520, y2: 170 });
+  });
+
   it("follows the anchor: a turned or panned plant moves the hotspot, label and leader together", () => {
     const a = placeCallout("old", { x: 289, y: 398 }, FRAME, LABEL);
     const b = placeCallout("old", { x: 319, y: 378 }, FRAME, LABEL);

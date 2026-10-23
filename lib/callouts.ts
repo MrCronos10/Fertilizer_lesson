@@ -16,6 +16,8 @@ export type Callout = {
 };
 
 export const CALLOUT = {
+  /** The landscape artboard's frame width, which the offsets below are measured in. */
+  frameWidth: 826,
   /** No label comes closer than this to the frame's edge. */
   margin: 12,
   old: { size: 72, labelRight: -92, labelTop: -31, leaderFromLabel: 27, leaderEnd: { dx: -43, dy: -2 } },
@@ -24,27 +26,32 @@ export const CALLOUT = {
 
 const clamp = (n: number, lo: number, hi: number) => Math.min(Math.max(n, lo), Math.max(lo, hi));
 
+/**
+ * Deficiency-Portrait.dc.html draws the same picture at 738 wide: every offset is the landscape one scaled by 738/826
+ * (within a pixel), while the hotspots keep their size. So the offsets scale with the frame and the hotspots do not.
+ */
 export function placeCallout(side: CalloutSide, anchor: Point, frame: Size, label: Size): Callout {
   const { margin } = CALLOUT;
+  const k = frame.w / CALLOUT.frameWidth;
   const size = CALLOUT[side].size;
   const hotspot = {
     x: clamp(anchor.x - size / 2, 0, frame.w - size),
     y: clamp(anchor.y - size / 2, 0, frame.h - size),
     size,
   };
-  const rawX = side === "old" ? anchor.x + CALLOUT.old.labelRight - label.w : anchor.x + CALLOUT.young.labelLeft;
+  const rawX = side === "old" ? anchor.x + k * CALLOUT.old.labelRight - label.w : anchor.x + k * CALLOUT.young.labelLeft;
   const at = {
     x: clamp(rawX, margin, frame.w - label.w - margin),
-    y: clamp(anchor.y + CALLOUT[side].labelTop, margin, frame.h - label.h - margin),
+    y: clamp(anchor.y + k * CALLOUT[side].labelTop, margin, frame.h - label.h - margin),
   };
   // The artboard's two lines, M176 352 L220 354 and M562 162 L520 170 at 826/738: from the label's edge to a point
   // fixed to the hotspot (the old one 7 px short of its rim; the young one stops well short, as drawn).
   const end = CALLOUT[side].leaderEnd;
   const leader = {
     x1: side === "old" ? at.x + label.w : at.x,
-    y1: at.y + CALLOUT[side].leaderFromLabel,
-    x2: anchor.x + end.dx,
-    y2: anchor.y + end.dy,
+    y1: at.y + k * CALLOUT[side].leaderFromLabel,
+    x2: anchor.x + k * end.dx,
+    y2: anchor.y + k * end.dy,
   };
   return { hotspot, label: at, leader };
 }

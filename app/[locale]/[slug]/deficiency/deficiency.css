@@ -1,4 +1,5 @@
-/* The deficiency explorer page (T-037), from Deficiency-Landscape.dc.html (1366). Portrait and phone are T-040.
+/* The deficiency explorer page (T-037), from Deficiency-Landscape.dc.html (1366) and Deficiency-Portrait.dc.html (834,
+   T-040); mobile-first, with only min-width 40em and 75em queries.
    Every selector sits under .def-page (lib/deficiency.test.ts pins that). Links here are plain blocks and their
    arrows are pseudo-element masks: an inline <svg>, or display: inline-flex, on a link made WebKit leave `load`
    unfired on chapter 1 (T-028, T-029). */
@@ -62,30 +63,70 @@
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9h11M9.5 4.5L14 9l-4.5 4.5'/%3E%3C/svg%3E");
 }
 
-/* ---- Layout: one column; picture and picker on the left and the answer on the right from 75em -------------- */
+/* ---- Layout (T-040) ---------------------------------------------------------------------------------------------
+   Below 75em the two columns dissolve (display: contents) and every block takes its place in one grid, in the
+   portrait artboard's order: picture, picker, answer, then the sources beside the 282 px soil-test strip (40em up;
+   one column on a phone). The portrait artboard leaves out the rules panel and the next link; they stay, after the
+   answer and at the end. From 75em the left column (picture, picker, sources) and the right (answer, rules, strip,
+   next) return. */
 .def-page .def-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "picture" "choice" "answer" "rules" "sources" "strip" "next";
   gap: 18px;
   align-items: start;
 }
 .def-page .def-col {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 18px;
-  min-width: 0;
+  display: contents;
+}
+.def-page .def-picture { grid-area: picture; }
+.def-page .def-choice { grid-area: choice; }
+.def-page .def-answer-wrap { grid-area: answer; }
+.def-page .def-rules { grid-area: rules; }
+.def-page .def-sources { grid-area: sources; }
+.def-page .def-strip { grid-area: strip; }
+.def-page .def-next { grid-area: next; }
+@media (min-width: 40em) {
+  /* The portrait artboard's 48 px sides: the site's 16 px gutter plus 32, so the picture is 738 wide at 834. */
+  .def-page .def-layout {
+    padding-inline: 32px;
+    grid-template-columns: minmax(0, 1fr) 282px;
+    grid-template-areas: "picture picture" "choice choice" "answer answer" "rules rules" "sources strip" "next next";
+    column-gap: 16px;
+  }
+  .def-page .def-sources,
+  .def-page .def-strip {
+    align-self: stretch;
+  }
 }
 @media (min-width: 75em) {
   .def-page .def-layout {
     grid-template-columns: minmax(0, 826px) minmax(0, 1fr);
+    grid-template-areas: none;
+    padding-inline: 0;
     gap: 32px;
     padding-block-start: 6px;
+  }
+  .def-page .def-col {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    min-width: 0;
+  }
+  .def-page .def-col > * {
+    grid-area: auto;
+  }
+  .def-page .def-sources,
+  .def-page .def-strip {
+    align-self: auto;
   }
 }
 
 /* ---- The picture: the 3D plant (T-038), the flat plant without WebGL ------------------------------------------- */
 /* The artboard's frame is 826 x 582 (738 x 520 in portrait, the same shape). The canvas is transparent, so the frame
    carries the artboard's air gradient; the soil is drawn in the scene. */
+/* There is no phone artboard; the phone keeps the artboards' shape. A square frame was tried (T-040): it moved the
+   answer to the fold on Lighthouse's phone, where it painted late, and the page's score fell from 96 to 85. */
 .def-page .def-picture {
   position: relative;
   aspect-ratio: 826 / 582;
@@ -209,23 +250,24 @@
   border: 4px solid var(--spot);
   background: color-mix(in srgb, var(--spot) 20%, transparent);
 }
+/* Portrait sizes (Deficiency-Portrait.dc.html); the landscape artboard's are from 75em, below. */
 .def-page .def-callout {
   box-sizing: border-box;
-  width: 170px;
-  padding: 10px 13px;
+  width: 152px;
+  padding: 9px 12px;
   border-radius: 12px;
   background: rgba(255, 255, 252, 0.96);
   border: 1px solid rgba(27, 42, 34, 0.3);
   box-shadow: 0 6px 16px rgba(27, 42, 34, 0.16);
 }
 .def-page .def-callout-young {
-  width: 179px;
+  width: 160px;
 }
 .def-page .def-callout-name {
   display: block;
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
   color: var(--spot);
 }
@@ -246,7 +288,7 @@
 .def-page .def-hint {
   position: absolute;
   left: 50%;
-  bottom: 14px;
+  bottom: 12px;
   margin: 0;
   transform: translateX(-50%);
   max-width: calc(100% - 24px);
@@ -269,6 +311,22 @@
   -webkit-mask: var(--icon) center / contain no-repeat;
   mask: var(--icon) center / contain no-repeat;
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 8h12M5 5L2 8l3 3M11 5l3 3-3 3'/%3E%3C/svg%3E");
+}
+
+@media (min-width: 75em) {
+  .def-page .def-callout {
+    width: 170px;
+    padding: 10px 13px;
+  }
+  .def-page .def-callout-young {
+    width: 179px;
+  }
+  .def-page .def-callout-name {
+    font-size: 16px;
+  }
+  .def-page .def-hint {
+    bottom: 14px;
+  }
 }
 
 /* ---- The picker -------------------------------------------------------------------------------------------- */
@@ -471,7 +529,7 @@
   border-radius: 12px;
   background: var(--warn-bg);
   border-inline-start: 4px solid var(--warn);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.75;
   font-weight: 600;
   color: var(--warn);
@@ -494,11 +552,20 @@
 /* ---- Sources ------------------------------------------------------------------------------------------------- */
 .def-page .def-sources {
   box-sizing: border-box;
-  padding: 14px 18px;
+  padding: 14px 16px;
   border-radius: 12px;
   background: var(--soft);
   border: 1px solid var(--line);
   scroll-margin-top: calc(var(--tap) + 0.5rem);
+}
+/* The portrait artboard's strip and sources box are a touch tighter than the landscape one's. */
+@media (min-width: 75em) {
+  .def-page .def-strip {
+    font-size: 14px;
+  }
+  .def-page .def-sources {
+    padding-inline: 18px;
+  }
 }
 .def-page .def-sources h2 {
   margin: 0 0 8px;

@@ -854,6 +854,22 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: U79–U81** in `docs/content/THAI-REVIEW.md`, from the artboard.
   - **Not verified:** a real iPad; VoiceOver on the hotspots.
 
+### T-040: Deficiency explorer — portrait (834) and phone
+- Status: done
+- Depends on: T-039
+- Goal: `Deficiency-Portrait.dc.html`: one column in the order picture, picker, answer (with its source line), then the sources beside the soil-test strip; on a phone, one column. The rules panel and the next link, which the portrait artboard leaves out, stay.
+- Acceptance criteria:
+  - [x] At 834 the picture is 738 x 520 at the artboard's 48 px sides; the strip is 282 px beside the sources, the same height
+  - [x] The callouts use the portrait artboard's sizes (labels 152 and 160 px, 15 px names) and land on its numbers
+  - [x] On a phone: one column in the same order, hotspots at 44 px or more inside the frame, labels and hint hidden, no sideways scroll at 390 or 320
+  - [x] Landscape unchanged
+- **Verified:** typecheck, lint, 902 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1111 passed, 0 failed; canary 60 of 60; Lighthouse (3 runs, median): the page performance 97, accessibility 100; chapter 1 98, 100.
+  - **How:** below 75em the two columns are `display: contents` and every block takes a named grid area; from 75em the columns return. Only min-width 40em and 75em queries, portrait values as the base and landscape's from 75em.
+  - **One function for both artboards:** the portrait picture is the landscape one scaled by 738/826 (every label and leader offset agrees within a pixel; the hotspots keep their size), so `placeCallout` scales its offsets by the frame's width. Unit-tested against both artboards' numbers.
+  - **Tried and dropped: a square picture on phones.** It made the plant bigger, but on Lighthouse's phone it moved the answer to the fold, where it painted late; the page's score fell from 97 to 85 (median of 3). The phone keeps the artboards' shape.
+  - **Tab order below 75em:** the sources box (in the left column in the markup) is drawn after the rules; its links come before the answer's in tab order. Kept, so landscape's columns stay simple; noted for the iPad check.
+  - **Not verified:** a real iPad in portrait; a real phone.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)
