@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { UiStrings } from "@/lib/ui";
+import { SourcesLink } from "./SourcesLink";
 import { ThemeToggle } from "./ThemeToggle";
 
 /**
  * The site header from the redesign (Main, Home-Portrait, Home-Phone, Home-Night). Shared by every
  * route, so the contents link points at the home page's path. The design's sources link is
- * left out: it points at an all-sources page the site does not have yet.
- * TODO(T-027): add the sources link once an all-sources page exists.
+ * shown on chapter pages only, where there is a sources section to jump to (T-035).
+ * TODO: on the home page it needs an all-sources page, which the site does not have yet.
  */
 export function SiteHeader({ locale, ui }: { locale: string; ui: UiStrings }) {
   return (
@@ -23,6 +24,7 @@ export function SiteHeader({ locale, ui }: { locale: string; ui: UiStrings }) {
         <Link className="site-link" href={`/${locale}#chapters`}>
           {ui.contents}
         </Link>
+        <SourcesLink label={ui.sources} />
         <ThemeToggle toDark={ui.themeToDark} toLight={ui.themeToLight} />
       </div>
     </header>

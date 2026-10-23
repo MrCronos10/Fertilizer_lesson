@@ -773,6 +773,19 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Not verified:** a real iPad or phone; VoiceOver on the new header, cards, picker and flat plant; two-finger gestures on a real touch screen.
   - **Correction (found by the code review):** the T-033 commit also carried an iCloud copy, `components/FlatPlant 2.tsx` (a bulk `git add`); `lib/hygiene.test.ts` failed on `main` from that commit until the copy was removed. I had not rerun the unit tests after that commit. Removed in the next merge; 881 unit tests pass again.
 
+### T-035: Sources link in the header (code-review follow-up)
+- Status: done
+- Depends on: T-033
+- Goal: The artboards' "ที่มาของข้อมูล" header link, which the code review found left out without the owner's approval. Taken with the owner: show it where it works.
+- Acceptance criteria:
+  - [x] On every chapter page the header (from 40em up, as the artboards show) has the link, 44 px, landing on the sources section
+  - [x] The home page has no such link (it has no sources section); it comes back and goes on client-side navigation
+  - [x] The header still fits 320–834 px without sideways scroll
+- **Verified:** typecheck, lint, 882 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1014 passed, 0 failed (`e2e/sources-link.spec.ts` adds 12); canary 60 of 60.
+  - **Still left out:** the home page's safety-strip sources link, until an all-sources page exists (TODO in `app/[locale]/page.tsx`). The phone header shows only the logo and the theme button, as the phone artboards do; chapter pages keep their "jump to sources" bar there.
+  - **A slip, caught by an existing guard:** my first comment in the new component quoted the Thai label, which `lib/shell.test.ts` forbids in components; reworded.
+  - **New Thai: none** (reuses `sources`).
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)
