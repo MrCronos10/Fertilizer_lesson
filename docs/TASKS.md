@@ -922,14 +922,17 @@ Chapters 2–6 take the redesign so the whole lesson matches the home page and c
 Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
 
 ### T-043: Turn on the redesign per chapter
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-042
 - Goal: Whether a chapter uses the redesign is said by the chapter itself, not by a "chapter 1" check in the page. Chapter 1's stylesheet and its guard tests become the shared redesigned-chapter stylesheet. Chapter 1 looks exactly as it does now.
 - Acceptance criteria:
-  - [ ] A chapter opts into the redesign in its own front matter; chapter 1 opts in, chapters 2–7 do not yet
-  - [ ] The stylesheet and its guards (scoping, min-width-only queries, unused properties) are named for every redesigned chapter, not chapter 1
-  - [ ] The footer makes the next chapter the primary button when the chapter has no explorer button (chapter 1 keeps the explorer as primary)
-  - [ ] Chapter 1 is unchanged: its e2e specs, the canary and Lighthouse pass as before
+  - [x] A chapter opts into the redesign in its own front matter; chapter 1 opts in, chapters 2–7 do not yet
+  - [x] The stylesheet and its guards (scoping, min-width-only queries, unused properties) are named for every redesigned chapter, not chapter 1
+  - [x] The footer makes the next chapter the primary button when the chapter has no explorer button (chapter 1 keeps the explorer as primary)
+  - [x] Chapter 1 is unchanged: its e2e specs, the canary and Lighthouse pass as before
+- **Verified:** typecheck, lint, 904 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1123 passed, 0 failed; canary 60 of 60; Lighthouse (3 runs): every route 96 or more, accessibility 100.
+  - **How:** `redesign: true` in a chapter's front matter (validated: optional, a boolean); the page reads it. The explorer button shows only on `EXPLORER_CHAPTER`, one constant shared with the explorer route. `chapter1.css` is now `chapter.css`, and its guards moved to `lib/chapter-style.test.ts`.
+  - **The footer:** one `chapter-primary` class, on the explorer button in chapter 1 and on the next-chapter link elsewhere; every footer link is `display: flex`, not the global `inline-flex`. A chapter other than 1 first shows it in T-044, whose e2e checks it.
 
 ### T-044: Short chapter header, and chapter 3's page shell
 - Status: ready (Opus)

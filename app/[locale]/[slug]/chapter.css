@@ -1,9 +1,10 @@
-/* Chapter 1 (T-028 to T-032), from Chapter-01-Landscape.dc.html (1366) and Chapter-01-Portrait.dc.html (834). The phone
-   has no artboard: it is the portrait one reflowed (T-031).
+/* The redesigned chapters (T-043): every chapter whose front matter says `redesign: true`. Written for chapter 1
+   (T-028 to T-032), from Chapter-01-Landscape.dc.html (1366) and Chapter-01-Portrait.dc.html (834); the phone has no
+   artboard: it is the portrait one reflowed (T-031).
 
    Mobile first. The custom properties on .chapter-redesign hold one value per layout: the phone's here, the portrait
    artboard's from 40em, the landscape artboard's from 75em. The rules below read them and are written once.
-   Every selector sits under .chapter-redesign (lib/chapter1.test.ts pins that), so none of this reaches a chapter that
+   Every selector sits under .chapter-redesign (lib/chapter-style.test.ts pins that), so none of this reaches a chapter that
    has not been redesigned. */
 
 .chapter-redesign {
@@ -605,6 +606,8 @@
   }
 }
 .chapter-redesign .chapter-nav a {
+  display: flex; /* not the global inline-flex: inline-flex on a link is the WebKit load-stall trigger (T-029) */
+  align-items: center;
   box-sizing: border-box;
   min-height: 48px;
   padding: 0 18px;
@@ -616,8 +619,8 @@
   font-weight: 600;
   text-decoration: none;
 }
-.chapter-redesign .chapter-nav .chapter-explore {
-  display: flex; /* not the global inline-flex: inline-flex on a link is the WebKit load-stall trigger (T-029) */
+/* One primary button per footer: the explorer's on chapter 1, the next chapter's elsewhere (T-043). */
+.chapter-redesign .chapter-nav .chapter-primary {
   padding-inline: 22px;
   background: var(--brand);
   border-color: var(--brand);
@@ -627,7 +630,7 @@
   font-size: 16px;
 }
 /* The artboard's arrow, a mask (an inline <svg> in a link made WebKit leave `load` unfired, T-028). */
-.chapter-redesign .chapter-nav .chapter-explore::after {
+.chapter-redesign .chapter-nav .chapter-primary::after {
   content: "";
   flex: none;
   width: 17px;

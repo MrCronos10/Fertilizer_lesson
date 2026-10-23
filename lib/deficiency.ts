@@ -22,6 +22,9 @@ export interface LeafGroup {
   readonly entries: readonly DeficiencyEntry[];
 }
 
+/** The chapter whose symptom lines the explorer page shows (pamphlet p2 and p3); it alone links to the page (T-041). */
+export const EXPLORER_CHAPTER = 1;
+
 /** The mobility sentence (old vs young leaves) is on p2; the symptom lines it sorts are on p3. */
 export const RULE_PAGE = 2;
 

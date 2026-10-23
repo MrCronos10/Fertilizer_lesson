@@ -5,13 +5,13 @@ import { DefPageExplorer } from "@/components/DefPageExplorer";
 import { TierBadge } from "@/components/TierBadge";
 import { citationEntry } from "@/lib/citations";
 import { chapterSlug } from "@/lib/content";
-import { RULE_PAGE, deficiencyGroups, ruleScope } from "@/lib/deficiency";
+import { EXPLORER_CHAPTER, RULE_PAGE, deficiencyGroups, ruleScope } from "@/lib/deficiency";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
 import { readUiStrings } from "@/lib/ui";
 import "./deficiency.css";
 
 /** The one chapter this page belongs to: the symptom lines are chapter 1's (pamphlet p2 and p3). */
-const CHAPTER_NUMBER = 1;
+const CHAPTER_NUMBER = EXPLORER_CHAPTER;
 const CHAPTER = chapterSlug(CHAPTER_NUMBER);
 /** Where the next link goes: chapter 3, the bag reader. */
 const NEXT_CHAPTER = chapterSlug(3);

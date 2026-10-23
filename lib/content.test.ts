@@ -289,6 +289,20 @@ describe("frontmatter validation", () => {
     expect(parseChapter("ch03.mdx", `﻿${good}`).frontmatter.chapter).toBe(3);
   });
 
+  it("reads the redesign flag (T-043): optional, false when absent, a boolean when given", () => {
+    const without = good.replace(/^redesign:.*\n/m, "");
+    expect(parseChapter("ch03.mdx", without).frontmatter.redesign).toBe(false);
+    const on = without.replace("proseFromSource:", "redesign: true\nproseFromSource:");
+    expect(parseChapter("ch03.mdx", on).frontmatter.redesign).toBe(true);
+    expect(() => parseChapter("ch03.mdx", without.replace("proseFromSource:", "redesign: yes please\nproseFromSource:"))).toThrow(
+      /redesign must be a boolean/,
+    );
+  });
+
+  it("chapter 1 opts into the redesign", () => {
+    expect(readChapters("th").find((c) => c.frontmatter.chapter === 1)!.frontmatter.redesign).toBe(true);
+  });
+
   it("reports an unknown locale clearly", () => {
     expect(() => readChapters("km")).toThrow(/no content for locale "km"/);
   });
