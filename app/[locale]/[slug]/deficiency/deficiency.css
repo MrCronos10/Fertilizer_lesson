@@ -94,7 +94,11 @@
   background: linear-gradient(#e4ede0, #c8dcc4);
   overflow: hidden;
 }
-.def-page .def-picture > div,
+/* The scene's wrapper is pinned to the frame's inside edges: a 100% height under aspect-ratio came out 2 px over. */
+.def-page .def-picture > div {
+  position: absolute;
+  inset: 0;
+}
 .def-page .def-picture .scene3d {
   width: 100%;
   height: 100%;
@@ -130,6 +134,141 @@
   line-height: 1.7;
   color: #3c4c42;
   text-align: center;
+}
+
+/* ---- Over the picture: hotspots, labels, leader lines and the hint (T-039) ---------------------------------------
+   Placed by DefCallouts from the scene's anchors (a transform from the frame's top left). Hidden until the first
+   anchors arrive, and whenever the flat plant stands in. The colours are the artboard's scene art, like the soil. */
+.def-page .def-callouts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* A phone's picture is too small for the labels and the hint; the hotspots stay, and the picker and answer below
+   say the same. From 40em they show (the rest of the phone layout is T-040). */
+.def-page .def-callout,
+.def-page .def-leader,
+.def-page .def-hint {
+  display: none;
+}
+@media (min-width: 40em) {
+  .def-page .def-callout,
+  .def-page .def-leader {
+    display: block;
+  }
+  .def-page .def-hint {
+    display: flex;
+  }
+}
+/* Not ready: invisible but laid out, so the labels can be measured for the first placement. */
+.def-page .def-callouts:not([data-ready]) {
+  visibility: hidden;
+}
+.def-page .def-picture:has(.scene3d-fallback) .def-callouts {
+  display: none;
+}
+.def-page .def-hotspot,
+.def-page .def-callout,
+.def-page .def-leader {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/* The hotspots' sizes (72 and 68 px) come from CALLOUT in lib/callouts.ts, which also places them. */
+.def-page .def-hotspot {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 999px;
+  border: 3px solid rgba(27, 42, 34, 0.5);
+  background: rgba(255, 255, 252, 0.42);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.def-page .def-hotspot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 14px;
+  height: 14px;
+  margin: auto;
+  border-radius: 999px;
+  background: var(--spot);
+}
+.def-page .def-hotspot-old,
+.def-page .def-callout-old {
+  --spot: #b5541e;
+}
+.def-page .def-hotspot-young,
+.def-page .def-callout-young {
+  --spot: #8456b0;
+}
+/* The artboard's chosen ring: 4 px of the group's colour on a 0.2 wash of it. */
+.def-page .def-hotspot[aria-pressed="true"] {
+  border: 4px solid var(--spot);
+  background: color-mix(in srgb, var(--spot) 20%, transparent);
+}
+.def-page .def-callout {
+  box-sizing: border-box;
+  width: 170px;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: rgba(255, 255, 252, 0.96);
+  border: 1px solid rgba(27, 42, 34, 0.3);
+  box-shadow: 0 6px 16px rgba(27, 42, 34, 0.16);
+}
+.def-page .def-callout-young {
+  width: 179px;
+}
+.def-page .def-callout-name {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--spot);
+}
+.def-page .def-callout-group {
+  display: block;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #3c4c42;
+}
+/* A line drawn as a thin box, turned about its start (an inline <svg> is avoided, see the top of this file). */
+.def-page .def-leader {
+  height: 1.7px;
+  margin-top: -0.85px;
+  background: #1b2a22;
+  opacity: 0.45;
+  transform-origin: 0 50%;
+}
+.def-page .def-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  margin: 0;
+  transform: translateX(-50%);
+  max-width: calc(100% - 24px);
+  width: max-content;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 252, 0.92);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #1b2a22;
+}
+.def-page .def-hint::before {
+  content: "";
+  flex: none;
+  width: 16px;
+  height: 16px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 8h12M5 5L2 8l3 3M11 5l3 3-3 3'/%3E%3C/svg%3E");
 }
 
 /* ---- The picker -------------------------------------------------------------------------------------------- */

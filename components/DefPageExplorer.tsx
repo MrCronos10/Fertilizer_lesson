@@ -1,12 +1,14 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useCallback, useId, useRef, useState, type ReactNode } from "react";
 import { RULE_PAGE, ruleElements, ruleGroupLabel, type LeafGroup, type LeafGroupId } from "@/lib/deficiency";
 import type { Tier } from "@/lib/sources";
 import type { UiStrings } from "@/lib/ui";
+import { DefCallouts, type CalloutsHandle } from "./DefCallouts";
 import { FlatPlant } from "./FlatPlant";
 import { NearViewport } from "./NearViewport";
 import { PlantExplorer } from "./PlantExplorer";
+import type { LeafAnchors } from "./PlantScene";
 import { TierBadge } from "./TierBadge";
 
 /** What the answer panel's source line needs, read on the server so the bibliography stays out of this chunk. */
@@ -17,6 +19,7 @@ export type PageSource = { readonly name: string; readonly tier: Tier; readonly 
  * `left` and `right` are the server-rendered blocks that sit under each column (sources; rules, strip and next
  * link), so the answer can sit in the right column while the picture and picker sit in the left.
  * The picture is the 3D plant (T-038), fetched when it is about to be seen; the flat plant stands in without WebGL.
+ * Over the plant sit its hotspots, labels and drag hint (T-039), placed from where the scene says the leaves are.
  */
 export function DefPageExplorer({
   ui,
@@ -34,6 +37,8 @@ export function DefPageExplorer({
   const name = useId();
   const [selected, setSelected] = useState<LeafGroupId>("old");
   const group = groups.find((g) => g.id === selected) ?? groups[0];
+  const callouts = useRef<CalloutsHandle>(null);
+  const onAnchors = useCallback((a: LeafAnchors) => callouts.current?.place(a), []);
 
   const label: Record<LeafGroupId, string> = { old: ui.defOld, young: ui.defYoung, unplaced: ui.defBadgeNone };
   const choice: Record<LeafGroupId, string> = { old: ui.defOld, young: ui.defYoung, unplaced: ui.defUnplaced };
@@ -62,8 +67,16 @@ export function DefPageExplorer({
               selected={selected}
               onSelect={setSelected}
               stage="page"
+              onAnchors={onAnchors}
             />
           </NearViewport>
+          <DefCallouts
+            ref={callouts}
+            ui={ui}
+            selected={selected}
+            onSelect={setSelected}
+            groupLabel={{ old: groupLabel.old, young: groupLabel.young }}
+          />
         </div>
         <fieldset className="def-choice">
           <legend>{ui.defLegend}</legend>

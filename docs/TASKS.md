@@ -835,6 +835,25 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Scene colours** (soil, air, halo) stay in the scene and `deficiency.css`, not `globals.css`, as with the night scene.
   - **Not verified:** a real iPad.
 
+### T-039: Deficiency explorer — hotspots, labels, leader lines and the hint
+- Status: done
+- Depends on: T-038
+- Goal: The HTML over the 3D plant from `Deficiency-Landscape.dc.html`: a round button on each leaf group (72 and 68 px), a label with a leader line to it, and the "drag to rotate" hint at the foot. No text in the canvas (D3).
+- Acceptance criteria:
+  - [x] Hotspots are real buttons with a spoken name and `aria-pressed`, at least 44 px, inside the frame; tap, Enter and Space choose, and the radios agree
+  - [x] Labels and leader lines sit where the artboard draws them (to the pixel at 826 wide, unit-tested) and follow the plant when it is zoomed, panned or turned
+  - [x] Hidden until the scene has placed them, and absent when the flat plant stands in
+  - [x] The site's focus ring shows on a focused hotspot
+- **Verified:** typecheck, lint, 901 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1099 passed, 0 failed (7 new tests in `e2e/deficiency-scene.spec.ts`); canary 60 of 60; Lighthouse (1 run): the page performance 97, accessibility 100; chapter 1 96, 100.
+  - **How it moves:** the scene reports a screen point for each group every frame; `components/DefCallouts.tsx` writes the positions straight to the elements (no React render per frame). The placement maths is a pure function, `lib/callouts.ts`, with the artboard's offsets; labels and hotspots are held inside the frame. Label sizes come from a ResizeObserver, not a read every frame.
+  - **Leader lines are thin boxes, not an inline `<svg>`**, and the hint's arrow is a CSS mask: the WebKit load-stall rule.
+  - **Departure: the labels' group names are the pamphlet's full words.** The artboard's label says "ธาตุที่เคลื่อนที่ได้"; the site shows "ธาตุที่เคลื่อนที่ได้ในพืช", cut from the rule sentence by `ruleGroupLabel` as the answer panel does, so nothing is typed a second time. It still fits on one line.
+  - **Pulled forward from T-040:** below 40em the labels, lines and hint are hidden (the hotspots stay). At 320 px they spilled out of the frame and the reflow test failed.
+  - **Found by that test:** the scene's wrapper was 2 px taller than the frame under `aspect-ratio` (since T-038, invisible until the frame held text); it is now pinned to the frame's inside edges.
+  - **Review (two axes, fresh subagents):** fixed the leader end points (now the artboard's), labels re-placed when their size changes (font swap, crossing 40em), hotspots held inside the frame, one source for the hotspot sizes and colours, the hint as a centred row. Left: the projection maths repeated in the scene's frame loop, and `onAnchors` passing through `PlantExplorer3D`.
+  - **New Thai: U79–U81** in `docs/content/THAI-REVIEW.md`, from the artboard.
+  - **Not verified:** a real iPad; VoiceOver on the hotspots.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)
