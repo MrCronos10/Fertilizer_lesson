@@ -34,6 +34,15 @@
   --band-h1: 26px;
   --band-badge-h: 26px;
   --band-badge-size: 12px;
+  /* the bag reader (T-045): Bag-Calculator-Portrait's sizes, which the phone shares */
+  --bag-pad: 34px 20px 20px;
+  --bag-radius: 8px 8px 22px 22px;
+  --bag-gap: 14px;
+  --bag-tiles-gap: 10px;
+  --bag-tile-h: 112px;
+  --bag-tile-radius: 10px;
+  --bag-shadow: 0 10px 24px rgba(27, 42, 34, 0.18);
+  --bag-answer-pad: 18px;
   --step-w: 46px;
   /* the sources bar */
   --bar-pad-l: var(--pad-l);
@@ -109,6 +118,15 @@
     --band-h1: 32px;
     --band-badge-h: 28px;
     --band-badge-size: 13px;
+    /* Bag-Calculator-Landscape */
+    --bag-pad: 36px 22px 22px;
+    --bag-radius: 8px 8px 24px 24px;
+    --bag-gap: 16px;
+    --bag-tiles-gap: 12px;
+    --bag-tile-h: 134px;
+    --bag-tile-radius: 12px;
+    --bag-shadow: 0 12px 28px rgba(27, 42, 34, 0.2);
+    --bag-answer-pad: 18px 20px;
     --bar-pad-l: 64px;
     --bar-pad-r: 64px;
     --cols-max: 1238px;
@@ -707,6 +725,138 @@
   line-height: 1.75;
   font-weight: 600;
   color: var(--warn);
+}
+
+/* ---- Bag reader (T-045) ---------------------------------------------------------------------------------------
+   From the Bag-Calculator artboards. The sack and its tiles are a drawn object, so their colours are the artboard's
+   literals in both themes; a chosen tile and the answer's edge and badge take the nutrient's colour (N, P, K), also
+   as the artboard's literals: the dark theme's lighter --n would put white text under 4.5:1. The
+   bag sits beside its answer in portrait (420 px), above it in landscape and on a phone. */
+.chapter-redesign .bag-reader {
+  gap: 16px;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .bag-reader {
+    grid-template-columns: 420px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+}
+@media (min-width: 75em) {
+  .chapter-redesign .bag-reader {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+}
+.chapter-redesign .bag-tile[data-nutrient="n"],
+.chapter-redesign .bag-answer[data-nutrient="n"] {
+  --edge: #2f6f3e;
+}
+.chapter-redesign .bag-tile[data-nutrient="p2o5"],
+.chapter-redesign .bag-answer[data-nutrient="p2o5"] {
+  --edge: #8456b0;
+}
+.chapter-redesign .bag-tile[data-nutrient="k2o"],
+.chapter-redesign .bag-answer[data-nutrient="k2o"] {
+  --edge: #b5541e;
+}
+.chapter-redesign .bag legend {
+  margin-bottom: 10px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--brand);
+}
+.chapter-redesign .bag-body {
+  max-width: none;
+  gap: var(--bag-gap);
+  padding: var(--bag-pad);
+  border-radius: var(--bag-radius);
+  background: #e2d6b6;
+  border: 2px solid #9a8356;
+  box-shadow: var(--bag-shadow);
+}
+/* The sewn top: the artboard's dashed line, 2.5 px of #9A8356 at 16 px down. */
+.chapter-redesign .bag-body::before {
+  inset: 15px 20px auto;
+  border-top: 2.5px dashed #9a8356;
+}
+.chapter-redesign .bag-tiles {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--bag-tiles-gap);
+}
+.chapter-redesign .bag-tile {
+  gap: 4px;
+  min-height: var(--bag-tile-h);
+  padding: 8px;
+  border-radius: var(--bag-tile-radius);
+  /* The artboard's 0.4 alpha is about 2:1 on the sack; 0.6 reaches the 3:1 a control's edge needs (WCAG 1.4.11). */
+  border: 2px solid rgba(27, 42, 34, 0.6);
+  background: #fffffc;
+  color: #1b2a22;
+}
+.chapter-redesign .bag-tile:has(.bag-input:checked) {
+  background: var(--edge);
+  border-color: var(--edge);
+  color: #ffffff;
+}
+.chapter-redesign .bag-symbol {
+  font-size: 18px;
+}
+.chapter-redesign .bag-number {
+  font-size: 54px;
+}
+.chapter-redesign .bag-weight {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  color: #6b4a2f;
+}
+.chapter-redesign .bag-answer {
+  box-sizing: border-box;
+  gap: 10px;
+  padding: var(--bag-answer-pad);
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--edge);
+}
+.chapter-redesign .bag-answer p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.85;
+}
+/* The 18 px title size is set on this block, not on the .bag-role span inside it: a font-size on that span (17 or
+   18 px) made WebKit leave `load` unfired on chapter 3 in landscape (6-8 of 8 walks, e2e/bag.spec.ts "coexist");
+   on the block, 30 of 30 reach it (T-045). */
+.chapter-redesign .bag-answer .bag-answer-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.chapter-redesign .bag-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: var(--edge);
+  color: #ffffff;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 14px;
+}
+.chapter-redesign .bag-answer .bag-role {
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+.chapter-redesign .bag-answer .muted {
+  font-size: 14px;
+  line-height: 1.8;
 }
 
 /* ---- Footer -------------------------------------------------------------------------------------------------- */

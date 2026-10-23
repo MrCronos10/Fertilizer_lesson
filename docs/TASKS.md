@@ -953,13 +953,22 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad.
 
 ### T-045: Chapter 3 bag reader to the artboard
-- Status: ready (Opus)
+- Status: done
 - Depends on: T-044
 - Goal: "แตะตัวเลขบนกระสอบ": the bag reader restyled to the Bag-Calculator artboards in landscape and portrait, with the behaviour unchanged (tapping a number on the bag explains it, from the pamphlet's words).
 - Acceptance criteria:
-  - [ ] Sizes, colours and layout as drawn at 1366 and 834; works on a phone
-  - [ ] Every tappable number is a real button, 44 px, keyboard-operable, with its state announced
-  - [ ] Its existing behaviour specs pass; the artboard's PLACEHOLDER rows are not built (the real data shows)
+  - [x] Sizes, colours and layout as drawn at 1366 and 834; works on a phone
+  - [x] Every tappable number is a real button, 44 px, keyboard-operable, with its state announced
+  - [x] Its existing behaviour specs pass; the artboard's PLACEHOLDER rows are not built (the real data shows)
+- **Verified:** typecheck, lint, 909 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1156 passed and 6 failed on the first full run (the border contrast below, fixed; that test then 6 of 6); `e2e/bag-redesign.spec.ts` adds 15; the chapter 3 load test 30 of 30 after the fix; canary 60 of 60; Lighthouse (3 runs): chapter 3 performance 97, accessibility 100.
+  - **The artboards' look:** the sack (#E2D6B6, a #9A8356 edge, the sewn line), 134 px tiles in landscape and 112 px in portrait, 54 px numbers. A chosen tile, and the answer's top edge and badge, take the nutrient's colour. Portrait sets the 420 px sack beside its answer; landscape and the phone stack them.
+  - **The nutrient colours are the artboard's literals in both themes.** The dark theme's lighter `--n` put white text under 4.5:1 (seen in a dark screenshot), and the sack is a drawn object.
+  - **Departures, all deliberate:**
+    - **Wording:** the answer keeps the site's pamphlet wording (the p2 role, "กระสอบ 50 กก. มี N 8 กก.", the pages). The artboard's sentences ("ในปุ๋ย 100 กิโลกรัม มีไนโตรเจน…") are not in the pamphlet.
+    - **Legend and weight:** the legend stays "ตัวเลข 3 ตัวบนกระสอบ" (the artboard's "แตะตัวเลขบนกระสอบ" would be new Thai). The sack shows "50 กก." at its foot, not the artboard's "สูตร 16-20-0" at its head.
+    - **Tile borders:** 0.6 alpha, not the artboard's 0.4. The 0.4 border was about 2:1 on the sack; WCAG 1.4.11 needs 3:1, and `e2e/a11y-behaviour.spec.ts` measures it.
+  - **A WebKit `load` stall, found and fixed:** with the 18 px title size set on the `.bag-role` span, chapter 3 left `load` unfired in landscape (6 to 8 of 8 walks of the "coexist" test; 17 px too). Bisected rule by rule to that one property. Set on the block around it, 30 of 30 walks reach `load`. The stylesheet says so where the rule is.
+  - **Not verified:** a real iPad.
 
 ### T-046: Chapter 3 calculator to the artboard
 - Status: ready (Sonnet)
