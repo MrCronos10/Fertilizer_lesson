@@ -733,6 +733,21 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: U74** (`defBadgeNone`, "ไม่ระบุ") in `docs/content/THAI-REVIEW.md`.
   - **Not verified:** a real iPad; VoiceOver on the card; the guards are not mutation-tested this ticket; portrait and phone polish (ticket 4).
 
+### T-031: Chapter 1 redesign — portrait and phone layouts
+- Status: done (the real-iPad and real-phone look are yours; a fresh code review over T-028–T-031 is still to run)
+- Depends on: T-029, T-030
+- Goal: Chapter 1 at portrait (40–75em, `Chapter-01-Portrait.dc.html` at 834) and on a phone (no artboard: the portrait one reflowed).
+- Acceptance criteria:
+  - [x] Portrait: its own hero drawing, a 578 px title card with a 32 px heading, one 640 px column, the plant (236 × 248) beside the answer card, sources as a plain section under a rule
+  - [x] Phone: the picture above the title card, steps and bars that fit, the plant above the answer card, stacked footer buttons; nothing runs off the screen at 390 or 320 px
+  - [x] Targets stay 44 px (48 px for the picker and footer); the landscape layout is unchanged
+  - [x] Title readable in dark mode (the design has no night version of this page)
+- **Verified:** typecheck, lint, 878 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1002 passed, 0 failed (`e2e/chapter1-narrow.spec.ts` adds 15 across the three projects). The load-stall canary (`e2e/fonts-load.spec.ts`, 20 repeats × 3): 60 of 60. Lighthouse (1 run): ch01 performance 97, accessibility 100; every route within budget.
+  - **What was built:** `ChapterHero` carries both drawings and the stylesheet shows one (the wide one from 75em, the portrait one below); portrait and phone rules are `@media` blocks after the landscape ones in `globals.css`.
+  - **Mutation-tested:** the portrait step width changed from 46 to 50 px: the narrow spec fails; restored.
+  - **Derived, not drawn:** the phone layout. Its values (a 170 px picture strip, a 26 px heading, stacked plant and answer) are mine, from the portrait artboard; look at it on a phone.
+  - **Not verified:** a real iPad or phone; VoiceOver; the nutrient table still scrolls sideways inside its own box on a phone, as every table on the site does.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

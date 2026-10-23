@@ -1344,6 +1344,157 @@ strong.npk-k {
   color: var(--warn);
 }
 
+/* Chapter 1 at portrait (40-75em, Chapter-01-Portrait.dc.html at 834) and on a phone (no artboard: the portrait one
+   reflowed). The rules above are the landscape ones; these override them for the narrower ranges. */
+.chapter-hero .art-landscape {
+  display: none;
+}
+@media (min-width: 75em) {
+  .chapter-hero .art-landscape {
+    display: block;
+  }
+  .chapter-hero .art-portrait {
+    display: none;
+  }
+}
+@media (max-width: 74.99em) {
+  .chapter-redesign > .chapter-columns {
+    max-width: 640px;
+  }
+  .chapter-redesign .reading-column,
+  .chapter-redesign .side-column {
+    gap: 26px;
+  }
+  .reading-column > p:first-child {
+    max-width: 62ch;
+  }
+  .chapter-card {
+    padding: 18px 20px;
+  }
+  .chapter-card h2 {
+    font-size: 19px;
+  }
+  .chapter-card > p {
+    font-size: 16px;
+  }
+  .def-card {
+    padding: 20px;
+    gap: 16px;
+  }
+  .def-card .def-choice {
+    gap: 10px;
+    padding: 10px 16px 14px;
+  }
+  .def-row {
+    gap: 18px;
+  }
+  .def-scene {
+    width: min(100%, 236px);
+  }
+  .def-card .scene3d {
+    aspect-ratio: 236 / 248;
+  }
+  .def-card .def-panel .panel {
+    padding: 16px;
+    gap: 10px;
+  }
+  .def-card .def-rule {
+    font-size: 16px;
+  }
+  /* In portrait the sources are a plain section under a rule, not a card. */
+  .sources-card {
+    padding: 18px 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+    border-radius: 0;
+    background: none;
+  }
+  .sources-card h2 {
+    font-size: 20px;
+  }
+  .safe-strip {
+    padding: 12px 16px;
+  }
+}
+@media (min-width: 40em) and (max-width: 74.99em) {
+  .chapter-hero {
+    min-height: 420px;
+  }
+  .chapter-back {
+    top: calc(20px + env(safe-area-inset-top, 0px));
+    left: calc(24px + env(safe-area-inset-left, 0px));
+    padding: 0 16px;
+  }
+  .chapter-title-card {
+    width: min(100%, 578px);
+    padding: 26px 32px 24px calc(32px + env(safe-area-inset-left, 0px));
+    border-top-right-radius: 26px;
+  }
+  .chapter-title-card h1 {
+    font-size: 32px;
+  }
+  .chapter-steps span {
+    width: 46px;
+  }
+  .chapter-redesign > .jump-sources {
+    padding-inline: 97px;
+  }
+  .chapter-redesign .chapter-nav {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+@media (max-width: 39.99em) {
+  .chapter-hero {
+    min-height: 0;
+    padding-top: 170px;
+  }
+  .chapter-back {
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    padding: 0 14px;
+  }
+  .chapter-title-card {
+    width: 100%;
+    padding-block: 20px 20px;
+    border-top-right-radius: 22px;
+  }
+  .chapter-title-card h1 {
+    font-size: 26px;
+  }
+  .chapter-where {
+    flex-wrap: wrap;
+  }
+  .chapter-steps span {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 46px;
+    width: auto;
+  }
+  .chapter-redesign > .jump-sources {
+    flex-wrap: wrap;
+    padding-block: 6px;
+    gap: 4px 16px;
+  }
+  .def-row {
+    flex-direction: column;
+  }
+  .def-card .def-panel {
+    flex: none;
+  }
+  .def-card {
+    padding: 16px;
+  }
+  .chapter-card {
+    padding: 16px;
+  }
+  .reading-column > p:first-child {
+    font-size: 17px;
+  }
+  .chapter-redesign .chapter-nav {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* A grade such as 18-46-0 must not break at its hyphens ("18-46-" / "0"). */
 .source-table .grade {
   white-space: nowrap;

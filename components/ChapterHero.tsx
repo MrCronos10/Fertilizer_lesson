@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { UiStrings } from "@/lib/ui";
 
 /**
- * Chapter 1's hero (T-028): the sky-and-soil picture, the back pill, the chapter badge, the title and the
+ * Chapter 1's hero (T-028, T-031): the sky-and-soil picture (one drawing for landscape, one for portrait and phone), the back pill, the chapter badge, the title and the
  * seven-step progress, from Chapter-01-Landscape.dc.html. The picture is decorative and has no text in it (D3).
  * Its colours are scene art, copied from the artboard, so they stay literals here rather than becoming tokens.
  */
@@ -21,7 +21,7 @@ export function ChapterHero({
 }) {
   return (
     <header className="chapter-hero">
-      <svg className="chapter-hero-art" viewBox="0 0 1366 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+      <svg className="chapter-hero-art art-landscape" viewBox="0 0 1366 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
         <defs>
           <linearGradient id="cl-sky" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0" stopColor="#9CC0CB" />
@@ -73,6 +73,53 @@ export function ChapterHero({
         <path d="M1062 182 C 1038 176, 1022 158, 1018 136 C 1044 134, 1058 156, 1062 182 Z" fill="#6FB169" />
         <path d="M1062 170 C 1086 164, 1102 146, 1106 124 C 1080 122, 1066 144, 1062 170 Z" fill="#6FB169" />
         <path d="M1062 144 C 1050 132, 1046 116, 1050 102 C 1064 110, 1070 130, 1062 144 Z" fill="#8FC98A" />
+      </svg>
+      {/* The portrait artboard draws its own picture (834 wide, the plant at the right), not a crop of the wide one;
+          phones show it too. Which one shows is decided by the stylesheet. */}
+      <svg className="chapter-hero-art art-portrait" viewBox="0 0 834 420" preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+        <defs>
+        <linearGradient id="cp-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#9CC0CB" /><stop offset="0.55" stopColor="#D3E0C9" /><stop offset="1" stopColor="#F6DAA8" />
+        </linearGradient>
+        <linearGradient id="cp-soil" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#7A563A" /><stop offset="1" stopColor="#3E2A1A" />
+        </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="834" height="420" fill="url(#cp-sky)" />
+        <circle cx="198" cy="76" r="66" fill="#F2B632" opacity="0.16" />
+        <circle cx="198" cy="76" r="40" fill="#F2B632" />
+        <path d="M0 212 C 160 188, 320 206, 480 216 C 620 224, 720 206, 834 198 L834 250 L0 250 Z" fill="#6E8C72" opacity="0.6" />
+        <path d="M0 236 C 200 218, 420 244, 640 236 C 740 232, 790 240, 834 234 L834 276 L0 284 Z" fill="#9FB87E" />
+        <path d="M0 284 C 200 274, 420 292, 640 282 C 740 277, 790 286, 834 278 L834 330 L0 340 Z" fill="#7FA463" />
+        <path d="M0 340 C 200 330, 420 346, 834 330 L834 420 L0 420 Z" fill="#5A8A50" />
+        <path d="M0 280 C 200 270, 420 288, 834 274" stroke="#C9A87C" strokeWidth="2.5" fill="none" opacity="0.6" />
+        <path d="M0 336 C 200 326, 420 342, 834 326" stroke="#C9A87C" strokeWidth="3" fill="none" opacity="0.55" />
+        <path d="M470 330 C 560 322, 700 336, 834 320 L834 420 L470 420 Z" fill="url(#cp-soil)" />
+        <path d="M470 330 C 560 322, 700 336, 834 320" stroke="#A98563" strokeWidth="3" fill="none" />
+        <g stroke="#C9A87C" fill="none" strokeLinecap="round">
+        <path d="M662 330 C 662 356, 660 380, 658 414" strokeWidth="5" />
+        <path d="M662 342 C 630 356, 606 374, 594 408" strokeWidth="3.2" />
+        <path d="M662 350 C 696 364, 718 382, 728 412" strokeWidth="3.2" />
+        </g>
+        <g>
+        <circle cx="658" cy="396" r="7" fill="#2F6F3E" />
+        <circle cx="660" cy="364" r="6" fill="#2F6F3E" />
+        <circle cx="661" cy="340" r="5" fill="#2F6F3E" opacity="0.85" />
+        <circle cx="604" cy="388" r="7" fill="#8456B0" />
+        <circle cx="624" cy="362" r="6" fill="#8456B0" />
+        <circle cx="644" cy="340" r="5" fill="#8456B0" opacity="0.85" />
+        <circle cx="722" cy="392" r="7" fill="#B5541E" />
+        <circle cx="702" cy="364" r="6" fill="#B5541E" />
+        <circle cx="682" cy="340" r="5" fill="#B5541E" opacity="0.85" />
+        </g>
+        <path d="M662 332 L662 150" stroke="#2F6F3E" strokeWidth="8" strokeLinecap="round" fill="none" />
+        <path d="M662 300 C 608 294, 566 266, 552 230 C 606 224, 648 254, 662 300 Z" fill="#3F7B46" />
+        <path d="M662 282 C 716 276, 758 248, 772 212 C 718 206, 676 236, 662 282 Z" fill="#3F7B46" />
+        <path d="M662 236 C 622 230, 596 208, 588 180 C 626 176, 652 200, 662 236 Z" fill="#4C8A50" />
+        <path d="M662 222 C 702 216, 728 194, 736 166 C 698 162, 672 186, 662 222 Z" fill="#4C8A50" />
+        <path d="M662 182 C 638 176, 622 158, 618 136 C 644 134, 658 156, 662 182 Z" fill="#6FB169" />
+        <path d="M662 170 C 686 164, 702 146, 706 124 C 680 122, 666 144, 662 170 Z" fill="#6FB169" />
+        <path d="M662 144 C 650 132, 646 116, 650 102 C 664 110, 670 130, 662 144 Z" fill="#8FC98A" />
       </svg>
       <Link className="chapter-back" href={`/${locale}`}>
         <span className="chapter-icon chapter-icon-back" aria-hidden="true" />
