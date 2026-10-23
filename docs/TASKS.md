@@ -786,6 +786,20 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **A slip, caught by an existing guard:** my first comment in the new component quoted the Thai label, which `lib/shell.test.ts` forbids in components; reworded.
   - **New Thai: none** (reuses `sources`).
 
+### T-036: Chapter 1 stylesheet tidy (code-review follow-up)
+- Status: done
+- Depends on: T-035
+- Goal: The code review found the Chapter 1 CSS repeated across three media blocks, with mixed breakpoints and override churn. Taken with the owner: tidy it, change nothing visible.
+- Acceptance criteria:
+  - [x] One scoped file, `app/[locale]/[slug]/chapter1.css`; every selector under `.chapter-redesign`; `globals.css` back to its pre-redesign size
+  - [x] Mobile first: only `min-width: 40em` and `min-width: 75em`; each per-layout value written once, as a custom property
+  - [x] Pixel-identical to before, except the one deliberate fix below
+- **Verified:** typecheck, lint, 885 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1017 passed, 0 failed; canary 60 of 60. **Picture comparison:** 36 full-page pictures (light and dark × 1366, 1024, 834, 640, 390, 320 × chapter 1, chapter 2, home) before and after: 34 identical; the other 2 differed only by the fix below, and with that one value temporarily put back all 36 matched pixel for pixel.
+  - **One deliberate change, a fix of my T-029 slip:** a global `p, li { max-width: 62ch }` capped chapter 1's opening paragraph at landscape, but the artboard's landscape paragraph has no cap (only the portrait one has `62ch`). It now fills the 700 px column, as drawn; portrait is unchanged. Pinned by a new e2e test.
+  - **Guards added:** `lib/chapter1.test.ts` fails on an unscoped selector, any media query other than the two, and a custom property declared but never read. Group edges in the nutrient table are now an inline `--edge` from the component, not three classes.
+  - **Left alone, on purpose:** the two hero drawings (the artboards are two different pictures, so generating one from the other would hide that); `chapter === 1` in the page (becomes a frontmatter flag when chapter 2 is redesigned); the caption parsing in the table.
+  - **iCloud again:** two copies (`SourcesLink 2.tsx`, `sources-link.spec 2.ts`) appeared during this work and were deleted before the commit; the first one failed the shell test, and the second would have run as an extra e2e spec.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./chapter1.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChapterBody } from "@/components/ChapterBody";
