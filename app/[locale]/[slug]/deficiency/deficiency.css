@@ -21,10 +21,24 @@
   min-height: 64px;
   border-bottom: 1px solid color-mix(in srgb, var(--ink) 18%, transparent);
 }
+/* The portrait artboard's bar: 24 px sides (the site's 16 px gutter plus 8) and an 18 px title; landscape's from 75em. */
+@media (min-width: 40em) {
+  .def-page .def-bar {
+    padding-inline: 8px;
+  }
+}
+@media (min-width: 75em) {
+  .def-page .def-bar {
+    padding-inline: 0;
+  }
+  .def-page .def-bar h1 {
+    font-size: 19px;
+  }
+}
 .def-page .def-bar h1 {
   margin: 0;
   text-align: center;
-  font-size: 19px;
+  font-size: 18px;
   color: var(--brand);
 }
 .def-page .def-back,
@@ -55,6 +69,8 @@
   vertical-align: -3px;
 }
 .def-page .def-back::before {
+  width: 16px;
+  height: 16px;
   margin-inline-end: 8px;
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 9H4M8.5 4.5L4 9l4.5 4.5'/%3E%3C/svg%3E");
 }
@@ -74,6 +90,7 @@
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "picture" "choice" "answer" "rules" "sources" "strip" "next";
   gap: 18px;
+  padding-block-start: 4px; /* with the page's 18 px gap, the portrait artboard's 22 px under the bar */
   align-items: start;
 }
 .def-page .def-col {
@@ -143,8 +160,6 @@
 .def-page .def-picture .scene3d {
   width: 100%;
   height: 100%;
-}
-.def-page .def-picture .scene3d {
   aspect-ratio: auto;
   max-height: none;
   border: 0;
@@ -237,6 +252,7 @@
   border-radius: 999px;
   background: var(--spot);
 }
+/* The same two colours as the scene's halo (HALO in components/PlantScene.tsx): change them together. */
 .def-page .def-hotspot-old,
 .def-page .def-callout-old {
   --spot: #b5541e;
@@ -459,6 +475,9 @@
   font-size: 14px;
   line-height: 1.7;
 }
+.def-page .def-answer-source .def-answer-pages {
+  font-size: 13px;
+}
 .def-page .def-answer-source a {
   box-sizing: border-box;
   min-height: var(--tap);
@@ -566,6 +585,9 @@
   .def-page .def-sources {
     padding-inline: 18px;
   }
+  .def-page .def-sources p {
+    line-height: 1.8;
+  }
 }
 .def-page .def-sources h2 {
   margin: 0 0 8px;
@@ -575,5 +597,5 @@
 .def-page .def-sources p {
   margin: 0;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.75;
 }
