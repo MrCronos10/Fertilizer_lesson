@@ -10,7 +10,9 @@ test("chapter 1's hero: one h1, the badge and progress line, a back link, and no
   await expect(hero.locator(".chapter-where")).toHaveText("บทที่ 1บทที่ 1 จาก 7");
   await expect(hero.locator(".chapter-steps span")).toHaveCount(7);
   await expect(hero.locator(".chapter-steps span[data-done]")).toHaveCount(1);
-  await expect(hero.locator("svg.chapter-hero-art")).toHaveAttribute("aria-hidden", "true");
+  // One drawing for landscape, one for portrait and phone; both decorative, neither carries text.
+  await expect(hero.locator("svg.chapter-hero-art")).toHaveCount(2);
+  for (const art of await hero.locator("svg.chapter-hero-art").all()) await expect(art).toHaveAttribute("aria-hidden", "true");
   expect(await hero.locator("svg.chapter-hero-art text").count()).toBe(0);
   expect(problems).toEqual([]);
 });
