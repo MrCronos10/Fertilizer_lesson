@@ -49,12 +49,12 @@ export function pageRanges(pages: readonly number[]): string {
   return runs.map((r) => (r.length > 1 ? `${r[0]}–${r[r.length - 1]}` : `${r[0]}`)).join(", ");
 }
 
-export function Sources({ chapter, ui }: { chapter: Chapter; ui: UiStrings }) {
+export function Sources({ chapter, ui, card }: { chapter: Chapter; ui: UiStrings; card?: boolean }) {
   const { citations, sourcePages } = chapter.frontmatter;
   const pages = pageRanges(sourcePages);
 
   return (
-    <section id="sources" aria-labelledby="sources-heading" className="sources">
+    <section id="sources" aria-labelledby="sources-heading" className={card ? "sources sources-card" : "sources"}>
       <h2 id="sources-heading" tabIndex={-1}>
         {ui.sources}
       </h2>
@@ -87,6 +87,7 @@ export function Sources({ chapter, ui }: { chapter: Chapter; ui: UiStrings }) {
           })}
         </ul>
       ) : null}
+      {card ? <p className="safe-strip">{ui.homeSafeNote}</p> : null}
     </section>
   );
 }

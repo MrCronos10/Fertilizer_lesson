@@ -21,7 +21,7 @@ export function DeficiencyExplorer({ ui, groups }: { ui: UiStrings; groups: read
   const rule: Record<LeafGroupId, string> = { old: ui.defRuleOld, young: ui.defRuleYoung, unplaced: ui.defRuleNone };
 
   return (
-    <section className="deficiency">
+    <section className="deficiency def-card">
       <fieldset className="def-choice">
         <legend>{ui.defLegend}</legend>
         {groups.map((g) => (
@@ -38,34 +38,42 @@ export function DeficiencyExplorer({ ui, groups }: { ui: UiStrings; groups: read
         ))}
       </fieldset>
 
-      {/* three.js is fetched when the plant is about to be seen, not on arrival (T-024). */}
-      <NearViewport placeholder={<div className="scene3d" aria-hidden="true" />}>
-        <PlantExplorer
-          label={ui.defSceneLabel}
-          fallback={<p className="scene3d-fallback">{ui.defNo3d}</p>}
-          selected={selected}
-          onSelect={setSelected}
-        />
-      </NearViewport>
+      <div className="def-row">
+        {/* three.js is fetched when the plant is about to be seen, not on arrival (T-024). */}
+        <div className="def-scene">
+          <NearViewport placeholder={<div className="scene3d" aria-hidden="true" />}>
+            <PlantExplorer
+              label={ui.defSceneLabel}
+              fallback={<p className="scene3d-fallback">{ui.defNo3d}</p>}
+              selected={selected}
+              onSelect={setSelected}
+            />
+          </NearViewport>
+        </div>
 
-      <div role="status" aria-live="polite" aria-atomic="true" className="def-panel">
-        {group ? (
-          <div key={group.id} className="panel" data-group={group.id}>
-            <p className="def-rule">{rule[group.id]}</p>
-            <dl className="def-list">
-              {group.entries.map((e) => (
-                <div key={e.id} data-row={e.id}>
-                  <dt lang="en">{e.elements}</dt>
-                  <dd>{e.symptom}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="muted">
-              {ui.pamphletPages}: {group.id === "unplaced" ? "" : `${RULE_PAGE}, `}
-              {group.entries[0]?.sourcePage}
-            </p>
-          </div>
-        ) : null}
+        <div role="status" aria-live="polite" aria-atomic="true" className="def-panel">
+          {group ? (
+            <div key={group.id} className="panel" data-group={group.id}>
+              {/* The label above already names the group; the badge is for the eye, so it is not read twice. */}
+              <span className="def-badge" data-badge={group.id} aria-hidden="true">
+                {group.id === "unplaced" ? ui.defBadgeNone : label[group.id]}
+              </span>
+              <p className="def-rule">{rule[group.id]}</p>
+              <dl className="def-list">
+                {group.entries.map((e) => (
+                  <div key={e.id} data-row={e.id}>
+                    <dt lang="en">{e.elements}</dt>
+                    <dd>{e.symptom}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="muted">
+                {ui.pamphletPages}: {group.id === "unplaced" ? "" : `${RULE_PAGE}, `}
+                {group.entries[0]?.sourcePage}
+              </p>
+            </div>
+          ) : null}
+        </div>
       </div>
     </section>
   );

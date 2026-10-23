@@ -719,9 +719,19 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Not verified:** a real iPad; VoiceOver; portrait and phone polish (ticket 4); a fresh code reviewer (once, over T-028–T-030).
 
 ### T-030: Chapter 1 redesign — side column (leaf picker and sources)
-- Status: todo
+- Status: done (the real-iPad look and the Thai review are yours; a fresh code review over T-028–T-030 is still to run)
 - Depends on: T-028
-- Goal: Leaf-position picker with the flat plant diagram and answer card; sources card. Decision pending with the owner: the chapter's existing 3D plant versus the artboard's flat diagram plus a link to the (not yet built) Deficiency screen.
+- Goal: The explorer as the artboard's card (leaf picker, the 3D plant, the answer card) and the sources card. Decision taken with the owner: the plant stays 3D; the flat diagram is only the no-WebGL fallback the explorer already had.
+- Acceptance criteria:
+  - [x] Picker is a radio group of 48 px choices with the artboard's selected style
+  - [x] The 3D plant sits left of the answer card in a 200 × 226 box; the card follows the choice and shows a badge
+  - [x] Sources card keeps every source and tier, with the soil-test strip at its end
+  - [x] Other chapters keep their plain sources section
+- **Verified:** typecheck, lint, unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 987 passed, 0 failed (`e2e/chapter1-side.spec.ts` adds 15).
+  - **What was built:** `DeficiencyExplorer.tsx` (card, row, badge), `Sources` gets a `card` mode, styles in `globals.css`. 3D code and lazy loading untouched.
+  - **Kept from the site, not the artboard:** the answer text for "no leaf position" ("เอกสารไม่ได้ระบุว่าธาตุกลุ่มนี้แสดงอาการที่ใบแก่หรือใบอ่อนก่อน") stays; the artboard words it differently and adds a sentence ("เมื่อไม่มีข้อมูลอ้างอิง…") I did not add. The artboard's "PLACEHOLDER" source row is not built: the real list already shows the two unnamed sources.
+  - **New Thai: U74** (`defBadgeNone`, "ไม่ระบุ") in `docs/content/THAI-REVIEW.md`.
+  - **Not verified:** a real iPad; VoiceOver on the card; the guards are not mutation-tested this ticket; portrait and phone polish (ticket 4).
 
 ---
 

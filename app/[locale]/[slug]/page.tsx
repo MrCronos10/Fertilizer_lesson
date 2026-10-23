@@ -78,7 +78,7 @@ export default async function ChapterPage({ params }: { params: Params }) {
           <h1>{chapter.frontmatter.heading}</h1>
         </>
       )}
-      <ChapterBody source={chapter.body} ui={ui} sources={redesigned ? <Sources chapter={chapter} ui={ui} /> : undefined} />
+      <ChapterBody source={chapter.body} ui={ui} sources={redesigned ? <Sources chapter={chapter} ui={ui} card /> : undefined} />
       {redesigned ? null : <Sources chapter={chapter} ui={ui} />}
       <nav className="chapter-nav" aria-label={ui.chapterNav}>
         {previous ? (

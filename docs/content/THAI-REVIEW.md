@@ -241,3 +241,4 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U71 | `sourceLabel` | `ที่มา` | Label before a block's source line: "Source". From the Chapter-01 artboards. |
 | U72 | `moreFrom` | `และอีก` | "and another", before the number of further sources. |
 | U73 | `moreUnit` | `แหล่ง` | "sources", after that number: "และอีก 2 แหล่ง". |
+| U74 | `defBadgeNone` | `ไม่ระบุ` | Grey badge on the deficiency answer card when the pamphlet names no leaf position: "not specified". From the Chapter-01 artboards. |
