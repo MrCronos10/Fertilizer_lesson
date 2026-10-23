@@ -446,6 +446,15 @@
   line-height: 1.85;
 }
 
+/* A chapter without columns (chapter 2, T-047): its cards and sources card are one 860 px column in landscape, room
+   for the four-column tables; the 70ch measure above would squeeze them. */
+@media (min-width: 75em) {
+  .chapter-redesign > .chapter-card,
+  .chapter-redesign > .sources-card {
+    max-width: 860px;
+  }
+}
+
 /* ---- Reading column ------------------------------------------------------------------------------------------ */
 .chapter-redesign .cite-line {
   margin: -10px 0 0;
@@ -496,10 +505,10 @@
 .chapter-redesign .chapter-card > p strong {
   font-weight: 700;
 }
-.chapter-redesign .chapter-card > p strong:first-of-type {
+.chapter-redesign .chapter-card[data-leaves] > p strong:first-of-type {
   color: var(--k);
 }
-.chapter-redesign .chapter-card > p strong:last-of-type {
+.chapter-redesign .chapter-card[data-leaves] > p strong:last-of-type {
   color: var(--p);
 }
 .chapter-redesign .chapter-card .cite-line {
