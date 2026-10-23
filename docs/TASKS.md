@@ -1009,13 +1009,21 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad.
 
 ### T-048: Chapter 4 redesign
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-044
 - Goal: Chapter 4 opts in. The five sections (4R, practice, safety, mistakes, environment) as cards. The three safety ones take the warning style that chapter 1's soil-test strip uses. The band shows a scene I draw (a hand spreading fertilizer along a row).
 - Acceptance criteria:
-  - [ ] Section structure, page references and "uncited" markings kept; warning sections read as warnings without relying on colour alone
-  - [ ] Layout at 1366, 834 and 390; axe clean in both themes; the canary and Lighthouse pass
-  - [ ] The scene is listed as a departure
+  - [x] Section structure, page references and "uncited" markings kept; warning sections read as warnings without relying on colour alone
+  - [x] Layout at 1366, 834 and 390; axe clean in both themes; the canary and Lighthouse pass
+  - [x] The scene is listed as a departure
+- **Verified:** typecheck, lint, 909 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1198 passed, 0 failed (`e2e/chapter4-redesign.spec.ts` adds 12); canary 60 of 60; Lighthouse (3 runs): chapter 4 performance 99, accessibility 100; budget met on every route.
+  - **How:**
+    - **Sections:** the five `<Section>` blocks are drawn as chapter 1's cards (a 5 px brand edge, the card padding, 16 px list text, one 860 px column in landscape).
+    - **Warnings:** the three warning sections keep the warning colours and gain a warning-triangle sign (a CSS mask), so a warning is not told by colour alone. A test checks the sign is on those three and on no other.
+    - **Unchanged:** the page references and "uncited" notes are as before.
+  - **An older test updated:** `e2e/safe-use.spec.ts` "no prose sits outside a block that names its page" now lets the redesign's header band and sources bar through; neither holds prose.
+  - **The scene** (a scoop scattering granules along a row of seedlings) is **a departure, drawn by me, for the owner or designer to review.**
+  - **Not verified:** a real iPad.
 
 ### T-049: Chapter 5 redesign
 - Status: ready (Sonnet)
