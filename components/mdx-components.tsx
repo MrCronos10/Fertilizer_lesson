@@ -79,9 +79,13 @@ export function mdxComponents(ui: UiStrings, slots: { sources?: ReactNode } = {}
         {slots.sources}
       </div>
     ),
-    Card: ({ heading, children }: { heading: string; children: ReactNode }) => (
-      <section className="chapter-card">
-        <h2>{heading}</h2>
+    /**
+     * A card of the redesign. Without `heading` its first child is the section's own markdown heading (chapter 2,
+     * T-047). `leaves` colours chapter 1's two bold words, the old and the young leaves, in their colours.
+     */
+    Card: ({ heading, leaves, children }: { heading?: string; leaves?: boolean; children: ReactNode }) => (
+      <section className="chapter-card" data-leaves={leaves ? "" : undefined}>
+        {heading ? <h2>{heading}</h2> : null}
         {children}
       </section>
     ),

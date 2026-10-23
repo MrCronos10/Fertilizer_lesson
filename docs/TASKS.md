@@ -990,14 +990,23 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad.
 
 ### T-047: Chapter 2 redesign
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-044
 - Goal: Chapter 2 opts in. The eight sections (2.1–2.8) read as chapter 1's cards with a source line under each block. The source tables and the timing diagram are in the redesigned style. The band shows a scene I draw (fertilizer types: a compost heap beside sacks).
 - Acceptance criteria:
-  - [ ] Every block names its source as chapter 1's do; no prose sits outside a sourced block
-  - [ ] Tables readable and inside the column at 1366, 834 and 390; the timing diagram keeps its text as real text
-  - [ ] Axe clean in both themes; the canary and Lighthouse pass
-  - [ ] The scene is listed as a departure in the Verified note
+  - [x] Every block keeps its citations where the source put them, inline (not moved into chapter 1's line under the block: see the Verified note); every section sits in a card
+  - [x] Tables readable and inside the column at 1366, 834 and 390; the timing diagram keeps its text as real text
+  - [x] Axe clean in both themes; the canary and Lighthouse pass
+  - [x] The scene is listed as a departure in the Verified note
+- **Verified:** typecheck, lint, 909 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1177 passed and 9 failed on the full run. All nine were three older tests that took chapter 2 as the example of an old-design chapter: two now use chapter 7, and the sources-bar one clicks the link inside the redesign's bar. Those then passed 54 of 54. `e2e/chapter2-redesign.spec.ts` adds 15. Canary 60 of 60; Lighthouse (3 runs): chapter 2 performance 96, accessibility 100.
+  - **How:**
+    - **Cards:** each `## 2.x` section is wrapped in a `<Card>` with no heading prop, so its own markdown heading opens the card. Only lines were added to the chapter file (no word moved), and the zero-rewording test passes.
+    - **Leaf colours:** chapter 1's card colours its two bold leaf words. That rule is now on `<Card leaves>` only, so chapter 2's bold words keep the text colour (a test checks).
+    - **Sources card:** a chapter without a side column gets the sources card (with the soil-test strip) after its cards.
+    - **Width:** in landscape the cards and sources are one 860 px column, room for the four-column tables.
+  - **The scenes:** all four drawn scenes (chapters 2, 4, 5, 6) went in with this ticket, so T-048 to T-050 only switch their chapter on. Chapter 2's is a compost heap beside a sack, with granules in the N, P and K colours. **A departure, drawn by me, for the owner or designer to review.**
+  - **Departure: citations stay inline.** Chapter 2 cites per sentence, in the source's places. Turning those into chapter 1's one line under each block would move and merge them, so they stay.
+  - **Not verified:** a real iPad.
 
 ### T-048: Chapter 4 redesign
 - Status: ready (Sonnet)

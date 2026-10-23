@@ -49,6 +49,7 @@ export default async function ChapterPage({ params }: { params: Params }) {
 
   const redesigned = chapter.frontmatter.redesign;
   const explorer = redesigned && chapter.frontmatter.chapter === EXPLORER_CHAPTER;
+  const sideColumn = chapter.body.includes("<SideColumn>");
   const tiers = TIERS.filter((t) => chapter.frontmatter.citations.some((id) => citationEntry(id).tier === t));
   const sourcesBar = redesigned ? (
     <div className="jump-sources">
@@ -94,8 +95,10 @@ export default async function ChapterPage({ params }: { params: Params }) {
           <h1>{chapter.frontmatter.heading}</h1>
         </>
       )}
-      <ChapterBody source={chapter.body} ui={ui} sources={redesigned ? <Sources chapter={chapter} ui={ui} card /> : undefined} />
-      {redesigned ? null : <Sources chapter={chapter} ui={ui} />}
+      {/* The sources card closes the side column when the chapter has one (chapter 1, chapter 3); otherwise it
+          follows the chapter (T-047). */}
+      <ChapterBody source={chapter.body} ui={ui} sources={redesigned && sideColumn ? <Sources chapter={chapter} ui={ui} card /> : undefined} />
+      {redesigned && sideColumn ? null : <Sources chapter={chapter} ui={ui} card={redesigned} />}
       <nav className="chapter-nav" aria-label={ui.chapterNav}>
         {previous ? (
           <Link rel="prev" href={`/${locale}/${chapterSlug(previous.frontmatter.chapter)}`}>

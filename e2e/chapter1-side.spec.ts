@@ -55,8 +55,8 @@ test("the sources card keeps every source with its tier and ends with the soil-t
   for (const a of await card.locator(".source-list a").all()) expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44);
 });
 
-test("other chapters keep the plain sources section", async ({ page }) => {
-  await page.goto("/th/ch02");
+test("a chapter not yet redesigned keeps the plain sources section", async ({ page }) => {
+  await page.goto("/th/ch07");
   await expect(page.locator("section#sources.sources-card")).toHaveCount(0);
   await expect(page.locator(".safe-strip")).toHaveCount(0);
 });

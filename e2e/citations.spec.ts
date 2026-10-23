@@ -76,7 +76,8 @@ test("the sources jump link stays in reach from anywhere and lands on the sectio
   await expect(jump).toBeInViewport();
   const box = await jump.boundingBox();
   expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
-  await jump.click();
+  // The redesign's bar holds the link beside the tier legend (T-047); before, the bar was the link.
+  await page.locator("a.jump-sources, .jump-sources a").first().click();
   await expect(page).toHaveURL(/#sources$/);
   await expect(page.getByRole("heading", { name: "ที่มาของข้อมูล" })).toBeInViewport();
 });
