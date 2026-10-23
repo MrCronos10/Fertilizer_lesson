@@ -771,6 +771,7 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Owner's list:** (1) look at the preview on the iPad (landscape and portrait) and a phone; (2) Thai strings U50–U75 in `docs/content/THAI-REVIEW.md`, especially U64–U66 (nutrient names, not in the pamphlet); (3) the Department of Agriculture source line moved from after the first sentence to under the paragraph, as the artboard draws it; say if it should be tied to the first sentence only; (4) the phone layout is derived, not drawn.
   - **Left out on purpose:** the "สำรวจอาการขาดธาตุแบบ 3 มิติ" link (its screen does not exist yet); the header's and the safety strip's "sources" links (no all-sources page yet); the artboard's "PLACEHOLDER" source row and its "no leaf position" wording (the site's own text stays).
   - **Not verified:** a real iPad or phone; VoiceOver on the new header, cards, picker and flat plant; two-finger gestures on a real touch screen.
+  - **Correction (found by the code review):** the T-033 commit also carried an iCloud copy, `components/FlatPlant 2.tsx` (a bulk `git add`); `lib/hygiene.test.ts` failed on `main` from that commit until the copy was removed. I had not rerun the unit tests after that commit. Removed in the next merge; 881 unit tests pass again.
 
 ---
 
