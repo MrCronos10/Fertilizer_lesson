@@ -67,6 +67,7 @@ describe("the explorer's words", () => {
 
   it("uses the source's own p3 heading and chapter label", () => {
     expect(nospace(readFileSync(join(__dirname, "../docs/content/raw/p03.txt"), "utf8"))).toContain(nospace(`ธาตุ ${ui.colSymptom}`));
-    expect(squash(CH01)).toContain(`**${ui.defTableCaption}:**`);
+    // The label is now the heading of the card that holds the paragraph (T-029); the manifest records the dropped colon.
+    expect(squash(CH01)).toContain(`<Card heading="${ui.defTableCaption}">`);
   });
 });

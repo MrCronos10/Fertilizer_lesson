@@ -16,11 +16,39 @@ import type { UiStrings } from "@/lib/ui";
  * also what keeps the Cambodian table (D11) off the page.
  */
 
+/** The three macronutrients' own colours, shared by the chips and the role text (the artboard's N/P/K). */
+const NPK_CLASS = { N: "npk-n", P: "npk-p", K: "npk-k" } as const;
+const GROUP_TONE: Record<string, string> = { macronutrients: "tone-n", secondary: "tone-soil", micronutrients: "tone-soil-light" };
+
+/** "N = <caption>; P = …": the words are the pamphlet's, only the symbol before each "=" is coloured. */
+function Role({ role, coloured }: { role: string; coloured: boolean }) {
+  if (!coloured) return <>{role}</>;
+  return (
+    <>
+      {role.split("; ").map((part, i) => {
+        const symbol = part.split(" = ")[0] as keyof typeof NPK_CLASS;
+        const rest = NPK_CLASS[symbol] ? part.slice(symbol.length) : null;
+        return (
+          <span key={i}>
+            {i > 0 ? "; " : ""}
+            {rest === null ? part : (
+              <>
+                <strong className={NPK_CLASS[symbol]}>{symbol}</strong>
+                {rest}
+              </>
+            )}
+          </span>
+        );
+      })}
+    </>
+  );
+}
+
 function NutrientGroups({ ui }: { ui: UiStrings }) {
   const rows = nutrientGroupRows();
   const pages = [...new Set(rows.map((r) => r.sourcePage))].join(", ");
   return (
-    <figure className="table-figure" tabIndex={0} aria-label={ui.nutrientGroupsCaption}>
+    <figure className="table-figure nutrient-groups" tabIndex={0} aria-label={ui.nutrientGroupsCaption}>
       <table className="source-table" data-cols={3}>
         <caption className="visually-hidden">{ui.nutrientGroupsCaption}</caption>
         <thead>
@@ -31,13 +59,31 @@ function NutrientGroups({ ui }: { ui: UiStrings }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
-            <tr key={row.id} data-row={row.id} data-source-page={row.sourcePage}>
-              <th scope="row">{row.labels.th.group}</th>
-              <td>{row.elements.join(", ")}</td>
-              <td>{row.labels.th.role}</td>
-            </tr>
-          ))}
+          {rows.map((row) => {
+            const npk = row.id === "macronutrients";
+            return (
+              <tr key={row.id} data-row={row.id} data-source-page={row.sourcePage} className={GROUP_TONE[row.id]}>
+                <th scope="row">{row.labels.th.group}</th>
+                <td>
+                  {npk ? (
+                    <span className="npk-chips">
+                      {row.elements.map((e, i) => (
+                        <span key={e}>
+                          {i > 0 ? <span className="visually-hidden">, </span> : null}
+                          <span className={`npk-chip ${NPK_CLASS[e as keyof typeof NPK_CLASS]}`}>{e}</span>
+                        </span>
+                      ))}
+                    </span>
+                  ) : (
+                    row.elements.join(", ")
+                  )}
+                </td>
+                <td>
+                  <Role role={row.labels.th.role} coloured={npk} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <figcaption className="muted">

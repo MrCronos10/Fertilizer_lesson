@@ -17,8 +17,8 @@
         [2, 16, 17],
         [3, 12, 13]
       ],
-      "omit": ["⚠"],
-      "omitWhy": "R10: the warning glyph became a <Callout type=\"warn\"> wrapper."
+      "omit": ["⚠", "อาการขาดธาตุ :"],
+      "omitWhy": "R10: the warning glyph became a <Callout type=\"warn\"> wrapper. T-029: the lead-in label became the heading of the card that holds the paragraph (a heading attribute, pinned to the p3 caption in lib/deficiency.test.ts) as in Chapter-01-Landscape.dc.html; its colon is not carried over."
     },
     "ch02": {
       "spans": [

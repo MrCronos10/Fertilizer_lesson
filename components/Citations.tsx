@@ -7,8 +7,24 @@ export { TierBadge };
 
 /** Inline citation: links the claim to its entry in the chapter's sources section. */
 export function makeCite(ui: UiStrings) {
-  return function Cite({ id, more }: { id: string; more?: number }) {
+  return function Cite({ id, more, block }: { id: string; more?: number; block?: boolean }) {
     const entry = citationEntry(id, more);
+    // The redesigned chapter 1 (T-029) puts the source on its own line under the block, as the artboard does.
+    if (block)
+      return (
+        <p className="cite-line">
+          <span className="muted">{ui.sourceLabel}</span>
+          <a href={`#src-${id}`} data-cite={id} lang="en">
+            {entry.name}
+          </a>
+          <TierBadge tier={entry.tier} ui={ui} />
+          {entry.unnamed > 0 ? (
+            <a href="#sources" className="cite-more">
+              {ui.moreFrom} {entry.unnamed} {ui.moreUnit}
+            </a>
+          ) : null}
+        </p>
+      );
     return (
       <sup className="cite">
         <a href={`#src-${id}`} data-cite={id}>

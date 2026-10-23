@@ -102,5 +102,8 @@
   "chapterBack": "หน้าแรก",
   "chapterWord": "บทที่",
   "chapterFrom": "จาก",
-  "tierLegend": "ระดับแหล่งข้อมูลในบทนี้"
+  "tierLegend": "ระดับแหล่งข้อมูลในบทนี้",
+  "sourceLabel": "ที่มา",
+  "moreFrom": "และอีก",
+  "moreUnit": "แหล่ง"
 }
