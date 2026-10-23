@@ -583,23 +583,25 @@
 }
 
 /* ---- Footer -------------------------------------------------------------------------------------------------- */
-/* The contents as an outlined button, the next chapter as the primary one. */
+/* The contents and the next chapter as outlined buttons, the way into the deficiency explorer as the primary one
+   (T-041: the artboards' footer has only the contents and the explorer; the next chapter is kept, outlined). */
 .chapter-redesign .chapter-nav {
   grid-template-columns: minmax(0, 1fr);
   gap: 12px 16px;
   border-top: 1px solid var(--line);
   padding-top: 16px;
 }
+/* From 40em one wrapping row; the explorer button keeps its words on one line and sits at the right end, on a line
+   of its own when the column is too narrow for all three. */
 @media (min-width: 40em) {
   .chapter-redesign .chapter-nav {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
   }
-}
-@media (min-width: 75em) {
-  .chapter-redesign .chapter-nav {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  .chapter-redesign .chapter-nav .chapter-explore {
+    margin-inline-start: auto;
+    white-space: nowrap;
   }
 }
 .chapter-redesign .chapter-nav a {
@@ -614,10 +616,24 @@
   font-weight: 600;
   text-decoration: none;
 }
-.chapter-redesign .chapter-nav a[rel="next"] {
+.chapter-redesign .chapter-nav .chapter-explore {
+  padding-inline: 22px;
   background: var(--brand);
   border-color: var(--brand);
   color: var(--brand-ink);
   font-family: var(--font-ui);
   font-weight: 700;
+  font-size: 16px;
+}
+/* The artboard's arrow, a mask (an inline <svg> in a link made WebKit leave `load` unfired, T-028). */
+.chapter-redesign .chapter-nav .chapter-explore::after {
+  content: "";
+  flex: none;
+  width: 17px;
+  height: 17px;
+  margin-inline-start: 10px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9h11M9.5 4.5L14 9l-4.5 4.5'/%3E%3C/svg%3E");
 }

@@ -249,3 +249,4 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U79 | `defPickOld` | `เลือกใบแก่` | Spoken name of the hotspot on the 3D plant's old leaves: "choose the old leaves". From the Deficiency artboards. |
 | U80 | `defPickYoung` | `เลือกใบอ่อนหรือยอด` | Spoken name of the hotspot on the young leaves or tip: "choose the young leaves or tip". From the Deficiency artboards. |
 | U81 | `defHint` | `ลากเพื่อหมุน · แตะจุดบนใบเพื่อดูอาการ` | Hint at the foot of the 3D plant: "drag to rotate · tap a spot on a leaf to see the symptoms". From the Deficiency artboards. Differs from `homeDragHint` (U54). |
+| U82 | `defExplore` | `สำรวจอาการขาดธาตุแบบ 3 มิติ` | Chapter 1's footer button into the deficiency explorer: "explore deficiency symptoms in 3D". From the Chapter-01 artboards. |

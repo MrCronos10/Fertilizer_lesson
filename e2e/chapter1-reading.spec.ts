@@ -57,7 +57,7 @@ test("two columns at 1366 and one at 834, with no sideways scroll", async ({ pag
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });
 
-test("the footer offers the contents as an outlined button and the next chapter as the primary one", async ({ page }) => {
+test("the footer offers the contents and the next chapter as outlined buttons (the explorer is the primary one, T-041)", async ({ page }) => {
   await page.goto("/th/ch01");
   const nav = page.locator(".chapter-nav");
   await expect(nav.getByRole("link", { name: "สารบัญ" })).toHaveAttribute("href", "/th");
