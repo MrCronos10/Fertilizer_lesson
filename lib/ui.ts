@@ -138,6 +138,10 @@ export const UI_KEYS = [
   "defGroupNone",
   "defRulesHeading",
   "defNext",
+  /** The callouts over the explorer page's 3D plant (T-039), from Deficiency-Landscape.dc.html: the two hotspots' spoken names and the drag hint. */
+  "defPickOld",
+  "defPickYoung",
+  "defHint",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

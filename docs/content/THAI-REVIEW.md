@@ -246,3 +246,6 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U76 | `defGroupNone` | `ไม่มีข้อมูลอ้างอิง` | Group label on the explorer page's answer panel when the pamphlet names no leaf position: "no reference data". From the Deficiency artboards. |
 | U77 | `defRulesHeading` | `กฎที่ใช้อ่านอาการ` | Heading of the rules panel: "the rule for reading symptoms". From the Deficiency artboards. |
 | U78 | `defNext` | `ต่อไป วิธีอ่านตัวเลขบนกระสอบ` | The explorer page's link on to the bag reader (chapter 3): "Next: how to read the numbers on the bag". From the Deficiency artboards. |
+| U79 | `defPickOld` | `เลือกใบแก่` | Spoken name of the hotspot on the 3D plant's old leaves: "choose the old leaves". From the Deficiency artboards. |
+| U80 | `defPickYoung` | `เลือกใบอ่อนหรือยอด` | Spoken name of the hotspot on the young leaves or tip: "choose the young leaves or tip". From the Deficiency artboards. |
+| U81 | `defHint` | `ลากเพื่อหมุน · แตะจุดบนใบเพื่อดูอาการ` | Hint at the foot of the 3D plant: "drag to rotate · tap a spot on a leaf to see the symptoms". From the Deficiency artboards. Differs from `homeDragHint` (U54). |

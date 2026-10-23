@@ -13,11 +13,21 @@ import type { LeafGroupId } from "@/lib/deficiency";
  */
 export type PlantStage = "chapter" | "page";
 
+/** Where each leaf group's hotspot belongs, in CSS px from the canvas's top left, and the canvas's size (T-039). */
+export type LeafAnchors = {
+  readonly old: { readonly x: number; readonly y: number };
+  readonly young: { readonly x: number; readonly y: number };
+  readonly w: number;
+  readonly h: number;
+};
+
 type Props = {
   animate: boolean;
   selected: LeafGroupId;
   onSelect: (id: Exclude<LeafGroupId, "unplaced">) => void;
   stage?: PlantStage;
+  /** Called every drawn frame; the explorer page moves its HTML callouts with it, without a React render. */
+  onAnchors?: (anchors: LeafAnchors) => void;
 };
 
 /** Leaves round a stem: [angle, radius from the stem, tilt]. Purely a drawing, nothing agronomic. */
@@ -32,7 +42,7 @@ const rad = (deg: number) => (deg * Math.PI) / 180;
  * pinching (or Ctrl + scroll), pan with two fingers. The page text and the DOM radios
  * beside it do everything the scene does, so none of this is the only way in.
  */
-export function PlantScene({ animate, selected, onSelect, stage = "chapter" }: Props) {
+export function PlantScene({ animate, selected, onSelect, stage = "chapter", onAnchors }: Props) {
   const { gl, camera, invalidate } = useThree();
   const root = useRef<Group>(null);
   const oldHit = useRef<Mesh>(null);
@@ -45,6 +55,10 @@ export function PlantScene({ animate, selected, onSelect, stage = "chapter" }: P
     busy: false,
   });
   const scratch = useRef({ box: new Box3(), point: new Vector3() });
+  const anchorsRef = useRef(onAnchors);
+  useEffect(() => {
+    anchorsRef.current = onAnchors;
+  }, [onAnchors]);
 
   // Redraw when the selection changes: under prefers-reduced-motion the loop is on demand.
   useEffect(() => {
@@ -163,6 +177,24 @@ export function PlantScene({ animate, selected, onSelect, stage = "chapter" }: P
       canvas.dataset[name === "old" ? "regionOld" : "regionYoung"] = [minX, minY, maxX - minX, maxY - minY]
         .map((n) => n.toFixed(1))
         .join(",");
+    }
+
+    // The hotspots sit on the leaves beside the stem, not on the stem: the old leaves to the left (their centres are
+    // 0.55 from it), the young to the right (0.3), so the two never cover each other however the plant is turned.
+    const report = anchorsRef.current;
+    if (report && oldHit.current && youngHit.current) {
+      const at = (mesh: Mesh, dx: number) => {
+        mesh.getWorldPosition(point);
+        point.x += dx * mesh.parent!.scale.x;
+        point.project(camera);
+        return { x: ((point.x + 1) / 2) * canvas.clientWidth, y: ((1 - point.y) / 2) * canvas.clientHeight };
+      };
+      report({
+        old: at(oldHit.current, -OLD_LEAVES[0]!.radius),
+        young: at(youngHit.current, YOUNG_LEAVES[0]!.radius),
+        w: canvas.clientWidth,
+        h: canvas.clientHeight,
+      });
     }
   });
 

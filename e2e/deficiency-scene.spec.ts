@@ -122,3 +122,121 @@ test("without WebGL the frame shows the flat plant and the note, the picker stil
   await expect(flat).toHaveAttribute("data-leaf", "young");
   await expect(page.locator(".def-answer")).toHaveAttribute("data-group", "young");
 });
+
+/* ---- The callouts over the plant (T-039) ---- */
+const hotspot = (page: Page, name: string) => page.locator(".def-picture").getByRole("button", { name, exact: true });
+const OLD = "เลือกใบแก่";
+const YOUNG = "เลือกใบอ่อนหรือยอด";
+
+test("each leaf group has a real button on it, at least 44 px, inside the frame, saying which is chosen", async ({ page }) => {
+  await page.goto(ROUTE);
+  await expect(hotspot(page, OLD)).toBeVisible();
+  const frame = (await page.locator(".def-picture").boundingBox())!;
+  for (const name of [OLD, YOUNG]) {
+    const b = (await hotspot(page, name).boundingBox())!;
+    expect(b.width, name).toBeGreaterThanOrEqual(44);
+    expect(b.height, name).toBeGreaterThanOrEqual(44);
+    expect(b.x).toBeGreaterThanOrEqual(frame.x);
+    expect(b.x + b.width).toBeLessThanOrEqual(frame.x + frame.width);
+    expect(b.y).toBeGreaterThanOrEqual(frame.y);
+    expect(b.y + b.height).toBeLessThanOrEqual(frame.y + frame.height);
+  }
+  await expect(hotspot(page, OLD)).toHaveAttribute("aria-pressed", "true");
+  await expect(hotspot(page, YOUNG)).toHaveAttribute("aria-pressed", "false");
+  // Old leaves low and to the left, young ones high and to the right, as drawn.
+  const o = (await hotspot(page, OLD).boundingBox())!;
+  const y = (await hotspot(page, YOUNG).boundingBox())!;
+  expect(o.y).toBeGreaterThan(y.y);
+  expect(o.x).toBeLessThan(y.x);
+});
+
+test("the labels name each group from the source's rule, with a line to their hotspot, and the hint sits at the foot", async ({ page }) => {
+  await page.goto(ROUTE);
+  await expect(hotspot(page, OLD)).toBeVisible();
+  await expect(page.locator(".def-callout-old")).toHaveText("ใบแก่ธาตุที่เคลื่อนที่ได้ในพืช");
+  await expect(page.locator(".def-callout-young")).toHaveText("ใบอ่อน/ยอดธาตุที่เคลื่อนที่ไม่ได้");
+  await expect(page.locator(".def-picture .def-hint")).toHaveText("ลากเพื่อหมุน · แตะจุดบนใบเพื่อดูอาการ");
+  const label = (await page.locator(".def-callout-old").boundingBox())!;
+  const spot = (await hotspot(page, OLD).boundingBox())!;
+  expect(label.x + label.width, "the old label sits left of its hotspot").toBeLessThan(spot.x);
+  for (const side of ["old", "young"]) {
+    const w = await page.locator(".def-leader").nth(side === "old" ? 0 : 1).evaluate((el) => el.getBoundingClientRect().width);
+    expect(w, `${side} leader`).toBeGreaterThan(10);
+  }
+});
+
+test("a hotspot chooses its group by tap and by keyboard", async ({ page }) => {
+  await page.goto(ROUTE);
+  await hotspot(page, YOUNG).click();
+  await expect(page.locator(".def-answer")).toHaveAttribute("data-group", "young");
+  await expect(hotspot(page, YOUNG)).toHaveAttribute("aria-pressed", "true");
+  await expect(hotspot(page, OLD)).toHaveAttribute("aria-pressed", "false");
+  await hotspot(page, OLD).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator(".def-answer")).toHaveAttribute("data-group", "old");
+  await hotspot(page, YOUNG).focus();
+  await page.keyboard.press("Space");
+  await expect(page.locator(".def-answer")).toHaveAttribute("data-group", "young");
+  // The radios below agree.
+  await expect(page.getByRole("group", { name: "เลือกตำแหน่งใบ" }).getByLabel("ใบอ่อน/ยอด", { exact: true })).toBeChecked();
+});
+
+test("the callouts follow the plant when it is zoomed", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(ROUTE);
+  await expect(hotspot(page, YOUNG)).toBeVisible();
+  const before = (await hotspot(page, YOUNG).boundingBox())!;
+  const c = (await canvas(page).boundingBox())!;
+  await page.mouse.move(c.x + c.width / 2, c.y + c.height / 2);
+  await page.keyboard.down("Control");
+  for (let i = 0; i < 6; i++) await page.mouse.wheel(0, 40);
+  await page.keyboard.up("Control");
+  await expect.poll(async () => Math.abs((await hotspot(page, YOUNG).boundingBox())!.y - before.y)).toBeGreaterThan(8);
+  const label = (await page.locator(".def-callout-young").boundingBox())!;
+  const spot = (await hotspot(page, YOUNG).boundingBox())!;
+  expect(label.x, "the label went with it").toBeGreaterThan(spot.x);
+});
+
+test("after a drag turns the plant, each hotspot still sits on its own leaf group", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(ROUTE);
+  await expect(hotspot(page, OLD)).toBeVisible();
+  const c = (await canvas(page).boundingBox())!;
+  const before = Number(await canvas(page).getAttribute("data-yaw"));
+  await page.mouse.move(c.x + c.width * 0.6, c.y + c.height * 0.55);
+  await page.mouse.down();
+  await page.mouse.move(c.x + c.width * 0.6 + 120, c.y + c.height * 0.55, { steps: 8 });
+  await page.mouse.up();
+  await expect.poll(async () => Number(await canvas(page).getAttribute("data-yaw"))).toBeGreaterThan(before + 0.5);
+  for (const [name, which] of [[OLD, "old"], [YOUNG, "young"]] as const) {
+    const b = (await hotspot(page, name).boundingBox())!;
+    const r = await region(page, which);
+    const [cx, cy] = [b.x + b.width / 2, b.y + b.height / 2];
+    expect(Math.abs(cx - r.cx), `${which} across`).toBeLessThan(r.w / 2);
+    expect(Math.abs(cy - r.cy), `${which} up and down`).toBeLessThan(r.h / 2);
+  }
+});
+
+test("a focused hotspot shows the site's focus ring", async ({ page }) => {
+  await page.goto(ROUTE);
+  await expect(hotspot(page, OLD)).toBeVisible();
+  // WebKit's Tab skips buttons unless Safari's "Press Tab to highlight each item" is on, so focus it directly.
+  await hotspot(page, OLD).focus();
+  await expect(hotspot(page, OLD)).toBeFocused();
+  expect(await hotspot(page, OLD).evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("solid");
+});
+
+test("without WebGL there are no hotspots, labels or hint, only the flat plant and the picker", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+      if (/webgl/.test(type)) return null;
+      return (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+    } as typeof original;
+  });
+  await page.goto(ROUTE);
+  await expect(page.locator(".def-picture .flat-fallback")).toBeVisible();
+  await expect(page.locator(".def-picture").getByRole("button")).toHaveCount(0);
+  await expect(page.locator(".def-picture .def-hint")).toBeHidden();
+  await expect(page.locator(".def-callout-old")).toBeHidden();
+});
