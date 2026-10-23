@@ -98,5 +98,9 @@
   "homeChapterCountShort": "7 บท",
   "npkNameN": "ไนโตรเจน",
   "npkNameP": "ฟอสฟอรัส",
-  "npkNameK": "โพแทสเซียม"
+  "npkNameK": "โพแทสเซียม",
+  "chapterBack": "หน้าแรก",
+  "chapterWord": "บทที่",
+  "chapterFrom": "จาก",
+  "tierLegend": "ระดับแหล่งข้อมูลในบทนี้"
 }

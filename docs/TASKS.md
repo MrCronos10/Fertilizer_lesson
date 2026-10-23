@@ -681,6 +681,34 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **New Thai: U50–U66** in `docs/content/THAI-REVIEW.md`, all copied verbatim from the design. **U64–U66 (ไนโตรเจน, ฟอสฟอรัส, โพแทสเซียม) are in neither the pamphlet nor the current site**, so they need your check under D6.
   - **TODO left in code:** the header's sources link and the strip's all-sources link, until an all-sources page exists.
 
+### T-028: Chapter 1 redesign — hero and top bars
+- Status: done (the real-iPad look and the Thai review are yours)
+- Depends on: T-027
+- Goal: Chapter 1's hero (sky and soil art, back pill, chapter badge, title, seven-step progress) and the sources bar with the chapter's tier badges, from `Chapter-01-Landscape.dc.html` (1366).
+- Acceptance criteria:
+  - [x] Hero art copied from the artboard (decorative SVG, `aria-hidden`; no text in it); the title stays the page's one `<h1>`
+  - [x] "หน้าแรก" back pill is a real link, 44 px, border at 3:1
+  - [x] Progress shows chapter 1 of 7; the sources bar lists only the tiers the chapter cites
+  - [x] Safe areas kept; the other chapters are unchanged
+- Test plan: unit (strings, tiers), WebKit e2e at 1366, 834 and 390 in both themes; axe.
+- **Verified:** typecheck, lint, 878 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 952 passed, 0 failed after two fixes below (the new `e2e/chapter-hero.spec.ts` adds 12). Lighthouse (1 run, Chrome): ch01 performance 98, accessibility 100; every route meets the budget.
+  - **What was built:** `components/ChapterHero.tsx` (art copied from the artboard, back pill, badge, "บทที่ 1 จาก 7", seven-step progress), the sources bar with the tiers the chapter actually cites (`app/[locale]/[slug]/page.tsx`), styles in `globals.css`. Chapters 2–7 keep their old top.
+  - **A real defect found, and fixed:** with the hero's two arrow icons as inline `<svg>` inside links, WebKit left `load` unfired on chapter 1 in 33 of 45 walks of `e2e/fonts-load.spec.ts`. Removing the hero picture changed nothing (31 of 45); removing the arrows cured it (0 of 45). Same trigger as the theme button in T-027. The arrows are now CSS masks: 0 of 60 stalls with the hero picture in.
+  - **Test changed because the layout changed:** `scene3d.spec.ts` assumed the 3D plant was near the screen on arrival. The taller hero moves it out of range, so three.js (loaded only near the screen, T-024) did not load. That test now scrolls to the explorer first.
+  - **Departures from the artboard:** the back pill's border is `--line` (the artboard's 0.22 alpha is under 3:1); the bar uses `--soil`-free `--soft` (#e6e9dc) rather than #ece9dc, so it follows the theme; hero art stays light-coloured in dark mode (the artboard has no night version).
+  - **New Thai: U67–U70** in `docs/content/THAI-REVIEW.md`, copied from the artboard.
+  - **Not verified:** a real iPad; VoiceOver; portrait and phone layouts of this hero (T-031 in the plan); a fresh code reviewer (runs once over T-028–T-030).
+
+### T-029: Chapter 1 redesign — reading column
+- Status: todo
+- Depends on: T-028
+- Goal: Two-column landscape layout; body text with source line and tier badge; nutrient table with N/P/K chips; "อาการขาดธาตุ" card; back/next footer.
+
+### T-030: Chapter 1 redesign — side column (leaf picker and sources)
+- Status: todo
+- Depends on: T-028
+- Goal: Leaf-position picker with the flat plant diagram and answer card; sources card. Decision pending with the owner: the chapter's existing 3D plant versus the artboard's flat diagram plus a link to the (not yet built) Deficiency screen.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

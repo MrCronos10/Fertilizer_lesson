@@ -121,6 +121,11 @@ export const UI_KEYS = [
   "npkNameN",
   "npkNameP",
   "npkNameK",
+  /** Chapter hero (T-028): "บทที่ 1" and "บทที่ 1 จาก 7" are built from these, copied from the Chapter-01 artboards. */
+  "chapterBack",
+  "chapterWord",
+  "chapterFrom",
+  "tierLegend",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

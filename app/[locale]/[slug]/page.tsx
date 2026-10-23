@@ -2,10 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChapterBody } from "@/components/ChapterBody";
+import { ChapterHero } from "@/components/ChapterHero";
+import { citationEntry } from "@/lib/citations";
 import { Sources } from "@/components/Citations";
 import { chapterSlug, readChapters } from "@/lib/content";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
+import type { Tier } from "@/lib/sources";
+import { TierBadge } from "@/components/TierBadge";
 import { readUiStrings } from "@/lib/ui";
+
+const TIERS: readonly Tier[] = ["official", "research", "commercial"];
 
 type Params = Promise<{ locale: string; slug: string }>;
 
@@ -21,7 +27,7 @@ function find(locale: string, slug: string) {
   const index = chapters.findIndex((c) => chapterSlug(c.frontmatter.chapter) === slug);
   const chapter = chapters[index];
   if (!chapter) return null;
-  return { chapter, previous: chapters[index - 1], next: chapters[index + 1] };
+  return { chapter, previous: chapters[index - 1], next: chapters[index + 1], total: chapters.length };
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
@@ -35,14 +41,43 @@ export default async function ChapterPage({ params }: { params: Params }) {
   const found = find(locale, slug);
   if (!found) notFound();
   const ui = readUiStrings(locale as "th");
-  const { chapter, previous, next } = found;
+  const { chapter, previous, next, total } = found;
 
-  return (
-    <article className="stack">
-      <a className="jump-sources" href="#sources">
+  const redesigned = chapter.frontmatter.chapter === 1;
+  const tiers = TIERS.filter((t) => chapter.frontmatter.citations.some((id) => citationEntry(id).tier === t));
+  const sourcesBar = redesigned ? (
+    <div className="jump-sources">
+      <a href="#sources">
         {ui.jumpToSources}
       </a>
-      <h1>{chapter.frontmatter.heading}</h1>
+      {tiers.length > 0 ? (
+        <span className="tier-legend">
+          {ui.tierLegend}
+          {tiers.map((t) => (
+            <TierBadge key={t} tier={t} ui={ui} />
+          ))}
+        </span>
+      ) : null}
+    </div>
+  ) : (
+    <a className="jump-sources" href="#sources">
+      {ui.jumpToSources}
+    </a>
+  );
+
+  return (
+    <article className={redesigned ? "stack chapter-redesign" : "stack"}>
+      {redesigned ? (
+        <>
+          <ChapterHero locale={locale} ui={ui} chapter={chapter.frontmatter.chapter} total={total} heading={chapter.frontmatter.heading} />
+          {sourcesBar}
+        </>
+      ) : (
+        <>
+          {sourcesBar}
+          <h1>{chapter.frontmatter.heading}</h1>
+        </>
+      )}
       <ChapterBody source={chapter.body} ui={ui} />
       <Sources chapter={chapter} ui={ui} />
       <nav className="chapter-nav" aria-label={ui.chapterNav}>

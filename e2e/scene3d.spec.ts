@@ -170,7 +170,7 @@ test("the drawing buffer is capped at 2x even on a 3x display", async ({ browser
   await context.close();
 });
 
-async function scriptsLoaded(page: Page, route: string) {
+async function scriptsLoaded(page: Page, route: string, scrollTo?: string) {
   const bodies: Promise<{ size: number; text: string }>[] = [];
   const onResponse = (r: Response) => {
     if (/\.js(\?|$)/.test(r.url()))
@@ -178,6 +178,13 @@ async function scriptsLoaded(page: Page, route: string) {
   };
   page.on("response", onResponse);
   await page.goto(route, { waitUntil: "networkidle" });
+  // three.js is fetched when the plant is near the screen (T-024); a hero above it can put it out of range on arrival.
+  if (scrollTo) {
+    await page.locator(scrollTo).scrollIntoViewIfNeeded();
+    // The observer fires, then the chunk is requested: give that request time to start before waiting for quiet.
+    await page.waitForTimeout(500);
+    await page.waitForLoadState("networkidle");
+  }
   page.off("response", onResponse);
   return Promise.all(bodies);
 }
@@ -190,7 +197,7 @@ test("the 3D route ships at most 600 KB gzipped JS and does carry three.js", asy
 });
 
 test("chapter 1 (the deficiency explorer) is a 3D route: within 600 KB and carrying three.js", async ({ page }) => {
-  const scripts = await scriptsLoaded(page, "/th/ch01");
+  const scripts = await scriptsLoaded(page, "/th/ch01", ".deficiency");
   const total = scripts.reduce((n, s) => n + s.size, 0);
   expect(total, `/th/ch01 JS is ${total} bytes gzipped`).toBeLessThanOrEqual(600 * 1024);
   expect(scripts.some((s) => s.text.includes("WebGLRenderer"))).toBe(true);

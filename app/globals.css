@@ -532,6 +532,168 @@ main:focus {
   }
 }
 
+/* Chapter 1 hero and sources bar (T-028), from Chapter-01-Landscape.dc.html. The hero runs edge to edge, so it
+   cancels the page padding (safe areas included) and gives it back to its own contents. */
+.chapter-redesign > .chapter-hero,
+.chapter-redesign > .jump-sources {
+  --pad-l: calc(var(--gutter) + env(safe-area-inset-left, 0px));
+  --pad-r: calc(var(--gutter) + env(safe-area-inset-right, 0px));
+  margin-inline: calc(-1 * var(--pad-l)) calc(-1 * var(--pad-r));
+}
+.chapter-redesign {
+  max-width: none;
+}
+.chapter-redesign > :not(.chapter-hero, .jump-sources) {
+  width: 100%;
+  max-width: 70ch;
+  margin-inline: auto;
+}
+.chapter-hero {
+  position: relative;
+  min-height: 340px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  margin-top: calc(-1 * (var(--gutter) + env(safe-area-inset-top, 0px)));
+}
+@media (min-width: 75em) {
+  .chapter-hero {
+    min-height: 420px;
+  }
+}
+.chapter-hero-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.chapter-back {
+  position: absolute;
+  top: calc(24px + env(safe-area-inset-top, 0px));
+  left: calc(var(--gutter) + env(safe-area-inset-left, 0px));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+/* The arrows are CSS masks, not inline <svg>: an inline <svg> inside a link here made WebKit leave `load`
+   unfired on chapter 1 (33 of 45 walks), the same as the theme button's icon in T-027. */
+.chapter-icon {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.chapter-icon-back {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 9H4M8.5 4.5L4 9l4.5 4.5'/%3E%3C/svg%3E");
+}
+.chapter-icon-down {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3v11M4.5 9.5L9 14l4.5-4.5'/%3E%3C/svg%3E");
+}
+.chapter-title-card {
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, 760px);
+  padding: 28px calc(var(--gutter) + env(safe-area-inset-left, 0px)) 26px;
+  background: var(--bg);
+  border-top-right-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 75em) {
+  .chapter-title-card {
+    padding-inline-start: calc(40px + env(safe-area-inset-left, 0px));
+  }
+  .chapter-back {
+    left: calc(40px + env(safe-area-inset-left, 0px));
+  }
+}
+.chapter-title-card h1 {
+  margin: 0;
+  font-size: 40px;
+  color: var(--brand);
+  text-wrap: pretty;
+}
+.chapter-where {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.chapter-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 13px;
+}
+.chapter-steps {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+.chapter-steps span {
+  width: 64px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  opacity: 0.45;
+}
+.chapter-steps span[data-done] {
+  background: var(--accent);
+  opacity: 1;
+}
+.chapter-redesign > .jump-sources {
+  box-sizing: border-box;
+  min-height: 56px;
+  justify-content: space-between;
+  gap: 16px;
+  padding-inline: var(--pad-l) var(--pad-r);
+  background: var(--soft);
+}
+.chapter-redesign > .jump-sources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.tier-legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+@media (min-width: 75em) {
+  .chapter-redesign > .jump-sources {
+    padding-inline: 64px;
+  }
+}
+
 .sources {
   display: grid;
   gap: 0.75rem;
