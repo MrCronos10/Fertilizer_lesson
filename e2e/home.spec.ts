@@ -70,7 +70,8 @@ test("D16: one live context, released when leaving for chapter 1 and back", asyn
   await page.addInitScript(TRACK_CONTEXTS);
   await page.goto("/th");
   await expect(canvas(page)).toBeVisible();
-  expect(await alive(page)).toBe(1);
+  // The <canvas> is in the page a moment before its context exists: wait for the count (see deficiency.spec.ts).
+  await expect.poll(() => alive(page)).toBe(1);
   for (let i = 0; i < 2; i++) {
     await page.getByRole("navigation", { name: "สารบัญ" }).getByRole("link").first().click();
     await expect(page).toHaveURL(/\/th\/ch01$/);

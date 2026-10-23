@@ -5,6 +5,8 @@ import { RULE_PAGE, ruleElements, ruleGroupLabel, type LeafGroup, type LeafGroup
 import type { Tier } from "@/lib/sources";
 import type { UiStrings } from "@/lib/ui";
 import { FlatPlant } from "./FlatPlant";
+import { NearViewport } from "./NearViewport";
+import { PlantExplorer } from "./PlantExplorer";
 import { TierBadge } from "./TierBadge";
 
 /** What the answer panel's source line needs, read on the server so the bibliography stays out of this chunk. */
@@ -14,7 +16,7 @@ export type PageSource = { readonly name: string; readonly tier: Tier; readonly 
  * The deficiency explorer page's interactive half (T-037): the picture, the leaf picker and the answer panel.
  * `left` and `right` are the server-rendered blocks that sit under each column (sources; rules, strip and next
  * link), so the answer can sit in the right column while the picture and picker sit in the left.
- * The picture is the flat plant for now; the 3D scene replaces it in T-038.
+ * The picture is the 3D plant (T-038), fetched when it is about to be seen; the flat plant stands in without WebGL.
  */
 export function DefPageExplorer({
   ui,
@@ -48,7 +50,20 @@ export function DefPageExplorer({
     <div className="def-layout">
       <div className="def-col def-col-left">
         <div className="def-picture">
-          <FlatPlant selected={selected} label={ui.defFlatLabel} />
+          <NearViewport placeholder={<div className="scene3d" aria-hidden="true" />}>
+            <PlantExplorer
+              label={ui.defSceneLabel}
+              fallback={
+                <figure className="scene3d-fallback flat-fallback">
+                  <FlatPlant selected={selected} label={ui.defFlatLabel} />
+                  <figcaption>{ui.defNo3d}</figcaption>
+                </figure>
+              }
+              selected={selected}
+              onSelect={setSelected}
+              stage="page"
+            />
+          </NearViewport>
         </div>
         <fieldset className="def-choice">
           <legend>{ui.defLegend}</legend>
