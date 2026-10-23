@@ -904,6 +904,109 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
 
 ---
 
+## Redesign: chapters 2–6 (planned 2026-10-24)
+
+Chapters 2–6 take the redesign so the whole lesson matches the home page and chapter 1. **Design sources:**
+- **Chapter 3:** the only one of these with artboards, Bag-Calculator-Landscape and Bag-Calculator-Portrait.
+- **Shared header:** the Bag-Calculator and Quiz artboards show a short header band shared by every chapter after the first. It holds the bar (back to the contents, "บทที่ N จาก 7"), a 150–160 px band with a small scene of the chapter's own, the chapter badge and the title. Chapter 1 keeps its tall hero.
+- **Chapters 2, 4, 5 and 6 (no artboards):** built from chapter 1's parts and the Design-System artboard:
+  - cards
+  - the source line under a block
+  - the sources card
+  - the soil-test strip
+  - the footer
+
+  Their band scenes are drawn by me in the flat style of the chapter 3 and 7 bands. That is an owner decision of 2026-10-24, and each scene is a departure for the owner or designer to review.
+- **Rules that still apply:** copy artboard values exactly; Thai text verbatim, with any new UI wording in THAI-REVIEW; no Thai in components; icons as CSS masks; no `inline-flex` on links; 44 px targets; colours through the site's tokens, so the dark theme works.
+
+Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
+
+### T-043: Turn on the redesign per chapter
+- Status: ready (Sonnet)
+- Depends on: T-042
+- Goal: Whether a chapter uses the redesign is said by the chapter itself, not by a "chapter 1" check in the page. Chapter 1's stylesheet and its guard tests become the shared redesigned-chapter stylesheet. Chapter 1 looks exactly as it does now.
+- Acceptance criteria:
+  - [ ] A chapter opts into the redesign in its own front matter; chapter 1 opts in, chapters 2–7 do not yet
+  - [ ] The stylesheet and its guards (scoping, min-width-only queries, unused properties) are named for every redesigned chapter, not chapter 1
+  - [ ] The footer makes the next chapter the primary button when the chapter has no explorer button (chapter 1 keeps the explorer as primary)
+  - [ ] Chapter 1 is unchanged: its e2e specs, the canary and Lighthouse pass as before
+
+### T-044: Short chapter header, and chapter 3's page shell
+- Status: ready (Opus)
+- Depends on: T-043
+- Goal: The header band of chapters after the first, from Bag-Calculator-Landscape and Bag-Calculator-Portrait: the bar (back to the contents, "บทที่ 3 จาก 7"), the 160 px band with the artboard's bag scene (inline art, no text in it), the badge and the title. Chapter 3 opts in. Its bag reader and calculator sit in the new page unchanged; it gets the sources card and the footer.
+- Acceptance criteria:
+  - [ ] The band matches the artboard at 1366 and 834, and has a phone layout; the scene is decorative (hidden from screen readers)
+  - [ ] One h1, the back link and the chapter count; 44 px targets; no sideways scroll at 320
+  - [ ] The band takes a scene per chapter, so T-047–T-050 only add their own
+  - [ ] The bag reader and calculator still pass their existing specs; the canary and Lighthouse pass
+
+### T-045: Chapter 3 bag reader to the artboard
+- Status: ready (Opus)
+- Depends on: T-044
+- Goal: "แตะตัวเลขบนกระสอบ": the bag reader restyled to the Bag-Calculator artboards in landscape and portrait, with the behaviour unchanged (tapping a number on the bag explains it, from the pamphlet's words).
+- Acceptance criteria:
+  - [ ] Sizes, colours and layout as drawn at 1366 and 834; works on a phone
+  - [ ] Every tappable number is a real button, 44 px, keyboard-operable, with its state announced
+  - [ ] Its existing behaviour specs pass; the artboard's PLACEHOLDER rows are not built (the real data shows)
+
+### T-046: Chapter 3 calculator to the artboard
+- Status: ready (Sonnet)
+- Depends on: T-044
+- Goal: "คำนวณว่าต้องใช้ปุ๋ยกี่กิโลกรัมต่อไร่": the target rate, the grade on the bag (N, P₂O₅, K₂O) and "คิดจากธาตุใด", restyled to the artboards. The arithmetic and its source are unchanged; the result keeps its "starting point, test the soil" framing.
+- Acceptance criteria:
+  - [ ] Sizes, colours and layout as drawn at 1366 and 834; works on a phone
+  - [ ] Labelled fields, oxide units only, errors announced; 44 px targets
+  - [ ] Its existing calculation specs pass unchanged
+
+### T-047: Chapter 2 redesign
+- Status: ready (Sonnet)
+- Depends on: T-044
+- Goal: Chapter 2 opts in. The eight sections (2.1–2.8) read as chapter 1's cards with a source line under each block. The source tables and the timing diagram are in the redesigned style. The band shows a scene I draw (fertilizer types: a compost heap beside sacks).
+- Acceptance criteria:
+  - [ ] Every block names its source as chapter 1's do; no prose sits outside a sourced block
+  - [ ] Tables readable and inside the column at 1366, 834 and 390; the timing diagram keeps its text as real text
+  - [ ] Axe clean in both themes; the canary and Lighthouse pass
+  - [ ] The scene is listed as a departure in the Verified note
+
+### T-048: Chapter 4 redesign
+- Status: ready (Sonnet)
+- Depends on: T-044
+- Goal: Chapter 4 opts in. The five sections (4R, practice, safety, mistakes, environment) as cards. The three safety ones take the warning style that chapter 1's soil-test strip uses. The band shows a scene I draw (a hand spreading fertilizer along a row).
+- Acceptance criteria:
+  - [ ] Section structure, page references and "uncited" markings kept; warning sections read as warnings without relying on colour alone
+  - [ ] Layout at 1366, 834 and 390; axe clean in both themes; the canary and Lighthouse pass
+  - [ ] The scene is listed as a departure
+
+### T-049: Chapter 5 redesign
+- Status: ready (Sonnet)
+- Depends on: T-044
+- Goal: Chapter 5 opts in. The two crop tables and the crop matcher in the redesigned style. The band shows a scene I draw (a rice paddy).
+- Acceptance criteria:
+  - [ ] Tables readable at all three widths (scroll inside their own box if they must, never the page); the crop matcher's behaviour specs pass
+  - [ ] 44 px targets; axe clean in both themes; the canary and Lighthouse pass
+  - [ ] The scene is listed as a departure
+
+### T-050: Chapter 6 redesign
+- Status: ready (Sonnet)
+- Depends on: T-044
+- Goal: Chapter 6 (the glossary) opts in. The glossary table is in the redesigned style. The band shows a scene I draw (an open book with a leaf).
+- Acceptance criteria:
+  - [ ] Every term and definition kept word for word; readable at all three widths
+  - [ ] Axe clean in both themes; the canary and Lighthouse pass
+  - [ ] The scene is listed as a departure
+
+### T-051: Chapters 2–6 — final checks and review
+- Status: ready (Sonnet)
+- Depends on: T-045, T-046, T-047, T-048, T-049, T-050
+- Goal: Close the chapters 2–6 redesign: a two-axis review (standards and spec) of the whole diff, fixes, the full checks, and a preview for the owner.
+- Acceptance criteria:
+  - [ ] The review's findings are fixed or left on purpose, each recorded
+  - [ ] Full WebKit e2e, the canary (`--repeat-each=20`) and Lighthouse (3 runs) all green
+  - [ ] A preview link sent to the owner, and the new Thai and the drawn scenes listed for review
+
+---
+
 ## Open follow-ups (created on demand, not yet scheduled)
 
 - Approved entries from `docs/content/ADDITIONS.md` become one task each (gated by T-008).
