@@ -800,6 +800,25 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Left alone, on purpose:** the two hero drawings (the artboards are two different pictures, so generating one from the other would hide that); `chapter === 1` in the page (becomes a frontmatter flag when chapter 2 is redesigned); the caption parsing in the table.
   - **iCloud again:** two copies (`SourcesLink 2.tsx`, `sources-link.spec 2.ts`) appeared during this work and were deleted before the commit; the first one failed the shell test, and the second would have run as an extra e2e spec.
 
+### T-037: Deficiency explorer redesign — page shell (`/th/ch01/deficiency`)
+- Status: done (the picture is the flat plant until T-038; the real-iPad look and the Thai review are yours)
+- Depends on: T-036
+- Goal: The new page from `Deficiency-Landscape.dc.html` (1366): header bar, picture, leaf picker, answer panel, rules panel, soil-test strip, link on to the bag reader, sources. Decisions taken with my recommendations (the owner left the questions open): the route is `/th/ch01/deficiency`; chapter 1 keeps its own 3D plant (the link to this page is T-041); the site's existing "no leaf position" wording stays; the next link goes to chapter 3.
+- Acceptance criteria:
+  - [x] One h1, a back link to chapter 1 and a sources link, all 44 px
+  - [x] Answer panel: badge, group label, the pamphlet's own sentence, chips (N, P, K in the lesson's colours, the rest soil-brown), a polite live region
+  - [x] Rules panel, soil-test strip, the "ต่อไป วิธีอ่านตัวเลขบนกระสอบ" link to chapter 3, a sources box with the one real source
+  - [x] In the route budget, axe-checked in both themes, and walked by the load-stall canary
+- **Verified:** typecheck, lint, 894 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1060 passed, 0 failed (`e2e/deficiency-page.spec.ts` adds 27); canary 60 of 60; Lighthouse (1 run): the new page performance 97, accessibility 100.
+  - **From the source, not typed twice:** the chips, the group names and the rules panel's text are cut from the pamphlet's own rule sentences by three small functions in `lib/deficiency.ts` (unit-tested), so the source's words and order show (Fe, Ca, B, S, Mn).
+  - **A real accessibility failure, found by the full run:** the rules panel's group names in the artboard's colours (#B5541E, #8456B0) on the beige panel are under 4.5:1 (axe, light theme). The artboard itself fails there. The colour stays on the dot and the names are in the ink colour. My first full run printed no result line and I had called it clean; I reran it and found this.
+  - **Departures from the artboard, all deliberate:** the rules-panel names (above); the answer's source line says pages "2, 3", not 3 (the rule sentence is on p2); the artboard's "PLACEHOLDER" row is not built, the box shows the real source; the picker's selected state uses `--soft` (follows the theme).
+  - **Status code, as the site already documents:** `/th/ch02/deficiency` and unknown locales render the not-found page with a noindex tag and status 200 (cacheComponents, see `e2e/shell.spec.ts`), not a 404.
+  - **Guards added:** `lib/deficiency.test.ts` fails on an unscoped selector in `deficiency.css` and on `display: inline-flex` on a link; `lib/budget.test.ts` knows the route.
+  - **New Thai: U76–U78** in `docs/content/THAI-REVIEW.md`, from the artboard.
+  - **Next:** T-038 the 3D scene and T-039 labels, leader lines and hotspots (both Opus, with the owner's OK to switch), T-040 portrait and phone, T-041 the link from chapter 1, T-042 final checks and review.
+  - **Not verified:** a real iPad; VoiceOver on the page.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

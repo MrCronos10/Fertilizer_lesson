@@ -21,6 +21,8 @@ export const ROUTES: readonly { readonly path: string; readonly kind: RouteKind 
   { path: "/th", kind: "3d" },
   // Chapter 1 carries the deficiency explorer's 3D plant (T-018).
   ...CHAPTER_SLUGS.map((slug) => ({ path: `/th/${slug}`, kind: (slug === "ch01" ? "3d" : "text") as RouteKind })),
+  // The deficiency explorer page (T-037). A text route until its 3D scene arrives (T-038).
+  { path: "/th/ch01/deficiency", kind: "text" },
   // Internal pages, not part of the lesson but served, so held to the same budget.
   { path: "/specimen", kind: "text" },
   { path: "/specimen-3d", kind: "3d" },

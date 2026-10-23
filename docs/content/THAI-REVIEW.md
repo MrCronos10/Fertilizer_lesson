@@ -243,3 +243,6 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U73 | `moreUnit` | `แหล่ง` | "sources", after that number: "และอีก 2 แหล่ง". |
 | U74 | `defBadgeNone` | `ไม่ระบุ` | Grey badge on the deficiency answer card when the pamphlet names no leaf position: "not specified". From the Chapter-01 artboards. |
 | U75 | `defFlatLabel` | `ภาพต้นพืช แสดงตำแหน่งใบแก่ด้านล่างและใบอ่อนหรือยอดด้านบน` | Spoken name of the flat plant shown when the 3D plant cannot run: "a plant, showing the old leaves low and the young leaves or tip high". From the Chapter-01 artboards. |
+| U76 | `defGroupNone` | `ไม่มีข้อมูลอ้างอิง` | Group label on the explorer page's answer panel when the pamphlet names no leaf position: "no reference data". From the Deficiency artboards. |
+| U77 | `defRulesHeading` | `กฎที่ใช้อ่านอาการ` | Heading of the rules panel: "the rule for reading symptoms". From the Deficiency artboards. |
+| U78 | `defNext` | `ต่อไป วิธีอ่านตัวเลขบนกระสอบ` | The explorer page's link on to the bag reader (chapter 3): "Next: how to read the numbers on the bag". From the Deficiency artboards. |

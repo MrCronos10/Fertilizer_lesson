@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { deficiencyGroups } from "./deficiency";
+import { deficiencyGroups, ruleElements, ruleGroupLabel, ruleScope } from "./deficiency";
 import { numsFor } from "./nums";
 import { readUiStrings } from "./ui";
 
@@ -69,5 +69,47 @@ describe("the explorer's words", () => {
     expect(nospace(readFileSync(join(__dirname, "../docs/content/raw/p03.txt"), "utf8"))).toContain(nospace(`ธาตุ ${ui.colSymptom}`));
     // The label is now the heading of the card that holds the paragraph (T-029); the manifest records the dropped colon.
     expect(squash(CH01)).toContain(`<Card heading="${ui.defTableCaption}">`);
+  });
+});
+
+describe("the rule sentence, read for the explorer page (T-037)", () => {
+  const ui = readUiStrings("th");
+
+  it("takes the chips from the source's own bracket, in its order", () => {
+    expect(ruleElements(ui.defRuleOld)).toEqual(["N", "P", "K", "Mg"]);
+    expect(ruleElements(ui.defRuleYoung)).toEqual(["Fe", "Ca", "B", "S", "Mn"]);
+  });
+
+  it("has no chips for the sentence that names none", () => {
+    expect(ruleElements(ui.defRuleNone)).toEqual([]);
+  });
+
+  it("takes the group's name and its scope from the same sentence, unchanged", () => {
+    expect(ruleGroupLabel(ui.defRuleOld)).toBe("ธาตุที่เคลื่อนที่ได้ในพืช");
+    expect(ruleGroupLabel(ui.defRuleYoung)).toBe("ธาตุที่เคลื่อนที่ไม่ได้");
+    expect(ruleScope(ui.defRuleOld)).toBe("ธาตุที่เคลื่อนที่ได้ในพืช (N, P, K, Mg)");
+    expect(ruleScope(ui.defRuleYoung)).toBe("ธาตุที่เคลื่อนที่ไม่ได้ (Fe, Ca, B, S, Mn)");
+  });
+
+  it("returns the sentence whole when it has no bracket, rather than inventing a split", () => {
+    expect(ruleGroupLabel(ui.defRuleNone)).toBe(ui.defRuleNone);
+    expect(ruleScope(ui.defRuleNone)).toBe(ui.defRuleNone);
+  });
+});
+
+describe("deficiency.css", () => {
+  const raw = readFileSync(join(__dirname, "../app/[locale]/[slug]/deficiency/deficiency.css"), "utf8");
+  const css = raw.replace(/\/\*[\s\S]*?\*\//g, "").replace(/@[^{]+\{/g, "{");
+  const selectors = [...css.matchAll(/([^{}]+)\{[^{}]*\}/g)].flatMap((m) => m[1]!.split(/,(?![^(]*\))/).map((x) => x.trim())).filter(Boolean);
+
+  it("scopes every rule to the explorer page, so its class names never reach another page", () => {
+    expect(selectors.length).toBeGreaterThan(40);
+    expect(selectors.filter((x) => !/(^|\s)\.def-page(\s|$|[.:\[>])/.test(x))).toEqual([]);
+  });
+
+  it("puts no display: inline-flex on a link, the trigger of WebKit's stalled load event (T-029)", () => {
+    const blocks = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+    const bad = blocks.filter(([, sel, body]) => /(^|[\s,>])a\b|-back|-next|-sources/.test(sel!) && /display:\s*inline-flex/.test(body!));
+    expect(bad.map(([, sel]) => sel!.trim())).toEqual([]);
   });
 });

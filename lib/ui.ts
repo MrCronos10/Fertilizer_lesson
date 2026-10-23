@@ -134,6 +134,10 @@ export const UI_KEYS = [
   "defBadgeNone",
   /** The flat plant's accessible name, when it stands in for the 3D one (T-032), from the Chapter-01 artboards. */
   "defFlatLabel",
+  /** The deficiency explorer page (T-037), from Deficiency-Landscape.dc.html: the group label when the pamphlet names none, the rules panel heading, and the link on to the bag reader. */
+  "defGroupNone",
+  "defRulesHeading",
+  "defNext",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

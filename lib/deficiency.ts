@@ -42,3 +42,27 @@ export function deficiencyGroups(): readonly LeafGroup[] {
   }
   return LEAF_GROUP_ORDER.map((id) => ({ id, entries: buckets[id] }));
 }
+
+/**
+ * The explorer page (T-037) shows the rule as chips, a group name and a scope. All three are cut from the
+ * pamphlet's own rule sentence ("<group> (<elements>) <verb> ..."), so the source's words and order are what
+ * show and nothing is typed in a second place. A sentence with no bracket is returned whole.
+ */
+const BRACKET = /^(.*?)\s*\(([^)]*)\)/;
+
+/** The elements the sentence names, in its order: "(N, P, K, Mg)" gives N, P, K, Mg. */
+export function ruleElements(rule: string): readonly string[] {
+  const m = BRACKET.exec(rule);
+  return m ? m[2]!.split(",").map((e) => e.trim()).filter(Boolean) : [];
+}
+
+/** The group's name: the sentence up to its bracket. */
+export function ruleGroupLabel(rule: string): string {
+  return BRACKET.exec(rule)?.[1] ?? rule;
+}
+
+/** The group with its bracket, "ธาตุ… (N, P, K, Mg)": what the rules panel shows. */
+export function ruleScope(rule: string): string {
+  const m = BRACKET.exec(rule);
+  return m ? `${m[1]} (${m[2]})` : rule;
+}

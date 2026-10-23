@@ -28,6 +28,10 @@ describe("the budget covers every route", () => {
     for (const path of ["/th", ...chapters]) expect(ROUTES.map((r) => r.path), path).toContain(path);
   });
 
+  it("lists the explorer page, which sits under a dynamic segment the file scan above skips", () => {
+    expect(ROUTES.map((r) => r.path)).toContain("/th/ch01/deficiency");
+  });
+
   it("has no duplicate or stray entries", () => {
     const paths = ROUTES.map((r) => r.path);
     expect(new Set(paths).size).toBe(paths.length);
