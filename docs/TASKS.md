@@ -819,6 +819,22 @@ P3 breadth and interactives (D2 Phase B) · P4 hardening.
   - **Next:** T-038 the 3D scene and T-039 labels, leader lines and hotspots (both Opus, with the owner's OK to switch), T-040 portrait and phone, T-041 the link from chapter 1, T-042 final checks and review.
   - **Not verified:** a real iPad; VoiceOver on the page.
 
+### T-038: Deficiency explorer — the 3D scene
+- Status: done
+- Depends on: T-037
+- Goal: The explorer page's picture becomes the 3D plant from the artboard: a soil mound and bed, a pale air background, a ring under the selected leaf group with the other group dimmed. Procedural geometry, no text in the canvas (D3, D7), one WebGL context (D16). Without WebGL or with reduced motion, the flat plant stands in.
+- Acceptance criteria:
+  - [x] The scene fills the 826/582 picture box and has a spoken name
+  - [x] Old and young leaf regions are at least 44 px, inside the frame; a tap selects, a drag turns the plant without selecting
+  - [x] Reduced motion holds still; no WebGL shows the flat plant with its caption
+  - [x] Going from the page to chapter 1 and back never holds two contexts
+  - [x] Home and chapter 1 keep their own look (the scene's `stage` defaults to "chapter")
+- **Verified:** typecheck, lint, 894 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1078 passed, 0 failed (`e2e/deficiency-scene.spec.ts` is new); canary 60 of 60; Lighthouse (1 run): the page performance 97, accessibility 100; chapter 1 96, 100.
+  - **The page is now a 3D route** in `lib/budget.ts` and the Lighthouse script (held to the score budgets, not the text-route LCP budget).
+  - **A flaky test on main, found and fixed:** R3F adds the `<canvas>` before it makes its context, so tests that counted live contexts straight away sometimes saw 0. The chapter 1 test failed 7 of 8 at iPad portrait when run alone; earlier clean runs were luck. `e2e/deficiency.spec.ts`, `e2e/home.spec.ts` and the new spec now poll until the count settles.
+  - **Scene colours** (soil, air, halo) stay in the scene and `deficiency.css`, not `globals.css`, as with the night scene.
+  - **Not verified:** a real iPad.
+
 ---
 
 ## Open follow-ups (created on demand, not yet scheduled)

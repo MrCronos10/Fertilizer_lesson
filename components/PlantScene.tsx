@@ -6,10 +6,18 @@ import { Box3, Vector3, type Group, type Mesh } from "three";
 import { ZOOM, cameraDistance, clampPan, clampZoom, dragYaw, isTap, pinchZoom } from "@/lib/gestures";
 import type { LeafGroupId } from "@/lib/deficiency";
 
+/**
+ * How the plant is staged. "chapter" is chapter 1's card (T-018): the plant alone, the chosen leaves glowing.
+ * "page" is the explorer page (T-038, Deficiency-Landscape.dc.html): on a soil mound, with the middle leaves,
+ * the chosen group in a coloured halo and the other dimmed.
+ */
+export type PlantStage = "chapter" | "page";
+
 type Props = {
   animate: boolean;
   selected: LeafGroupId;
   onSelect: (id: Exclude<LeafGroupId, "unplaced">) => void;
+  stage?: PlantStage;
 };
 
 /** Leaves round a stem: [angle, radius from the stem, tilt]. Purely a drawing, nothing agronomic. */
@@ -24,7 +32,7 @@ const rad = (deg: number) => (deg * Math.PI) / 180;
  * pinching (or Ctrl + scroll), pan with two fingers. The page text and the DOM radios
  * beside it do everything the scene does, so none of this is the only way in.
  */
-export function PlantScene({ animate, selected, onSelect }: Props) {
+export function PlantScene({ animate, selected, onSelect, stage = "chapter" }: Props) {
   const { gl, camera, invalidate } = useThree();
   const root = useRef<Group>(null);
   const oldHit = useRef<Mesh>(null);
@@ -168,13 +176,44 @@ export function PlantScene({ animate, selected, onSelect }: Props) {
       <ambientLight intensity={0.9} />
       <directionalLight position={[2, 3, 4]} intensity={1.4} />
       <group ref={root}>
-        <PlantModel selected={selected} oldHitRef={oldHit} youngHitRef={youngHit} onTapOld={tap("old")} onTapYoung={tap("young")} />
+        {stage === "page" ? <Ground /> : null}
+        <PlantModel
+          selected={selected}
+          highlight={stage === "page" ? "halo" : "glow"}
+          middle={stage === "page"}
+          oldHitRef={oldHit}
+          youngHitRef={youngHit}
+          onTapOld={tap("old")}
+          onTapYoung={tap("young")}
+        />
       </group>
     </>
   );
 }
 
 type TapEvent = { delta: number; stopPropagation: () => void };
+
+/** The explorer page's soil (T-038): a low mound on a wider bed, where the 2.6-unit stem stands (its foot at -1.3). */
+export const GROUND = { y: -1.3, mound: "#6B4A2F", bed: "#8B6239" } as const;
+
+function Ground() {
+  return (
+    <group position={[0, GROUND.y, 0]}>
+      <mesh scale={[1.25, 0.2, 1.25]}>
+        <sphereGeometry args={[1, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshStandardMaterial color={GROUND.mound} />
+      </mesh>
+      <mesh position={[0, -0.02, 0]}>
+        <cylinderGeometry args={[2, 2.1, 0.04, 48]} />
+        <meshStandardMaterial color={GROUND.bed} />
+      </mesh>
+    </group>
+  );
+}
+
+/** The halo colours are the lesson's old- and young-leaf colours (the artboard's #B5541E and #8456B0). */
+export const HALO = { old: "#B5541E", young: "#8456B0" } as const;
+const MIDDLE_LEAVES = [30, 210].map((deg) => ({ deg, radius: 0.42 }));
 
 /** The deficiency explorer's colours; the home hero passes the redesign's own (Main.dc.html). */
 export const PLANT_COLORS = { stem: "#5b7f3a", old: "#2f6f3c", young: "#8ac45a" } as const;
@@ -188,6 +227,8 @@ export type PlantColors = { readonly stem: string; readonly old: string; readonl
 export function PlantModel({
   colors = PLANT_COLORS,
   selected = "unplaced",
+  highlight = "glow",
+  middle = false,
   oldHitRef,
   youngHitRef,
   onTapOld,
@@ -195,6 +236,10 @@ export function PlantModel({
 }: {
   colors?: PlantColors;
   selected?: LeafGroupId;
+  /** "glow" lights the chosen leaves; "halo" rings them in their colour and dims the other group. */
+  highlight?: "glow" | "halo";
+  /** The explorer page's two middle leaves, which belong to neither group. */
+  middle?: boolean;
   oldHitRef?: React.RefObject<Mesh | null>;
   youngHitRef?: React.RefObject<Mesh | null>;
   onTapOld?: (e: TapEvent) => void;
@@ -213,6 +258,10 @@ export function PlantModel({
         tilt={-0.25}
         color={colors.old}
         selected={selected === "old"}
+        highlight={highlight}
+        halo={HALO.old}
+        haloSize={[0.95, 0.42, 0.95]}
+        dimmed={highlight === "halo" && selected === "young"}
         hitRadius={1.15}
         hitRef={oldHitRef}
         onTap={onTapOld}
@@ -224,10 +273,17 @@ export function PlantModel({
         tilt={0.5}
         color={colors.young}
         selected={selected === "young"}
+        highlight={highlight}
+        halo={HALO.young}
+        haloSize={[0.62, 0.42, 0.62]}
+        dimmed={highlight === "halo" && selected === "old"}
         hitRadius={0.75}
         hitRef={youngHitRef}
         onTap={onTapYoung}
       />
+      {middle ? (
+        <Cluster y={0.15} leaves={MIDDLE_LEAVES} size={[0.42, 0.055, 0.17]} tilt={0.1} color={colors.old} selected={false} hitRadius={0} />
+      ) : null}
     </>
   );
 }
@@ -239,6 +295,10 @@ function Cluster({
   tilt,
   color,
   selected,
+  highlight = "glow",
+  halo,
+  haloSize = [1, 0.5, 1],
+  dimmed = false,
   hitRadius,
   hitRef,
   onTap,
@@ -249,6 +309,11 @@ function Cluster({
   tilt: number;
   color: string;
   selected: boolean;
+  highlight?: "glow" | "halo";
+  halo?: string;
+  /** The halo's radii, close round the leaves as the artboard draws it. */
+  haloSize?: readonly [number, number, number];
+  dimmed?: boolean;
   hitRadius: number;
   hitRef?: React.RefObject<Mesh | null>;
   onTap?: (e: TapEvent) => void;
@@ -264,9 +329,23 @@ function Cluster({
           scale={size}
         >
           <sphereGeometry args={[1, 16, 10]} />
-          <meshStandardMaterial color={color} emissive={selected ? "#f2b632" : "#000000"} emissiveIntensity={0.5} />
+          <meshStandardMaterial
+            color={color}
+            emissive={selected && highlight === "glow" ? "#f2b632" : "#000000"}
+            emissiveIntensity={0.5}
+            // three.js reads `transparent` only when a material is built, so in halo mode it is set from the start
+            // and only the opacity changes; flipping it later would leave the dimmed group drawn solid.
+            transparent={highlight === "halo"}
+            opacity={dimmed ? 0.4 : 1}
+          />
         </mesh>
       ))}
+      {selected && highlight === "halo" && halo ? (
+        <mesh scale={haloSize} renderOrder={-1}>
+          <sphereGeometry args={[1, 24, 16]} />
+          <meshBasicMaterial color={halo} transparent opacity={0.22} depthWrite={false} />
+        </mesh>
+      ) : null}
       {/* Oversized and invisible: the target a fingertip finds, far over 44 pt. */}
       {hitRef ? (
         <mesh ref={hitRef}>

@@ -59,15 +59,12 @@ test("N, P and K chips carry the lesson's colours and the others are soil-brown"
   expect(mg).toBe("rgb(107, 74, 47)");
 });
 
-test("the picker is a radio group of 48 px choices and the flat plant follows it", async ({ page }) => {
+test("the picker is a radio group of 48 px choices", async ({ page }) => {
   await page.goto(ROUTE);
   const group = page.getByRole("group", { name: "เลือกตำแหน่งใบ" });
   for (const name of ["ใบแก่", "ใบอ่อน/ยอด", "เอกสารไม่ระบุตำแหน่งใบ"])
     expect((await group.getByRole("radio", { name }).locator("xpath=..").boundingBox())!.height).toBeGreaterThanOrEqual(48);
-  const plant = page.getByRole("img", { name: "ภาพต้นพืช แสดงตำแหน่งใบแก่ด้านล่างและใบอ่อนหรือยอดด้านบน" });
-  await expect(plant).toHaveAttribute("data-leaf", "old");
-  await group.getByLabel("ใบอ่อน/ยอด", { exact: true }).check();
-  await expect(plant).toHaveAttribute("data-leaf", "young");
+  // The flat plant following the choice (no WebGL) is in deficiency-scene.spec.ts.
 });
 
 test("the rules panel, the soil-test strip and the way on to the bag reader", async ({ page }) => {

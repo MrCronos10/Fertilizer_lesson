@@ -237,7 +237,9 @@ test("chapter 1 holds one WebGL context while open, none after leaving, and one 
     page.evaluate(() => (window as unknown as { __made: WebGLRenderingContext[] }).__made.filter((g) => !g.isContextLost()).length);
   await open(page);
   await expect(canvas(page)).toBeVisible();
-  expect(await alive()).toBe(1);
+  // R3F puts the <canvas> in the page a moment before it creates the context, so wait for it rather than
+  // reading the count at once (that read lost the race 7 of 8 times at iPad portrait).
+  await expect.poll(alive).toBe(1);
   await page.getByRole("link", { name: /บทถัดไป/ }).click();
   await expect(page).toHaveURL(/ch02$/);
   await expect.poll(alive, "released once the route is hidden").toBe(0);

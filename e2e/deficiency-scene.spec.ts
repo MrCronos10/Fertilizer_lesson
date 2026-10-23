@@ -1,0 +1,124 @@
+import { expect, test, type Page } from "@playwright/test";
+
+/** The explorer page's 3D plant (T-038). */
+const ROUTE = "/th/ch01/deficiency";
+const canvas = (page: Page) => page.locator(".def-picture .scene3d canvas:visible");
+
+const TRACK_CONTEXTS = () => {
+  const made: WebGLRenderingContext[] = [];
+  const w = window as unknown as { __made: WebGLRenderingContext[]; __peak: number };
+  w.__peak = 0;
+  const original = HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+    const ctx = (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+    if (ctx && /webgl/.test(type) && !made.includes(ctx as WebGLRenderingContext)) {
+      made.push(ctx as WebGLRenderingContext);
+      w.__peak = Math.max(w.__peak, made.filter((gl) => !gl.isContextLost()).length);
+    }
+    return ctx;
+  } as typeof original;
+  w.__made = made;
+};
+const alive = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __made: WebGLRenderingContext[] }).__made.filter((g) => !g.isContextLost()).length);
+const peak = (page: Page) => page.evaluate(() => (window as unknown as { __peak: number }).__peak);
+
+async function region(page: Page, which: "old" | "young") {
+  const box = (await canvas(page).boundingBox())!;
+  const attr = await canvas(page).getAttribute(which === "old" ? "data-region-old" : "data-region-young");
+  const [x, y, w, h] = attr!.split(",").map(Number) as [number, number, number, number];
+  return { cx: box.x + x + w / 2, cy: box.y + y + h / 2, w, h };
+}
+const chosen = (page: Page) => page.locator(".def-answer").getAttribute("data-group");
+
+test("the plant draws in the artboard's frame, filling it, with a spoken name", async ({ page }) => {
+  await page.goto(ROUTE);
+  await expect(canvas(page)).toBeVisible();
+  await expect(canvas(page)).toHaveAttribute("data-region-old", /.+/);
+  await expect(page.locator(".def-picture .scene3d")).toHaveAttribute("role", "img");
+  await expect(page.locator(".def-picture .scene3d")).toHaveAttribute("aria-label", "ภาพวาดต้นพืชสามมิติ ลากเพื่อหมุน");
+  const frame = (await page.locator(".def-picture").boundingBox())!;
+  const c = (await canvas(page).boundingBox())!;
+  expect(c.width).toBeGreaterThanOrEqual(frame.width - 3);
+  expect(c.height).toBeGreaterThanOrEqual(frame.height - 3);
+  expect(frame.width / frame.height).toBeCloseTo(826 / 582, 1);
+});
+
+test("both leaf groups are on screen, inside the frame, and at least 44 px", async ({ page }) => {
+  await page.goto(ROUTE);
+  await expect(canvas(page)).toHaveAttribute("data-region-young", /.+/);
+  const c = (await canvas(page).boundingBox())!;
+  for (const which of ["old", "young"] as const) {
+    const r = await region(page, which);
+    expect(r.w, which).toBeGreaterThanOrEqual(44);
+    expect(r.h, which).toBeGreaterThanOrEqual(44);
+    expect(r.cx).toBeGreaterThan(c.x);
+    expect(r.cx).toBeLessThan(c.x + c.width);
+    expect(r.cy).toBeGreaterThan(c.y);
+    expect(r.cy).toBeLessThan(c.y + c.height);
+  }
+});
+
+test("tapping the leaves in the plant changes the answer, and a drag turns it without choosing", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(ROUTE);
+  await expect(canvas(page)).toHaveAttribute("data-region-young", /.+/);
+  const young = await region(page, "young");
+  await page.mouse.click(young.cx, young.cy);
+  await expect.poll(() => chosen(page)).toBe("young");
+  const before = Number(await canvas(page).getAttribute("data-yaw"));
+  const old = await region(page, "old");
+  await page.mouse.move(old.cx, old.cy);
+  await page.mouse.down();
+  await page.mouse.move(old.cx + 90, old.cy, { steps: 8 });
+  await page.mouse.up();
+  await expect.poll(async () => Number(await canvas(page).getAttribute("data-yaw"))).toBeGreaterThan(before + 0.5);
+  expect(await chosen(page), "a drag must not choose").toBe("young");
+  await page.mouse.click((await region(page, "old")).cx, (await region(page, "old")).cy);
+  await expect.poll(() => chosen(page)).toBe("old");
+});
+
+test("under reduced motion the plant holds still", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(ROUTE);
+  await expect(canvas(page)).toHaveAttribute("data-yaw", /.+/);
+  const a = await canvas(page).getAttribute("data-yaw");
+  await page.waitForTimeout(600);
+  expect(await canvas(page).getAttribute("data-yaw")).toBe(a);
+});
+
+test("one live context on the page; to chapter 1's plant and back never holds two (D16)", async ({ page }) => {
+  await page.addInitScript(TRACK_CONTEXTS);
+  await page.goto(ROUTE);
+  await expect(canvas(page)).toBeVisible();
+  // The <canvas> is in the page a moment before its context exists: wait for the count, do not read it at once.
+  await expect.poll(() => alive(page)).toBe(1);
+  await page.locator(".def-back").click();
+  await expect(page).toHaveURL(/\/th\/ch01$/);
+  await page.locator(".deficiency").scrollIntoViewIfNeeded();
+  await expect(page.locator(".deficiency .scene3d canvas:visible")).toBeVisible();
+  await expect.poll(() => alive(page)).toBe(1);
+  await page.goBack();
+  await expect(page).toHaveURL(/deficiency$/);
+  await expect(canvas(page)).toBeVisible();
+  await expect.poll(() => alive(page)).toBe(1);
+  expect(await peak(page), "no moment with two live contexts").toBe(1);
+});
+
+test("without WebGL the frame shows the flat plant and the note, the picker still works, and there is no canvas", async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, type: string, ...rest: unknown[]) {
+      if (/webgl/.test(type)) return null;
+      return (original as (...a: unknown[]) => unknown).call(this, type, ...rest);
+    } as typeof original;
+  });
+  await page.goto(ROUTE);
+  const flat = page.locator(".def-picture").getByRole("img", { name: "ภาพต้นพืช แสดงตำแหน่งใบแก่ด้านล่างและใบอ่อนหรือยอดด้านบน" });
+  await expect(flat).toBeVisible();
+  await expect(page.locator(".def-picture figcaption")).toHaveText("เครื่องนี้แสดงภาพสามมิติไม่ได้ ใช้ตัวเลือกด้านบนและตารางด้านล่างแทน");
+  await expect(page.locator("canvas")).toHaveCount(0);
+  await page.getByRole("group", { name: "เลือกตำแหน่งใบ" }).getByLabel("ใบอ่อน/ยอด", { exact: true }).check();
+  await expect(flat).toHaveAttribute("data-leaf", "young");
+  await expect(page.locator(".def-answer")).toHaveAttribute("data-group", "young");
+});

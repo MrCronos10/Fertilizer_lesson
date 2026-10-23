@@ -83,22 +83,53 @@
   }
 }
 
-/* ---- The picture (the flat plant stands in until the 3D scene, T-038) ------------------------------------- */
+/* ---- The picture: the 3D plant (T-038), the flat plant without WebGL ------------------------------------------- */
+/* The artboard's frame is 826 x 582 (738 x 520 in portrait, the same shape). The canvas is transparent, so the frame
+   carries the artboard's air gradient; the soil is drawn in the scene. */
 .def-page .def-picture {
-  display: grid;
-  place-items: center;
+  position: relative;
   aspect-ratio: 826 / 582;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: #dce7d6;
+  background: linear-gradient(#e4ede0, #c8dcc4);
   overflow: hidden;
+}
+.def-page .def-picture > div,
+.def-page .def-picture .scene3d {
+  width: 100%;
+  height: 100%;
+}
+.def-page .def-picture .scene3d {
+  aspect-ratio: auto;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.def-page .def-picture .flat-fallback {
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+  padding: 12px;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  justify-items: center;
+  gap: 8px;
+  background: #dce7d6;
+  border: 0;
 }
 .def-page .def-picture .flat-plant {
   display: block;
   height: 100%;
   width: auto;
+  max-width: 100%;
   border: 0;
-  border-radius: 0;
+}
+.def-page .def-picture figcaption {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #3c4c42;
+  text-align: center;
 }
 
 /* ---- The picker -------------------------------------------------------------------------------------------- */

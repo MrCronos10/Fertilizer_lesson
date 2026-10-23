@@ -26,8 +26,8 @@ const ROUTES = [
   { path: "/th", text: true },
   { path: "/th/ch01", text: false },
   ...["02", "03", "04", "05", "06", "07"].map((n) => ({ path: `/th/ch${n}`, text: true })),
-  // The explorer page (T-037): text until its 3D scene arrives (T-038).
-  { path: "/th/ch01/deficiency", text: true },
+  // The explorer page carries the 3D plant (T-038): held to the score budgets, not to the text-route LCP budget.
+  { path: "/th/ch01/deficiency", text: false },
 ];
 
 const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
