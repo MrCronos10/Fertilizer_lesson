@@ -1,4 +1,5 @@
 import type { LeafGroupId } from "@/lib/deficiency";
+import "./FlatPlant.css";
 
 /**
  * The Chapter-01 artboards' flat plant (T-032): old leaves low, young leaves and the tip high, the chosen

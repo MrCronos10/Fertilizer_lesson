@@ -1,0 +1,12 @@
+/* The flat plant's states (T-032, shared with the explorer page in T-037): the chosen group is ringed, the other dimmed. */
+.flat-plant .fp-ring {
+  opacity: 0;
+}
+.flat-plant[data-leaf="old"] .fp-old .fp-ring,
+.flat-plant[data-leaf="young"] .fp-young .fp-ring {
+  opacity: 0.24;
+}
+.flat-plant[data-leaf="old"] .fp-young,
+.flat-plant[data-leaf="young"] .fp-old {
+  opacity: 0.35;
+}

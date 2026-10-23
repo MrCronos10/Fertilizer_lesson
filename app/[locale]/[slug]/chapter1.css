@@ -547,17 +547,6 @@
   line-height: 1.7;
   color: var(--muted);
 }
-.chapter-redesign .flat-plant .fp-ring {
-  opacity: 0;
-}
-.chapter-redesign .flat-plant[data-leaf="old"] .fp-old .fp-ring,
-.chapter-redesign .flat-plant[data-leaf="young"] .fp-young .fp-ring {
-  opacity: 0.24;
-}
-.chapter-redesign .flat-plant[data-leaf="old"] .fp-young,
-.chapter-redesign .flat-plant[data-leaf="young"] .fp-old {
-  opacity: 0.35;
-}
 
 /* ---- Side column: sources ------------------------------------------------------------------------------------ */
 /* Portrait and phone: a plain section under a rule. Landscape: a card. */
