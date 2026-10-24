@@ -108,6 +108,67 @@ function Chapter2() {
   );
 }
 
+/**
+ * Chapter 7, Quiz-Landscape.dc.html and Quiz-Portrait.dc.html: a rice harvest, the sun over golden hills and rows of
+ * stalks. Copied from the artboards: two pictures, as for chapter 3.
+ */
+function Chapter7() {
+  const rows = {
+    landscape: { xs: [900, 980, 1060, 1140, 1220, 1300], ys: [142, 148, 138, 148, 140, 148], ellipses: [[892, 114], [972, 120], [1052, 110], [1132, 120], [1212, 112], [1292, 120]], lean: [8, 24, 30, 23] },
+    portrait: { xs: [596, 646, 696, 746, 796], ys: [190, 196, 186, 196, 188], ellipses: [[588, 158], [638, 164], [688, 154], [738, 164], [788, 156]], lean: [8, 26, 32, 25] },
+  } as const;
+  const stalks = (k: "landscape" | "portrait") => {
+    const { xs, ys, lean } = rows[k];
+    const [dx, left, mid, right] = lean;
+    return (
+      <>
+        <g stroke="#8A6A22" strokeWidth="2.6" strokeLinecap="round" fill="none">
+          {xs.map((x, i) => (
+            <path key={x} d={`M${x} ${ys[i]} l-${dx} -${left} M${x} ${ys[i]} l0 -${mid} M${x} ${ys[i]} l${dx} -${right}`} />
+          ))}
+        </g>
+        <g fill="#E8C96A">
+          {rows[k].ellipses.map(([cx, cy]) => (
+            <ellipse key={cx} cx={cx} cy={cy} rx="5" ry="9" />
+          ))}
+        </g>
+      </>
+    );
+  };
+  return (
+    <>
+      <svg className="chapter-band-scene art-landscape" viewBox="0 0 1366 150" preserveAspectRatio="xMaxYMax slice" {...svgProps}>
+        <defs>
+          <linearGradient id="band7-sky-l" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#A8C7CF" />
+            <stop offset="1" stopColor="#F7CE8C" />
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="1366" height="150" fill="url(#band7-sky-l)" />
+        <circle cx="1128" cy="46" r="52" fill="#F2B632" opacity="0.2" />
+        <circle cx="1128" cy="46" r="32" fill="#F2B632" />
+        <path d="M0 90 C 340 76, 760 96, 1366 82 L1366 150 L0 150 Z" fill="#C9A24A" />
+        <path d="M0 116 C 340 106, 760 122, 1366 106 L1366 150 L0 150 Z" fill="#A8812F" />
+        {stalks("landscape")}
+      </svg>
+      <svg className="chapter-band-scene art-portrait" viewBox="0 0 834 200" preserveAspectRatio="xMaxYMax slice" {...svgProps}>
+        <defs>
+          <linearGradient id="band7-sky-p" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#A8C7CF" />
+            <stop offset="1" stopColor="#F7CE8C" />
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="834" height="200" fill="url(#band7-sky-p)" />
+        <circle cx="716" cy="56" r="56" fill="#F2B632" opacity="0.2" />
+        <circle cx="716" cy="56" r="34" fill="#F2B632" />
+        <path d="M0 122 C 200 108, 460 128, 834 114 L834 200 L0 200 Z" fill="#C9A24A" />
+        <path d="M0 152 C 200 142, 460 158, 834 142 L834 200 L0 200 Z" fill="#A8812F" />
+        {stalks("portrait")}
+      </svg>
+    </>
+  );
+}
+
 /** Field and sky shared by the drawn scenes: the chapter 3 band's colours and curves. */
 function Field({ id }: { id: string }) {
   return (
@@ -195,6 +256,7 @@ const SCENES: Readonly<Record<number, () => ReactNode>> = {
   4: Chapter4,
   5: Chapter5,
   6: Chapter6,
+  7: Chapter7,
 };
 
 /** The band's picture for a chapter; every redesigned chapter after the first has one (lib/band.test.ts). */

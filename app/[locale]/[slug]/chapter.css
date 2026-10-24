@@ -166,7 +166,8 @@
 .chapter-redesign > .jump-sources {
   margin-inline: calc(-1 * var(--pad-l)) calc(-1 * var(--pad-r));
 }
-.chapter-redesign > :not(.chapter-hero, .chapter-band, .jump-sources) {
+/* :where() keeps this default measure at the lowest specificity, so a block that sets its own width wins. */
+.chapter-redesign > :where(:not(.chapter-hero, .chapter-band, .jump-sources)) {
   width: 100%;
   max-width: 70ch;
   margin-inline: auto;
@@ -383,6 +384,21 @@
   font-size: var(--band-badge-size);
 }
 
+/* Chapter 7's band is a little different in the Quiz artboards: 200 px high with a 540 px card in portrait, 150 px
+   with a 640 px card in landscape. */
+@media (min-width: 40em) {
+  .chapter-redesign .chapter-band[data-chapter="7"] {
+    --band-min: 200px;
+    --band-card-w: 540px;
+  }
+}
+@media (min-width: 75em) {
+  .chapter-redesign .chapter-band[data-chapter="7"] {
+    --band-min: 150px;
+    --band-card-w: 640px;
+  }
+}
+
 /* ---- Sources bar --------------------------------------------------------------------------------------------- */
 .chapter-redesign > .jump-sources {
   box-sizing: border-box;
@@ -462,6 +478,7 @@
 @media (min-width: 75em) {
   .chapter-redesign > .chapter-card,
   .chapter-redesign > .chapter-section,
+  .chapter-redesign > h2,
   .chapter-redesign > .sources-card {
     max-width: 860px;
   }
