@@ -44,6 +44,10 @@
   --bag-tile-radius: 10px;
   --bag-shadow: 0 10px 24px rgba(27, 42, 34, 0.18);
   --bag-answer-pad: 18px;
+  --bag-legend: 18px;
+  /* the calculator (T-046): Bag-Calculator-Portrait's title and answer sizes */
+  --calc-h2: 20px;
+  --calc-answer: 22px;
   --step-w: 46px;
   /* the sources bar */
   --bar-pad-l: var(--pad-l);
@@ -129,6 +133,9 @@
     --bag-tile-radius: 12px;
     --bag-shadow: 0 12px 28px rgba(27, 42, 34, 0.2);
     --bag-answer-pad: 18px 20px;
+    --bag-legend: 19px;
+    --calc-h2: 21px;
+    --calc-answer: 24px;
     --bar-pad-l: 64px;
     --bar-pad-r: 64px;
     --cols-max: 1238px;
@@ -474,7 +481,6 @@
 }
 .chapter-redesign .chapter-section-warn {
   border-color: var(--warn);
-  border-top-color: var(--warn);
 }
 .chapter-redesign .chapter-section-warn::before {
   content: "";
@@ -820,7 +826,7 @@
   margin-bottom: 10px;
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: 19px;
+  font-size: var(--bag-legend);
   color: var(--brand);
 }
 .chapter-redesign .bag-body {
@@ -929,7 +935,7 @@
   margin: 0;
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: 21px;
+  font-size: var(--calc-h2);
   line-height: 1.4;
   color: var(--brand);
 }
@@ -969,6 +975,10 @@
   flex: 1 1 0;
   min-width: 0;
   gap: 4px;
+}
+/* The artboard sets the grade fields a shade darker than their white box (#F7F6EE on #FFFFFC): the page colour. */
+.chapter-redesign .calc-grade-fields input[type="text"] {
+  background: var(--bg);
 }
 .chapter-redesign .calc-grade-fields .calc-field label {
   font-size: 13px;
@@ -1017,6 +1027,12 @@
 .chapter-redesign .calc-result p,
 .chapter-redesign .calc-result h3 {
   margin: 0;
+}
+.chapter-redesign .calc-answer {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: var(--calc-answer);
+  color: var(--brand);
 }
 .chapter-redesign .calc-steps {
   display: grid;

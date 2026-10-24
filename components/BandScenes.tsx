@@ -11,6 +11,9 @@ import type { ReactNode } from "react";
  */
 const svgProps = { "aria-hidden": true, focusable: false } as const;
 
+/** The one chapter with the tall hero (ChapterHero) instead of a band: the first. */
+export const HERO_CHAPTER = 1;
+
 /** Chapter 3, Bag-Calculator-Landscape.dc.html and Bag-Calculator-Portrait.dc.html: fertilizer sacks on a field. */
 function Chapter3() {
   return (
@@ -71,19 +74,13 @@ function Chapter3() {
 function Chapter2() {
   return (
     <svg className="chapter-band-scene" viewBox="0 0 1366 160" preserveAspectRatio="xMaxYMax slice" {...svgProps}>
+      <Field id="band2-sky" />
       <defs>
-        <linearGradient id="band2-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#A8C7CF" />
-          <stop offset="1" stopColor="#F6DAA8" />
-        </linearGradient>
         <pattern id="band2-weave" width="8" height="8" patternUnits="userSpaceOnUse">
           <rect width="8" height="8" fill="#E2D6B6" />
           <path d="M0 4h8M4 0v8" stroke="#CBB98F" strokeWidth="1.4" />
         </pattern>
       </defs>
-      <rect x="0" y="0" width="1366" height="160" fill="url(#band2-sky)" />
-      <path d="M0 102 C 340 88, 760 108, 1366 94 L1366 160 L0 160 Z" fill="#7FA463" />
-      <path d="M0 132 C 340 122, 760 138, 1366 122 L1366 160 L0 160 Z" fill="#5A8A50" />
       {/* the compost heap: soil browns in layers, a few leaves and straws on top */}
       <path d="M1000 146 C 1012 104, 1048 74, 1092 70 C 1138 74, 1172 104, 1184 146 Z" fill="#6B4A2F" />
       <path d="M1018 146 C 1030 116, 1058 96, 1092 94 C 1126 96, 1156 116, 1166 146 Z" fill="#8B6239" />
