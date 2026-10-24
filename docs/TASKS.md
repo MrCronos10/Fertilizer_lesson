@@ -1063,13 +1063,35 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad or phone.
 
 ### T-051: Chapters 2–6 — final checks and review
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-045, T-046, T-047, T-048, T-049, T-050
 - Goal: Close the chapters 2–6 redesign: a two-axis review (standards and spec) of the whole diff, fixes, the full checks, and a preview for the owner.
 - Acceptance criteria:
-  - [ ] The review's findings are fixed or left on purpose, each recorded
-  - [ ] Full WebKit e2e, the canary (`--repeat-each=20`) and Lighthouse (3 runs) all green
-  - [ ] A preview link sent to the owner, and the new Thai and the drawn scenes listed for review
+  - [x] The review's findings are fixed or left on purpose, each recorded
+  - [x] Full WebKit e2e, the canary (`--repeat-each=20`) and Lighthouse (3 runs) all green
+  - [x] A preview link sent to the owner, and the new Thai and the drawn scenes listed for review
+- **Verified:** typecheck, lint, 912 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1219 passed, 0 failed; the chapter 3 load test 30 of 30; canary 60 of 60; Lighthouse (3 runs): every route 96 or more, accessibility 100 (chapters 2–6: 96, 99, 97, 99, 97).
+  - **Review (two axes, fresh subagents, diff `093bb8c...main`). Fixed:**
+    - **A hard violation, iCloud folder copies:** two Playwright result files under an iCloud copy of a folder (`test-results 2/`) were tracked on main, committed in T-045 unseen. `lib/hygiene.test.ts` only looked at file names; it now fails on any path under a "name 2/" folder (seen failing, then passing), and the files are gone.
+    - **Two criteria were only partly true:**
+      - T-045 (the bag legend is 18 px in portrait, 19 in landscape).
+      - T-046 (the calculator title is 20 px in portrait, 21 in landscape; my test had pinned 21 at every width). Also from the artboard for T-046: the answer line in the UI face, bold, 22 or 24 px, in the heading colour; the grade fields a shade darker than their box.
+      - Tests now check these per width.
+    - **Smells:**
+      - Chapter 2's scene now uses the shared sky-and-field helper.
+      - The tall-hero chapter is a named constant (`HERO_CHAPTER`), used by the page and the band test.
+      - The side-column check tolerates spacing inside the tag.
+      - A redundant border colour removed.
+  - **Left on purpose:**
+    - Chapter 3's two drawings repeat the sky and the sack: they are the artboards' own two pictures, copied.
+    - `ChapterBand` and `ChapterHero` share four props; they are two layouts of one header.
+    - The glossary's "English" and "中文" headers are the source's own, as "N-P-K (%)" already is.
+    - The band card uses the page colour, so in the dark theme it is a dark tab cut into the bright scene. That is how chapter 1's hero card works too; worth a look on a device.
+  - **For the owner:**
+    - The four drawn scenes (chapters 2, 4, 5, 6).
+    - Thai U83–U84.
+    - The pages on a real iPad and phone.
+
 
 ---
 

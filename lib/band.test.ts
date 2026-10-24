@@ -1,14 +1,14 @@
 import type { ReactElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { BAND_SCENE_CHAPTERS, bandScene } from "../components/BandScenes";
+import { BAND_SCENE_CHAPTERS, HERO_CHAPTER, bandScene } from "../components/BandScenes";
 import { readChapters } from "./content";
 
 const markup = (n: number) => renderToStaticMarkup(bandScene(n) as ReactElement);
 
 /** The redesigned chapters' header bands (T-044). */
 describe("band scenes", () => {
-  const redesigned = readChapters("th").filter((c) => c.frontmatter.redesign && c.frontmatter.chapter !== 1);
+  const redesigned = readChapters("th").filter((c) => c.frontmatter.redesign && c.frontmatter.chapter !== HERO_CHAPTER);
 
   it("every redesigned chapter after the first has its own scene", () => {
     expect(redesigned.length).toBeGreaterThan(0);

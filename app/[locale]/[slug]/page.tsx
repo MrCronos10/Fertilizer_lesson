@@ -10,6 +10,7 @@ import { citationEntry } from "@/lib/citations";
 import { Sources } from "@/components/Citations";
 import { chapterSlug, readChapters } from "@/lib/content";
 import { EXPLORER_CHAPTER } from "@/lib/deficiency";
+import { HERO_CHAPTER } from "@/components/BandScenes";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/lib/locales";
 import type { Tier } from "@/lib/sources";
 import { TierBadge } from "@/components/TierBadge";
@@ -49,7 +50,7 @@ export default async function ChapterPage({ params }: { params: Params }) {
 
   const redesigned = chapter.frontmatter.redesign;
   const explorer = redesigned && chapter.frontmatter.chapter === EXPLORER_CHAPTER;
-  const sideColumn = chapter.body.includes("<SideColumn>");
+  const sideColumn = /<SideColumn[\s>]/.test(chapter.body);
   const tiers = TIERS.filter((t) => chapter.frontmatter.citations.some((id) => citationEntry(id).tier === t));
   const sourcesBar = redesigned ? (
     <div className="jump-sources">
@@ -75,7 +76,7 @@ export default async function ChapterPage({ params }: { params: Params }) {
     <article className={redesigned ? "stack chapter-redesign" : "stack"}>
       {redesigned ? (
         <>
-          {chapter.frontmatter.chapter === 1 ? (
+          {chapter.frontmatter.chapter === HERO_CHAPTER ? (
             <ChapterHero locale={locale} ui={ui} chapter={chapter.frontmatter.chapter} total={total} heading={chapter.frontmatter.heading} />
           ) : (
             <ChapterBand

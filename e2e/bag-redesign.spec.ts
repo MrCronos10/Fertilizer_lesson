@@ -11,6 +11,7 @@ test("landscape: the sack fills the 620 px column, its tiles are 134 px, and the
   await page.goto(ROUTE);
   expect((await page.locator(".bag-body").boundingBox())!.width).toBeCloseTo(620, 0);
   expect((await tile(page, 0).boundingBox())!.height).toBeGreaterThanOrEqual(134);
+  expect(await page.locator(".bag legend").evaluate((el) => getComputedStyle(el).fontSize)).toBe("19px");
   const bag = (await page.locator(".bag").boundingBox())!;
   const answer = (await page.locator(".bag-answer").boundingBox())!;
   expect(answer.y).toBeGreaterThan(bag.y + bag.height);
@@ -22,6 +23,7 @@ test("portrait: the 420 px sack sits beside its answer, tiles 112 px", async ({ 
   const bag = (await page.locator(".bag-body").boundingBox())!;
   expect(bag.width).toBeCloseTo(420, 0);
   expect((await tile(page, 0).boundingBox())!.height).toBeGreaterThanOrEqual(112);
+  expect(await page.locator(".bag legend").evaluate((el) => getComputedStyle(el).fontSize)).toBe("18px");
   const answer = (await page.locator(".bag-answer").boundingBox())!;
   expect(answer.x).toBeGreaterThan(bag.x + bag.width);
   expect(answer.y).toBeCloseTo(bag.y - 31, -2);
