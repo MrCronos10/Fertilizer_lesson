@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { QuizIsland } from "../components/QuizIsland";
 import { readChapters } from "./content";
-import { againCount, emptyProgress, parseProgress, rightCount, serializeProgress, setMark } from "./quiz-progress";
+import { againCount, emptyProgress, parseProgress, rightCount, serializeProgress, setMark, stepQuestion } from "./quiz-progress";
 import { readUiStrings } from "./ui";
 
 const ui = readUiStrings("th");
@@ -34,8 +34,43 @@ describe("the six questions", () => {
   it("starts with every answer closed and nothing marked", () => {
     const html = renderToStaticMarkup(createElement(QuizIsland, { ui, items }));
     expect((html.match(/aria-expanded="false"/g) ?? []).length).toBe(6);
-    expect((html.match(/data-mark="none"/g) ?? []).length).toBe(6);
+    expect((html.match(/class="quiz-item"[^>]*data-mark="none"/g) ?? []).length).toBe(6);
     expect(html).toContain("ทำเครื่องหมายว่าตอบถูก 0 จาก 6");
+  });
+
+  it("shows one question at a time, the first on arrival; every question is still in the HTML (T-053)", () => {
+    const html = renderToStaticMarkup(createElement(QuizIsland, { ui, items }));
+    const cards = [...html.matchAll(/<div class="quiz-item"[^>]*>/g)].map((m) => m[0]);
+    expect(cards).toHaveLength(6);
+    expect(cards.filter((c) => !/ hidden=""/.test(c))).toHaveLength(1);
+    expect(cards[0]).not.toMatch(/ hidden=""/);
+    expect(html).toContain(`${ui.quizItem} 1 ${ui.quizOf} 6`);
+  });
+
+  it("lists all six in the side panel, each a button naming its question and its state", () => {
+    const html = renderToStaticMarkup(createElement(QuizIsland, { ui, items }));
+    const rows = [...html.matchAll(/<button[^>]*class="quiz-row"[^>]*>(.*?)<\/button>/g)].map((m) => m[1]!.replace(/<[^>]+>/g, "|"));
+    expect(rows).toHaveLength(6);
+    for (const [i, row] of rows.entries()) {
+      expect(row).toContain(items[i]!.q);
+      expect(row).toContain(ui.quizUnchecked);
+    }
+    expect((html.match(/class="quiz-row"[^>]*aria-current="step"/g) ?? []).length + (html.match(/aria-current="step"[^>]*class="quiz-row"/g) ?? []).length).toBe(1);
+  });
+
+  it("carries the two notes: kept on this device, and the questions are the source's", () => {
+    const html = renderToStaticMarkup(createElement(QuizIsland, { ui, items }));
+    expect(html).toContain(ui.quizDeviceNote);
+    expect(html).toContain(ui.quizSourceNote);
+  });
+});
+
+describe("stepQuestion: the previous and next buttons wrap round, as the artboard's do", () => {
+  it("moves one either way and wraps at both ends", () => {
+    expect(stepQuestion(0, 1, 6)).toBe(1);
+    expect(stepQuestion(5, 1, 6)).toBe(0);
+    expect(stepQuestion(0, -1, 6)).toBe(5);
+    expect(stepQuestion(3, -1, 6)).toBe(2);
   });
 });
 

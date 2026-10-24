@@ -1117,15 +1117,31 @@ Model: **Opus** for T-053, **Sonnet** for T-052 and T-054.
   - **Not verified:** a real iPad or phone.
 
 ### T-053: Chapter 7 quiz to the artboards
-- Status: ready (Opus)
+- Status: done
 - Depends on: T-052
 - Goal: The quiz as the Quiz artboards draw it: a question card (number, the real question, "ดูเฉลย", the answer, self-marking "ตอบถูก" / "ยังไม่ถูก"), "ข้อก่อนหน้า" and "ข้อถัดไป", a list of the six questions with their status (landscape) or progress dots (portrait), and the score line. Progress stays on this device only.
 - Acceptance criteria:
-  - [ ] All six questions and answers word for word from the pamphlet; none reworded; no PLACEHOLDER shown
-  - [ ] Show the answer, mark it right or not yet, move between questions; every control a real button, 44 px, keyboard-operable, state announced
-  - [ ] Progress and marks survive a reload and are kept on the device only
-  - [ ] Layout and sizes as drawn at 1366 and 834, and a phone layout
-  - [ ] New Thai wording listed in THAI-REVIEW
+  - [x] All six questions and answers word for word from the pamphlet; none reworded; no PLACEHOLDER shown
+  - [x] Show the answer, mark it right or not yet, move between questions; every control a real button, 44 px, keyboard-operable, state announced
+  - [x] Progress and marks survive a reload and are kept on the device only
+  - [x] Layout and sizes as drawn at 1366 and 834, and a phone layout
+  - [x] New Thai wording listed in THAI-REVIEW
+- **Done:**
+  - The quiz shows one question at a time, as the artboards draw it: a card with the number badge, the question and "ดูคำตอบ", then the answer with self-marking "ตอบถูก" / "ยังไม่ถูก". "ข้อก่อนหน้า" and "ข้อถัดไป" wrap round. In landscape a panel lists all six questions with their status; in portrait and on phones a row of dots does that job. A note says progress stays on this device, and another says the questions are the pamphlet's.
+  - All six questions are still in the server HTML; the ones not showing are `hidden`. Where you are and which answers are open are not saved; the marks are, as before, in localStorage only.
+  - Eight new strings, U85–U92, are in THAI-REVIEW.
+- **Departures from the artboards, on purpose:**
+  - The site's own words are kept: "ดูคำตอบ" (not "ดูเฉลย"), the score line with its "ยังไม่ถูก N" count, and "หน้าในเอกสารต้นฉบับ: 6–7" (not "คำถามต้นฉบับ หน้า 6–7").
+  - The panel rows show the real questions, not placeholders.
+  - "เริ่มใหม่" (reset) is kept.
+  - The answer button stays after the answer opens and becomes "ซ่อนคำตอบ" (the artboard hides it), so the answer can be closed again.
+  - The mark is still also written after the question, so a screen reader hears it with the answer closed.
+  - The question box is solid with a 2 px border; the artboard's dashed box marks placeholder text.
+  - Colours go through the site's tokens so dark mode works, so some fills and border alphas differ slightly from the artboard's literals. "ยังไม่ถูก" keeps the artboard's #B5541E (`--quiz-again`).
+  - The current dot's ring is the brand green, not the gold accent: gold on cream is 1.61:1, under WCAG 1.4.11's 3:1.
+  - In landscape only the quiz and its heading take the artboard's 1286 px width; the summary and sources cards stay at 860 px like every other chapter.
+- **Review (two-axis):** fixed a staged iCloud copy (`e2e/chapter7-redesign.spec 2.ts`, removed), the summary and sources cards widened beyond the ticket, the dot ring's contrast, the portrait device note's fill and alignment, and the mark word mapped twice; the live-region test now also checks `aria-live`, `aria-atomic` and that the region stays in the accessibility tree in landscape.
+- **Verified:** typecheck, lint, 916 unit tests green; WebKit e2e 1249 passed, 0 failed; canary 60 of 60; Lighthouse budget met: chapter 7 performance 96, accessibility 100.
 
 ### T-054: Chapter 7 — final checks and review
 - Status: ready (Sonnet)

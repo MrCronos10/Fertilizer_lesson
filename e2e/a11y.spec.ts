@@ -78,9 +78,13 @@ const STATES: State[] = [
     name: "ch07, quiz with an answer open and marked",
     route: "/th/ch07",
     prepare: async (page) => {
+      // One question at a time (T-053): move to the fourth, mark it right, then the fifth, mark it not yet.
+      const next = page.getByRole("button", { name: "ข้อถัดไป" });
+      for (let n = 0; n < 3; n++) await next.click();
       const item = page.locator('.quiz-item[data-question="3"]');
       await item.getByRole("button", { name: "ดูคำตอบ" }).click();
       await item.getByRole("button", { name: "ตอบถูก", exact: true }).click();
+      await next.click();
       await page.locator('.quiz-item[data-question="4"]').getByRole("button", { name: "ดูคำตอบ" }).click();
       await page.locator('.quiz-item[data-question="4"]').getByRole("button", { name: "ยังไม่ถูก", exact: true }).click();
     },

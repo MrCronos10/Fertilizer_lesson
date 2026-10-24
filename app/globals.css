@@ -938,54 +938,15 @@ main:focus {
   margin-inline-end: 0.75rem;
 }
 
-/* Quiz (T-021). */
-.quiz {
-  display: grid;
-  gap: 1rem;
-}
-.quiz-list {
-  display: grid;
-  gap: 1rem;
-  margin: 0;
-  padding-inline-start: 1.5rem;
-}
-.quiz-item {
-  padding-inline-start: 0.25rem;
-}
-/* The grid is on an inner box: a grid <li> loses its 1–6 number. */
-.quiz-body {
-  display: grid;
-  gap: 0.5rem;
-}
-.quiz-body > * {
-  max-width: 62ch;
-}
+/* Quiz (T-021); its layout is the redesign's, in app/[locale]/[slug]/chapter.css (T-053). A shown/hidden block must
+   stay hidden whatever display the layout gives it. */
 .quiz-q,
 .quiz-answer p {
   margin: 0;
 }
-.quiz-answer {
-  display: grid;
-  gap: 0.5rem;
-}
+.quiz-item[hidden],
 .quiz-answer[hidden] {
   display: none;
-}
-.quiz-marks,
-.quiz-footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-}
-.quiz-body button {
-  justify-self: start;
-}
-.quiz-marks button[aria-pressed="true"] {
-  background: var(--brand);
-  color: var(--brand-ink);
-  border-color: var(--brand);
-  font-weight: 600;
 }
 .quiz-state {
   color: var(--muted);

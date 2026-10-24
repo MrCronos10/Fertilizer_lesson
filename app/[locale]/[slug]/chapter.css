@@ -1059,6 +1059,461 @@
   line-height: 1.85;
 }
 
+/* ---- Quiz (T-053) -----------------------------------------------------------------------------------------------
+   From Quiz-Landscape/Portrait.dc.html: one question at a time in a card, the previous and next buttons, then either a
+   panel listing all six beside the card (landscape) or a row of dots over it (portrait and phone). Colours through the
+   site's tokens, as elsewhere; a "not yet" mark keeps the artboard's #B5541E, with white text in both themes.
+   The icons are CSS masks (no inline <svg> in a button: the WebKit load stall, T-028). */
+.chapter-redesign .quiz {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "dots" "card" "nav" "notes";
+  gap: 18px;
+  --quiz-card-pad: 22px;
+  --quiz-card-min: 0px;
+  --quiz-num: 44px;
+  --quiz-num-size: 18px;
+  --quiz-q-size: 21px;
+  --quiz-q-pad: 18px;
+  --quiz-again: #b5541e;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .quiz {
+    --quiz-card-min: 384px;
+  }
+}
+@media (min-width: 75em) {
+  .chapter-redesign .quiz {
+    grid-template-columns: minmax(0, 820px) minmax(0, 1fr);
+    grid-template-areas: "card head" "card rows" "card notes" "nav notes";
+    grid-template-rows: auto auto 1fr auto;
+    column-gap: 40px;
+    row-gap: 0;
+    --quiz-card-pad: 24px;
+    --quiz-card-min: 452px;
+    --quiz-num: 46px;
+    --quiz-num-size: 19px;
+    --quiz-q-size: 23px;
+    --quiz-q-pad: 20px;
+  }
+  .chapter-redesign .quiz-nav {
+    margin-top: 18px;
+  }
+  .chapter-redesign .quiz-notes {
+    margin-top: 16px;
+  }
+}
+/* In landscape the quiz alone takes the artboard's content width, room for the card and its panel; the summary and
+   sources cards keep the 860 px column of every other chapter. The quiz's own heading goes with it, to line up. */
+@media (min-width: 75em) {
+  .chapter-redesign > h2:has(+ .quiz),
+  .chapter-redesign > .quiz {
+    max-width: 1286px;
+  }
+}
+
+/* The head: which question and the score (portrait, phone); the panel's heading and the score (landscape). */
+.chapter-redesign .quiz-head {
+  grid-area: head;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.chapter-redesign .quiz-total {
+  display: none;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--brand);
+}
+.chapter-redesign .quiz-progress {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--brand);
+}
+.chapter-redesign .quiz-score {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 400;
+  color: var(--muted);
+}
+.chapter-redesign .quiz-reset {
+  min-height: var(--tap);
+  border-radius: 10px;
+}
+@media (min-width: 75em) {
+  .chapter-redesign .quiz-head {
+    padding: 18px 20px 12px;
+    border-radius: 14px 14px 0 0;
+    background: var(--soft);
+    border: 1px solid var(--line);
+    border-bottom: 0;
+  }
+  .chapter-redesign .quiz-total {
+    display: block;
+  }
+  /* Still a live region: only hidden from sight, as the panel shows which question is current. */
+  .chapter-redesign .quiz-progress {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Portrait and phone: a dot per question, the current one ringed. */
+.chapter-redesign .quiz-dots {
+  grid-area: dots;
+  display: flex;
+  gap: 8px;
+}
+.chapter-redesign .quiz-dots span {
+  flex: 1 1 0;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--line);
+}
+.chapter-redesign .quiz-dots span[data-mark="right"] {
+  background: var(--brand);
+}
+.chapter-redesign .quiz-dots span[data-mark="again"] {
+  background: var(--quiz-again);
+}
+.chapter-redesign .quiz-dots span[data-current] {
+  /* The artboard's ring is the gold accent, 1.61:1 on cream; WCAG 1.4.11 asks 3:1, so the brand green. */
+  box-shadow: 0 0 0 3px var(--brand);
+}
+@media (min-width: 75em) {
+  .chapter-redesign .quiz-dots {
+    display: none;
+  }
+}
+
+/* The question card. */
+.chapter-redesign .quiz-cards {
+  grid-area: card;
+}
+.chapter-redesign .quiz-item {
+  box-sizing: border-box;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-height: var(--quiz-card-min);
+  padding: var(--quiz-card-pad);
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.chapter-redesign .quiz-card-head {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.chapter-redesign .quiz-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--quiz-num);
+  height: var(--quiz-num);
+  border-radius: 999px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: var(--quiz-num-size);
+}
+/* A solid box: the artboard's dashed one marks its placeholder text, and these are the pamphlet's own questions. */
+.chapter-redesign .quiz-q {
+  padding: var(--quiz-q-pad);
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: var(--quiz-q-size);
+  line-height: 1.75;
+}
+.chapter-redesign .quiz-state {
+  font-size: 15px;
+}
+.chapter-redesign .quiz-answer {
+  display: grid;
+  gap: 14px;
+}
+.chapter-redesign .quiz-answer .quiz-answer-box {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--soft);
+  border-inline-start: 5px solid var(--brand);
+  font-size: 17px;
+  line-height: 1.85;
+  max-width: none;
+}
+.chapter-redesign .quiz-answer-label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--brand);
+}
+.chapter-redesign .quiz-a {
+  font-weight: 400;
+}
+.chapter-redesign .quiz-marks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.chapter-redesign .quiz-check {
+  font-size: 15px;
+  font-weight: 600;
+}
+.chapter-redesign .quiz-marks button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.chapter-redesign .quiz-marks button::before,
+.chapter-redesign .quiz-toggle::after,
+.chapter-redesign .quiz-prev::before,
+.chapter-redesign .quiz-next::after,
+.chapter-redesign .quiz-device::before {
+  content: "";
+  flex: none;
+  width: 17px;
+  height: 17px;
+  background: currentcolor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+.chapter-redesign .quiz-mark-right::before {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 9.5l3.6 3.6L14.5 5.5'/%3E%3C/svg%3E");
+}
+.chapter-redesign .quiz-mark-again::before {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 5l8 8M13 5l-8 8'/%3E%3C/svg%3E");
+}
+.chapter-redesign .quiz-mark-right[aria-pressed="true"] {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: var(--brand-ink);
+}
+.chapter-redesign .quiz-mark-again[aria-pressed="true"] {
+  background: var(--quiz-again);
+  border-color: var(--quiz-again);
+  color: #ffffff;
+}
+/* Closed: the artboard's primary "show the answer" button. Open: an outlined one that closes it again. */
+.chapter-redesign .quiz-toggle {
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 17px;
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 3v11M4.5 9.5L9 14l4.5-4.5'/%3E%3C/svg%3E");
+}
+.chapter-redesign .quiz-toggle[aria-expanded="true"] {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 16px;
+}
+.chapter-redesign .quiz-toggle[aria-expanded="true"]::after {
+  transform: rotate(180deg);
+}
+
+/* After the display rules above, which would otherwise beat the `hidden` attribute: one card shows, the rest wait. */
+.chapter-redesign .quiz-item[hidden],
+.chapter-redesign .quiz-answer[hidden] {
+  display: none;
+}
+
+/* Previous and next. */
+.chapter-redesign .quiz-nav {
+  grid-area: nav;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.chapter-redesign .quiz-nav button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.chapter-redesign .quiz-prev::before {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 9H4M8.5 4.5L4 9l4.5 4.5'/%3E%3C/svg%3E");
+}
+.chapter-redesign .quiz-next {
+  gap: 10px;
+  padding: 0 24px;
+  border: 0;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-family: var(--font-ui);
+  font-size: 17px;
+}
+.chapter-redesign .quiz-next::after {
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9h11M9.5 4.5L14 9l-4.5 4.5'/%3E%3C/svg%3E");
+}
+
+/* The panel of all six (landscape only). */
+.chapter-redesign .quiz-rows {
+  grid-area: rows;
+  display: none;
+  margin: 0;
+  padding: 0 20px 18px;
+  list-style: none;
+  gap: 6px;
+  border-radius: 0 0 14px 14px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-top: 0;
+}
+@media (min-width: 75em) {
+  .chapter-redesign .quiz-rows {
+    display: grid;
+  }
+}
+.chapter-redesign .quiz-row {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  text-align: start;
+  font-weight: 400;
+}
+.chapter-redesign .quiz-row[aria-current="step"] {
+  border-color: var(--brand);
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+.chapter-redesign .quiz-row-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--soft);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 15px;
+}
+.chapter-redesign .quiz-row[data-mark="right"] .quiz-row-num {
+  background: var(--brand);
+  color: var(--brand-ink);
+}
+.chapter-redesign .quiz-row[data-mark="again"] .quiz-row-num {
+  background: var(--quiz-again);
+  color: #ffffff;
+}
+.chapter-redesign .quiz-row-q {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.chapter-redesign .quiz-row-status {
+  flex: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.chapter-redesign .quiz-row[data-mark="right"] .quiz-row-status {
+  color: var(--brand);
+}
+.chapter-redesign .quiz-row[data-mark="again"] .quiz-row-status {
+  color: var(--warn);
+}
+
+/* The two notes: side by side in portrait (the strip 282 px), stacked on a phone and under the panel in landscape. */
+.chapter-redesign .quiz-notes {
+  grid-area: notes;
+  align-self: start;
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 40em) {
+  .chapter-redesign .quiz-notes {
+    grid-template-columns: minmax(0, 1fr) 282px;
+  }
+}
+@media (min-width: 75em) {
+  .chapter-redesign .quiz-notes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.chapter-redesign .quiz-device {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.8;
+}
+@media (min-width: 75em) {
+  .chapter-redesign .quiz-device {
+    align-items: flex-start;
+    background: var(--panel);
+  }
+  .chapter-redesign .quiz-device::before {
+    margin-top: 3px;
+  }
+}
+.chapter-redesign .quiz-device::before {
+  width: 20px;
+  height: 20px;
+  background: var(--brand);
+  --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4.5' width='14' height='11' rx='2'/%3E%3Cpath d='M7 8.5h6M7 11.5h4'/%3E%3C/svg%3E");
+}
+.chapter-redesign .quiz-source {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--warn-bg);
+  border-inline-start: 4px solid var(--warn);
+  font-size: 13px;
+  line-height: 1.75;
+  font-weight: 600;
+  color: var(--warn);
+}
+
 /* ---- Footer -------------------------------------------------------------------------------------------------- */
 /* The contents and the next chapter as outlined buttons, the way into the deficiency explorer as the primary one
    (T-041: the artboards' footer has only the contents and the explorer; the next chapter is kept, outlined). */

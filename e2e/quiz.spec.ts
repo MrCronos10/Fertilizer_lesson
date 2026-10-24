@@ -14,10 +14,17 @@ const QA = [
 
 const item = (page: Page, i: number) => page.locator(`.quiz-item[data-question="${i}"]`);
 const score = (page: Page) => page.locator(".quiz-score");
+/** Which question the card shows: one at a time since T-053. */
+const showing = (page: Page) => page.locator(".quiz-item:not([hidden])").getAttribute("data-question").then(Number);
 
 async function open(page: Page) {
   await page.goto(ROUTE, { waitUntil: "networkidle" });
   await expect(page.locator(".quiz-item")).toHaveCount(6);
+}
+/** Bring question i into the card with the next button (it wraps round), as a reader would at any width. */
+async function goTo(page: Page, i: number) {
+  for (let n = 0; n < 6 && (await showing(page)) !== i; n++) await press(page.getByRole("button", { name: "ข้อถัดไป" }));
+  await expect(item(page, i)).toBeVisible();
 }
 /** A finger on iPad, a click on Mac. */
 async function press(target: Locator) {
@@ -25,16 +32,20 @@ async function press(target: Locator) {
   else await target.click();
 }
 async function answer(page: Page, i: number, mark: "ตอบถูก" | "ยังไม่ถูก") {
+  await goTo(page, i);
   const it = item(page, i);
   if (await it.locator(".quiz-answer").isHidden()) await press(it.getByRole("button", { name: "ดูคำตอบ" }));
   await press(it.getByRole("button", { name: mark, exact: true }));
 }
 const saved = (page: Page) => page.evaluate((k) => window.localStorage.getItem(k), KEY);
 
-test("shows the six questions word for word, every answer closed", async ({ page }) => {
+test("shows the six questions word for word, one at a time from the first, every answer closed", async ({ page }) => {
   const problems = collectPageProblems(page);
   await open(page);
+  expect(await showing(page)).toBe(0);
+  await expect(page.locator(".quiz-item:visible")).toHaveCount(1);
   for (const [i, [q]] of QA.entries()) {
+    await goTo(page, i);
     await expect(item(page, i).locator(".quiz-q")).toHaveText(q);
     await expect(item(page, i).locator(".quiz-answer")).toBeHidden();
     await expect(item(page, i).getByRole("button", { name: "ดูคำตอบ" })).toHaveAttribute("aria-expanded", "false");
@@ -46,6 +57,7 @@ test("shows the six questions word for word, every answer closed", async ({ page
 test("each answer is the pamphlet's, shown on request and hidden again on request", async ({ page }) => {
   await open(page);
   for (const [i, [, a]] of QA.entries()) {
+    await goTo(page, i);
     const it = item(page, i);
     await press(it.getByRole("button", { name: "ดูคำตอบ" }));
     await expect(it.locator(".quiz-a")).toHaveText(a);
@@ -64,8 +76,9 @@ test("marking updates the score, which is a polite live region, and a mark can b
   await answer(page, 4, "ยังไม่ถูก");
   // A "not yet" mark changes the line too, so VoiceOver announces it.
   await expect(score(page)).toHaveText("ทำเครื่องหมายว่าตอบถูก 2 จาก 6 · ยังไม่ถูก 1");
-  await expect(item(page, 0).getByRole("button", { name: "ตอบถูก", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect(item(page, 4).getByRole("button", { name: "ยังไม่ถูก", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await goTo(page, 0);
+  await expect(item(page, 0).getByRole("button", { name: "ตอบถูก", exact: true })).toHaveAttribute("aria-pressed", "true");
   await press(item(page, 0).getByRole("button", { name: "ตอบถูก", exact: true }));
   await expect(score(page)).toHaveText("ทำเครื่องหมายว่าตอบถูก 1 จาก 6 · ยังไม่ถูก 1");
   await expect(item(page, 0)).toHaveAttribute("data-mark", "none");
@@ -108,11 +121,13 @@ test("the mark shows as text beside a closed question, in the right numbered ord
   await answer(page, 3, "ตอบถูก");
   await press(item(page, 3).getByRole("button", { name: "ซ่อนคำตอบ" }));
   await expect(item(page, 3).locator(".quiz-q")).toHaveText("ปุ๋ย 16-20-0 หนัก 50 กก. มี N กี่กิโลกรัม? · ตอบถูก");
-  // The numbers 1–6 the source prints are drawn: each item is a real list item.
-  const displays = await page.locator(".quiz-item").evaluateAll((els) => els.map((e) => getComputedStyle(e).display));
-  expect(new Set(displays)).toEqual(new Set(["list-item"]));
-  const labelled = await item(page, 3).locator(".quiz-marks").getAttribute("aria-labelledby");
-  await expect(page.locator(`#${labelled}`)).toContainText("ปุ๋ย 16-20-0");
+  // The numbers 1–6 the source prints are drawn on each card (T-053: one card at a time, no list markers).
+  await expect(item(page, 3).locator(".quiz-num")).toHaveText("4");
+  // The marks group is named by "check your own answer" and its question.
+  const ids = (await item(page, 3).locator(".quiz-marks").getAttribute("aria-labelledby"))!.split(" ");
+  await expect(page.locator(`[id="${ids[0]}"]`)).toHaveText("ตรวจคำตอบของคุณเอง");
+  await expect(page.locator(`[id="${ids[1]}"]`)).toContainText("ปุ๋ย 16-20-0");
+  await goTo(page, 1);
   // Latin-only answers are read in English.
   await expect(item(page, 1).locator(".quiz-a")).toHaveAttribute("lang", "en");
   await expect(item(page, 0).locator(".quiz-a")).not.toHaveAttribute("lang", /.+/);
@@ -185,6 +200,7 @@ for (const [name, value] of Object.entries({
 
 test("keyboard: the answer opens and a mark is set from the keyboard", async ({ page }) => {
   await open(page);
+  await goTo(page, 2);
   const it = item(page, 2);
   await it.getByRole("button", { name: "ดูคำตอบ" }).focus();
   await page.keyboard.press("Enter");
@@ -199,6 +215,7 @@ test("keyboard: the answer opens and a mark is set from the keyboard", async ({ 
 test("every button is at least 44 x 44, and the toggle names what it controls", async ({ page }) => {
   await open(page);
   await press(item(page, 0).getByRole("button", { name: "ดูคำตอบ" }));
+  await expect(item(page, 0).locator(".quiz-answer")).toBeVisible();
   for (const button of await page.locator(".quiz button:visible").all()) {
     const box = (await button.boundingBox())!;
     expect(box.width).toBeGreaterThanOrEqual(44);
