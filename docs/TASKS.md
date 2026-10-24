@@ -1026,13 +1026,19 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad.
 
 ### T-049: Chapter 5 redesign
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-044
 - Goal: Chapter 5 opts in. The two crop tables and the crop matcher in the redesigned style. The band shows a scene I draw (a rice paddy).
 - Acceptance criteria:
-  - [ ] Tables readable at all three widths (scroll inside their own box if they must, never the page); the crop matcher's behaviour specs pass
-  - [ ] 44 px targets; axe clean in both themes; the canary and Lighthouse pass
-  - [ ] The scene is listed as a departure
+  - [x] The crop matcher, in a card, readable at all three widths (no sideways page scroll); its behaviour specs pass. (The chapter's two table slots draw nothing and never have: their data reaches the reader through the matcher.)
+  - [x] 44 px targets; axe clean in both themes; the canary and Lighthouse pass
+  - [x] The scene is listed as a departure
+- **Verified:** typecheck, lint, 909 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1210 passed, 0 failed (`e2e/chapter5-redesign.spec.ts` adds 12); canary 60 of 60; Lighthouse (3 runs): chapter 5 performance 97, accessibility 100.
+  - **How:** the crop matcher goes in a card; the chosen crop's panel is plain inside it (no box in a box), its name in the card heading's size and colour. The picker keeps the site's chips (44 px and up, a test checks).
+  - **The tables:** chapter 5's two `<SourceTable>` slots render a hidden, empty element by design (only six tables are drawn; the crop data shows through the matcher). A first try put them in cards and drew two empty cards; they stay outside, unchanged.
+  - **For every band:** on a phone the picture now fills only the strip above the title card. Before, the card covered the lower part of the picture, where chapter 5's rice and chapter 3's sacks are. Checked in phone screenshots of chapters 2–5; a test checks the strip ends where the card begins.
+  - **The scene** (rice in a flooded paddy) is **a departure, drawn by me, for the owner or designer to review.**
+  - **Not verified:** a real iPad or phone.
 
 ### T-050: Chapter 6 redesign
 - Status: ready (Sonnet)

@@ -26,6 +26,7 @@
   /* the header band of chapters after the first (T-044); the phone has no artboard, the card sits under the scene */
   --band-top: 104px;
   --band-min: 0px;
+  --band-scene-h: var(--band-top);
   --band-bar-pad: var(--pad-l);
   --band-card-w: 100%;
   --band-card-pad: 16px var(--pad-l) 14px var(--pad-l);
@@ -85,6 +86,7 @@
     /* Bag-Calculator-Portrait.dc.html */
     --band-top: 0px;
     --band-min: 180px;
+    --band-scene-h: 100%;
     --band-bar-pad: 24px;
     --band-card-w: 560px;
     --band-card-pad: 18px 48px 16px;
@@ -336,11 +338,13 @@
   align-items: flex-end;
 }
 /* No `display` here: .art-landscape / .art-portrait choose which picture shows (absolute already makes it a block). */
+/* On a phone the picture fills only the strip above the card, so the card never covers the chapter's subject. */
 .chapter-redesign .chapter-band-scene {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  height: var(--band-scene-h);
 }
 .chapter-redesign .chapter-band-card {
   position: relative;
@@ -480,6 +484,22 @@
   -webkit-mask: var(--icon) center / contain no-repeat;
   mask: var(--icon) center / contain no-repeat;
   --icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 L22 20 H2 Z'/%3E%3Cpath d='M12 10 v4 M12 17 v.5'/%3E%3C/svg%3E");
+}
+
+/* Chapter 5's crop matcher (T-049), in a card: its picker keeps the site's own chips; the chosen crop's panel sits
+   plainly inside the card rather than being a second box in it. */
+.chapter-redesign .crop-panel .panel {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.chapter-redesign .crop-name {
+  font-size: var(--card-h2);
+  color: var(--brand);
+}
+.chapter-redesign .crop-list li {
+  font-size: var(--card-p);
+  line-height: 1.85;
 }
 
 /* ---- Reading column ------------------------------------------------------------------------------------------ */
