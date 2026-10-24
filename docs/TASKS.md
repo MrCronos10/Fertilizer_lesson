@@ -1041,13 +1041,26 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
   - **Not verified:** a real iPad or phone.
 
 ### T-050: Chapter 6 redesign
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-044
 - Goal: Chapter 6 (the glossary) opts in. The glossary table is in the redesigned style. The band shows a scene I draw (an open book with a leaf).
+- **Scope added 2026-10-24, the owner's decision:** the glossary had never been drawn (its slot rendered nothing, so chapter 6 was a heading, sources and footer). The owner chose to render it from the checked p14 data in this ticket.
 - Acceptance criteria:
-  - [ ] Every term and definition kept word for word; readable at all three widths
-  - [ ] Axe clean in both themes; the canary and Lighthouse pass
-  - [ ] The scene is listed as a departure
+  - [x] Every term and definition kept word for word; readable at all three widths
+  - [x] Axe clean in both themes; the canary and Lighthouse pass
+  - [x] The scene is listed as a departure
+- **Verified:** typecheck, lint, 912 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1218 passed and 1 failed. The failure was T-045's arrow-key test, once on Mac: a key pressed before the lazy bag reader hydrated. The test now waits until a tap is answered, retrying, and passed 45 of 45, then 63 of 63 for the whole spec. `e2e/chapter6-redesign.spec.ts` adds 9; `lib/glossary-table.test.ts` adds 4. Canary 60 of 60; Lighthouse (3 runs): chapter 6 performance 97, accessibility 100.
+  - **The glossary, drawn at last:**
+    - **Rows:** all 20 p14 rows from `content/data/glossary.json` (already checked against the source in T-006 and T-009), in a card, in the data's order.
+    - **Columns:** the source's header row, ไทย, English and 中文. The Khmer column is not carried, as the data's note explains.
+    - **Accessibility:** a named table with row headers; English and Chinese cells carry `lang`; the page reference under it.
+    - **Tests:** the unit test pins every cell to the data word for word, and the list of drawn tables now has seven.
+  - **Phone:** the three-column table scrolls inside its own box with the Thai term pinned (the T-026 rule for every table); the page never scrolls sideways.
+  - **New Thai: U83–U84:**
+    - `tableGlossaryCaption` "อภิธานศัพท์": the chapter's own title.
+    - `colThai` "ไทย": the p14 header.
+  - **The scene** (an open book with a leaf) is **a departure, drawn by me, for the owner or designer to review.**
+  - **Not verified:** a real iPad or phone.
 
 ### T-051: Chapters 2–6 — final checks and review
 - Status: ready (Sonnet)
