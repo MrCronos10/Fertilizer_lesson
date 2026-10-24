@@ -1144,13 +1144,17 @@ Model: **Opus** for T-053, **Sonnet** for T-052 and T-054.
 - **Verified:** typecheck, lint, 916 unit tests green; WebKit e2e 1249 passed, 0 failed; canary 60 of 60; Lighthouse budget met: chapter 7 performance 96, accessibility 100.
 
 ### T-054: Chapter 7 — final checks and review
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-053
 - Goal: A two-axis review of chapter 7's diff, fixes, full checks, and a preview for the owner.
 - Acceptance criteria:
-  - [ ] Review findings fixed or left on purpose, each recorded
-  - [ ] Full WebKit e2e, the canary and Lighthouse (3 runs) green
-  - [ ] A preview link sent to the owner
+  - [x] Review findings fixed or left on purpose, each recorded
+  - [x] Full WebKit e2e, the canary and Lighthouse (3 runs) green
+  - [x] A preview link sent to the owner
+- **Review (two-axis, T-052 + T-053 diff from ce99861):** standards found no hard violations; spec found nothing missing or unrecorded except one addition, now recorded: a visually hidden polite live region ("ข้อ N จาก 6") so moving between questions is announced.
+- **Left on purpose (judgement smells):** the repeated scene structure in `BandScenes.tsx` (same as chapter 3), the tuple shapes there, the inline English-answer regex and `QUIZ_PAGES` in `QuizIsland.tsx` (existing pattern), the 170-line component (dots and rows not split out), the `quizItem` key doing two jobs, the literal `#b5541e` and white (the artboard's, kept as one `--quiz-again` property for contrast), and the quiz CSS split between `globals.css` (basics) and `chapter.css` (layout).
+- **Verified:** the full check from T-053 stands (no code changed since): typecheck, lint, 916 unit tests; WebKit e2e 1249 passed, 0 failed; canary 60 of 60; Lighthouse budget met (chapter 7 performance 96, accessibility 100). Preview: https://fertilizer-lesson-3grskchc0-kuypavthai-4289s-projects.vercel.app (needs a Vercel login). Not verified: a real iPad or phone, dark mode on a device.
+
 
 ---
 
