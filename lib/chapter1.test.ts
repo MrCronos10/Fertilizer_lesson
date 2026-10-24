@@ -62,7 +62,7 @@ describe("p2 nutrient-group table", () => {
 });
 
 describe("which tables render", () => {
-  it("is exactly the six tables for Thai readers: p2 groups, p3 symptoms and the four fertilizer tables", () => {
+  it("is exactly the seven tables for Thai readers: p2 groups, p3 symptoms, the four fertilizer tables, the p14 glossary", () => {
     expect(RENDERED_TABLE_IDS).toEqual([
       "nutrient-groups",
       "deficiency-symptoms",
@@ -70,10 +70,11 @@ describe("which tables render", () => {
       "straight-fertilizers",
       "compound-grades",
       "soil-conditioners",
+      "glossary",
     ]);
   });
 
-  it.each(["rice-by-soil-group-kh", "other-crops", "glossary", "no-such-table"])(
+  it.each(["rice-by-soil-group-kh", "other-crops", "no-such-table"])(
     "%s renders no table",
     (id) => {
       expect(render(id)).not.toMatch(/<table/);

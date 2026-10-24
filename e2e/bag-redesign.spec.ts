@@ -56,6 +56,14 @@ for (const [i, id] of [[0, "n"], [1, "p2o5"], [2, "k2o"]] as const) {
 
 test("the arrow keys move between the numbers, and the answer follows", async ({ page }) => {
   await page.goto(ROUTE);
+  // The reader is a lazy client chunk: a key pressed before it hydrates moves the native radio but not the answer.
+  // Wait until a tap is answered, then go back to N and use the keys.
+  await expect(async () => {
+    await tile(page, 2).click();
+    await expect(page.locator(".bag-answer")).toHaveAttribute("data-nutrient", "k2o", { timeout: 1000 });
+  }).toPass();
+  await tile(page, 0).click();
+  await expect(page.locator(".bag-answer")).toHaveAttribute("data-nutrient", "n");
   await page.locator(".bag-input").first().focus();
   await page.keyboard.press("ArrowRight");
   await expect(page.locator(".bag-answer")).toHaveAttribute("data-nutrient", "p2o5");

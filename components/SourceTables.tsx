@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import {
   compoundGradeRows,
   deficiencyRows,
+  glossaryRows,
   nutrientGroupRows,
   organicFertilizers,
   soilConditioners,
@@ -155,10 +156,13 @@ function TableFigure({
   headings,
   rows,
   gradeColumn,
+  cellLangs,
 }: {
   ui: UiStrings;
   caption: string;
   headings: readonly string[];
+  /** The language of each non-header column, where it is not Thai (the glossary's English and Chinese). */
+  cellLangs?: readonly (string | undefined)[];
   /** Index (among the non-header cells) of a column holding a grade, which must never break mid-number. */
   gradeColumn?: number;
   rows: readonly { row: Row; header: string; cells: readonly string[] }[];
@@ -181,7 +185,7 @@ function TableFigure({
             <tr key={row.id} data-row={row.id} data-source-page={row.sourcePage}>
               <th scope="row">{header}</th>
               {cells.map((cell, i) => (
-                <td key={i} className={i === gradeColumn ? "grade" : undefined}>
+                <td key={i} className={i === gradeColumn ? "grade" : undefined} lang={cellLangs?.[i]}>
                   {cell}
                   {i === cells.length - 1 ? <RowCites row={row} ui={ui} /> : null}
                 </td>
@@ -260,6 +264,22 @@ function SoilConditioners({ ui }: { ui: UiStrings }) {
   );
 }
 
+/**
+ * The p14 glossary (T-050): the source's own term list in its header row's order, Thai, English, Chinese. The Khmer
+ * column is not carried (see the data file's note). The Latin and Chinese headers are the source's, not UI strings.
+ */
+function Glossary({ ui }: { ui: UiStrings }) {
+  return (
+    <TableFigure
+      ui={ui}
+      caption={ui.tableGlossaryCaption}
+      headings={[ui.colThai, "English", "中文"]}
+      cellLangs={["en", "zh"]}
+      rows={glossaryRows().map((row) => ({ row, header: row.labels.th, cells: [row.labels.en, row.labels.zh] }))}
+    />
+  );
+}
+
 const RENDERED: Readonly<Record<string, (props: { ui: UiStrings }) => React.ReactElement>> = {
   "nutrient-groups": NutrientGroups,
   "deficiency-symptoms": DeficiencySymptoms,
@@ -267,6 +287,7 @@ const RENDERED: Readonly<Record<string, (props: { ui: UiStrings }) => React.Reac
   "straight-fertilizers": StraightFertilizers,
   "compound-grades": CompoundGrades,
   "soil-conditioners": SoilConditioners,
+  glossary: Glossary,
 };
 
 export function makeSourceTable(ui: UiStrings) {
