@@ -24,7 +24,7 @@ export function ChapterBand({
   scene: ReactNode;
 }) {
   return (
-    <header className="chapter-band">
+    <header className="chapter-band" data-chapter={chapter}>
       <div className="chapter-band-bar">
         <Link className="chapter-band-back" href={`/${locale}`}>
           {ui.contents}

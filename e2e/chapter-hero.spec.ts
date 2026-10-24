@@ -45,7 +45,7 @@ test("the hero runs edge to edge with no sideways scroll, and other chapters kee
   expect(box!.x).toBeLessThanOrEqual(0.5);
   expect(box!.width).toBeGreaterThanOrEqual(width - 1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
-  // Chapter 7 has not been redesigned (chapters 2–6 have, T-043–T-050).
+  // The other chapters have the shorter header band, not the hero (T-044).
   await page.goto("/th/ch07");
   await expect(page.locator(".chapter-hero")).toHaveCount(0);
   await expect(page.locator(".jump-sources .tier-legend")).toHaveCount(0);

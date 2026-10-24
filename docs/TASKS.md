@@ -1095,6 +1095,49 @@ Model: **Opus** for T-044 and T-045, **Sonnet** for the rest.
 
 ---
 
+## Redesign: chapter 7 (planned 2026-10-25)
+
+Chapter 7 (summary and quiz) takes the redesign from `Quiz-Landscape.dc.html` and `Quiz-Portrait.dc.html`, which draw the same header band as chapters 2–6, with a harvest scene of their own (copied, not drawn by me). Real questions replace the artboards' PLACEHOLDER text; the pamphlet's six questions are not reworded. Sentences the artboard adds that are not in the pamphlet or the site (the warning strip's line about the six questions) are new Thai, listed in THAI-REVIEW for the owner; the "kept on this device" note is true of the current quiz (it saves to `localStorage`).
+
+Model: **Opus** for T-053, **Sonnet** for T-052 and T-054.
+
+### T-052: Chapter 7 page shell
+- Status: done
+- Depends on: T-051
+- Goal: Chapter 7 opts in. It shows the artboard's header band with its harvest scene, the summary (six numbered points, page 6) in a card, the quiz where it is now, the sources card and the footer. The quiz itself is T-053.
+- Acceptance criteria:
+  - [x] The band is the artboard's at 1366 and 834, with its harvest scene (sun, hills, rice stalks), hidden from assistive technology, no text in it
+  - [x] The summary's six points are word for word, in one card, still on page 6 and marked uncited
+  - [x] The existing quiz still works and sits under the summary
+  - [x] Axe clean in both themes; no sideways scroll down to 320; the canary and Lighthouse pass
+- **Verified:** typecheck, lint, 912 unit tests and the production build green; WebKit e2e at iPad portrait, iPad landscape and Mac: 1228 passed and 3 failed on the full run, all one older test that used chapter 7 as its "not yet redesigned" example (now it checks that all seven chapters have one sources card and strip); that and the hero test then passed 27 of 27. `e2e/chapter7-redesign.spec.ts` adds 12. Canary 60 of 60; Lighthouse (3 runs): chapter 7 performance 97, accessibility 100.
+  - **The band:** the Quiz artboards' (150 px high with a 640 px title card in landscape; 200 px and 540 in portrait; the other band values are chapter 3's, which the same artboards share). Its harvest scene (sun, golden hills, rice stalks) is copied from both artboards, landscape and portrait, not drawn by me. The sizes are set for chapter 7 alone, keyed on the band's chapter.
+  - **The page:** the summary (the six points, word for word) in one card, on page 6, still marked uncited; the quiz as it is, under it; the sources card and footer. Chapter 7 has no "next chapter", so its footer is the previous chapter and the contents. The quiz's own look is T-053.
+  - **A layout fix for every chapter without columns:** the headings between cards ("สรุป:", "แบบทดสอบ:") sat on the narrow text width while the cards were 860 px, so they did not line up. The general text-width rule now has the lowest specificity (`:where()`), so a block that sets its own width wins, and the headings use the cards' width. The scoping guard rejected a first try with an `article.` prefix; this one passes it.
+  - **Not verified:** a real iPad or phone.
+
+### T-053: Chapter 7 quiz to the artboards
+- Status: ready (Opus)
+- Depends on: T-052
+- Goal: The quiz as the Quiz artboards draw it: a question card (number, the real question, "ดูเฉลย", the answer, self-marking "ตอบถูก" / "ยังไม่ถูก"), "ข้อก่อนหน้า" and "ข้อถัดไป", a list of the six questions with their status (landscape) or progress dots (portrait), and the score line. Progress stays on this device only.
+- Acceptance criteria:
+  - [ ] All six questions and answers word for word from the pamphlet; none reworded; no PLACEHOLDER shown
+  - [ ] Show the answer, mark it right or not yet, move between questions; every control a real button, 44 px, keyboard-operable, state announced
+  - [ ] Progress and marks survive a reload and are kept on the device only
+  - [ ] Layout and sizes as drawn at 1366 and 834, and a phone layout
+  - [ ] New Thai wording listed in THAI-REVIEW
+
+### T-054: Chapter 7 — final checks and review
+- Status: ready (Sonnet)
+- Depends on: T-053
+- Goal: A two-axis review of chapter 7's diff, fixes, full checks, and a preview for the owner.
+- Acceptance criteria:
+  - [ ] Review findings fixed or left on purpose, each recorded
+  - [ ] Full WebKit e2e, the canary and Lighthouse (3 runs) green
+  - [ ] A preview link sent to the owner
+
+---
+
 ## Open follow-ups (created on demand, not yet scheduled)
 
 - Approved entries from `docs/content/ADDITIONS.md` become one task each (gated by T-008).
