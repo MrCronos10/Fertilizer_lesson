@@ -44,3 +44,8 @@ export function rightCount(marks: readonly Mark[]): number {
 export function againCount(marks: readonly Mark[]): number {
   return marks.filter((m) => m === "again").length;
 }
+
+/** The question after (+1) or before (-1) this one, wrapping round at both ends as the Quiz artboards' buttons do (T-053). */
+export function stepQuestion(index: number, delta: 1 | -1, total: number): number {
+  return (index + delta + total) % total;
+}

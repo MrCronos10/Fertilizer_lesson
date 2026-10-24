@@ -147,6 +147,15 @@ export const UI_KEYS = [
   /** Chapter 6's glossary table (T-050): its caption is the chapter's own title, and the Thai column's header is the p14 header row's. */
   "tableGlossaryCaption",
   "colThai",
+  /** Chapter 7's quiz in the redesign (T-053), from Quiz-Landscape/Portrait.dc.html. */
+  "quizCheckSelf",
+  "quizPrev",
+  "quizNext",
+  "quizTotal",
+  "quizItem",
+  "quizUnchecked",
+  "quizDeviceNote",
+  "quizSourceNote",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

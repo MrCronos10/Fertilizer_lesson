@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-/** Chapter 7's page shell in the redesign (T-052), from Quiz-Landscape/Portrait.dc.html; the quiz itself is T-053. */
+/** Chapter 7's page shell in the redesign (T-052), from Quiz-Landscape/Portrait.dc.html; the quiz's own layout is T-053. */
 const ROUTE = "/th/ch07";
 
 test("the band names chapter 7 and is the Quiz artboards': 150 px and a 640 px card in landscape, 200 px and 540 in portrait", async ({ page }) => {
@@ -40,11 +40,14 @@ test("the quiz still works under the summary, and the sources card and footer fo
   await expect(page.locator(".chapter-nav a[rel='next']")).toHaveCount(0);
 });
 
-test("the headings line up with the 860 px cards in landscape, and nothing scrolls sideways down to 320", async ({ page }) => {
+test("the headings line up with the 860 px cards in landscape (only the quiz is wider), and nothing scrolls sideways down to 320", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 1024 });
   await page.goto(ROUTE);
   const card = (await page.locator('[data-section="summary"]').boundingBox())!;
   expect(card.width).toBeCloseTo(860, 0);
+  const quiz = (await page.locator("article > .quiz").boundingBox())!;
+  expect(quiz.width).toBeCloseTo(1286, 0);
+  expect((await page.locator("article > h2:has(+ .quiz)").boundingBox())!.x).toBeCloseTo(quiz.x, 0);
   expect((await page.locator("article > h2").first().boundingBox())!.x).toBeCloseTo(card.x, 0);
   for (const width of [834, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
