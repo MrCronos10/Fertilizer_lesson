@@ -50,3 +50,18 @@ test("client-side navigation from the home page to a chapter and back adds and d
   await page.goBack();
   await expect(page.locator(".site-header a[href='#sources']")).toHaveCount(0);
 });
+
+test("the all-sources page does not link to itself in the header", async ({ page }) => {
+  await page.goto("/th/sources");
+  await expect(page.locator(".site-header a[href='/th/sources']")).toHaveCount(0);
+});
+
+test("the home page's all-sources button is 44 px and stays inside the strip from 1366 down to 320", async ({ page }) => {
+  for (const width of [1366, 834, 390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/th");
+    const button = page.locator(".safe-note .safe-sources");
+    expect((await button.boundingBox())!.height, `${width}`).toBeGreaterThanOrEqual(44);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `${width}`).toBe(true);
+  }
+});
