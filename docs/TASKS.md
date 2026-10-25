@@ -1210,13 +1210,19 @@ Model: **Opus** for T-055, **Sonnet** for T-056 and T-057.
 - **Not verified:** a real iPad or phone.
 
 ### T-056: Link the home page to the all-sources page
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-055
 - Goal: The design's two sources links on the home page work.
 - Acceptance criteria:
-  - [ ] The header's "ที่มาของข้อมูล" shows on the home page and opens `/th/sources`; on a chapter it still jumps to `#sources`
-  - [ ] The safety strip has the artboard's outlined "ที่มาของข้อมูลทั้งหมด" button, opening `/th/sources`
-  - [ ] Both are real links, 44 px, with no inline svg and no inline-flex (the WebKit load stall); both TODOs are gone
+  - [x] The header's "ที่มาของข้อมูล" shows on the home page and opens `/th/sources`; on a chapter it still jumps to `#sources`
+  - [x] The safety strip has the artboard's outlined "ที่มาของข้อมูลทั้งหมด" button, opening `/th/sources`
+  - [x] Both are real links, 44 px, with no inline svg and no inline-flex (the WebKit load stall); both TODOs are gone
+- **Done:**
+  - **Header:** "ที่มาของข้อมูล" now shows on the home page and opens `/th/sources`; on a chapter it still jumps to `#sources`. `SourcesLink` takes the page's href and renders a real `Link` off the chapters.
+  - **Safety strip:** the outlined "ที่มาของข้อมูลทั้งหมด" button (U93), a 44 px block link in the warn tokens (2px border, as the artboard's), beside the note from iPad portrait up and under it on the phone. No inline svg in it and no inline-flex.
+  - Both TODOs are gone.
+- **Verified:** typecheck, lint, 929 unit tests green; WebKit e2e 1283 passed, 0 failed; canary 60 of 60; Lighthouse budget met (home 97/100).
+- **Not verified:** a real iPad or phone; the strip in dark mode by eye (it uses the warn tokens).
 
 ### T-057: All-sources page — final checks and review
 - Status: ready (Sonnet)
