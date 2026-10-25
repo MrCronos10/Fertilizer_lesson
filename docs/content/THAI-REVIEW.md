@@ -260,3 +260,4 @@ Rows 1 (`สาหร่ายบลูม`), 5 (`แคร่`) and 7 (`MSU Ext
 | U90 | `quizUnchecked` | `ยังไม่ตรวจ` | A question's status before it is marked: "not checked yet". From the Quiz artboards. |
 | U91 | `quizDeviceNote` | `ความคืบหน้าของแบบทดสอบถูกเก็บไว้ในเครื่องของคุณเท่านั้น ไม่ต้องสมัครสมาชิก` | "Quiz progress is kept on your device only; no sign-up needed." True of the quiz: it saves to this browser's storage and sends nothing (e2e/quiz.spec.ts checks). From the Quiz artboards. |
 | U92 | `quizSourceNote` | `คำถามทั้ง 6 ข้อมาจากเอกสารต้นฉบับโดยตรง ไม่มีการเขียนคำถามใหม่` | "All 6 questions come straight from the source; none were written anew." True: lib/quiz-progress.test.ts checks each against p6–7. From the Quiz artboards. |
+| U93 | `allSources` | `ที่มาของข้อมูลทั้งหมด` | "All sources": the all-sources page's title (T-055). The words of the home safety strip's button in Main.dc.html. |

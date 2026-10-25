@@ -1514,6 +1514,56 @@
   color: var(--warn);
 }
 
+/* ---- All-sources page (T-055) --------------------------------------------------------------------------------
+   No artboard draws it: the chapters' band with no chapter and no scene (the art strip takes the sources bar's soft
+   fill), their tier legend in a bar that does not stick (there is nothing to jump to), a card per tier, the strip. */
+.chapter-redesign .chapter-band:not([data-chapter]) .chapter-band-art {
+  background: var(--soft);
+}
+.chapter-redesign.all-sources > .jump-sources {
+  position: static;
+}
+.chapter-redesign.all-sources .chapter-card h2 .tier {
+  font-size: 15px;
+  padding: 2px 12px;
+}
+.chapter-redesign.all-sources .source-list {
+  gap: 16px;
+}
+.chapter-redesign.all-sources .source-list ul {
+  margin: 0;
+}
+.chapter-redesign.all-sources .source-pages {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+/* Each chapter a 44 px outlined link, as the footer's, but on the page's background, as it sits on the card's panel;
+   block links in a wrapping row (no inline-flex on a link: the WebKit load stall, T-029). */
+.chapter-redesign.all-sources .source-chapters {
+  margin: 6px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chapter-redesign.all-sources .source-chapters a {
+  display: block;
+  min-height: var(--tap);
+  line-height: var(--tap);
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+@media (min-width: 75em) {
+  .chapter-redesign.all-sources > .safe-strip {
+    max-width: 860px;
+  }
+}
+
 /* ---- Footer -------------------------------------------------------------------------------------------------- */
 /* The contents and the next chapter as outlined buttons, the way into the deficiency explorer as the primary one
    (T-041: the artboards' footer has only the contents and the explorer; the next chapter is kept, outlined). */

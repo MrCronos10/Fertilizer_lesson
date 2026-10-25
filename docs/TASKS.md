@@ -1174,16 +1174,40 @@ Taken with the owner:
 Model: **Opus** for T-055, **Sonnet** for T-056 and T-057.
 
 ### T-055: All-sources page
-- Status: ready (Opus)
+- Status: done
 - Depends on: T-054
 - Goal: A page at `/th/sources` listing every source the pamphlet cites, from `content/sources.json`, grouped by tier.
 - Acceptance criteria:
-  - [ ] Title "ที่มาของข้อมูลทั้งหมด" in a plain band (no scene: a scene would be new art), the tier legend under it, then one card per tier
-  - [ ] Every one of the 41 linked documents appears once, under its tier, with its name, a real link, its pamphlet pages, and links to each chapter that cites it; the 5 named-only sources and the 2 count-only pills are listed as the chapters list them, nothing invented
-  - [ ] The soil-test strip at the end, as on every chapter
-  - [ ] The grouping is a pure function with unit tests (counts, no duplicates, every tier known); an e2e checks the page at 1366, 834, 390 and 320 with no sideways scroll, axe clean in both themes
-  - [ ] The new string in ui.json, UI_KEYS and THAI-REVIEW; no Thai in components
-  - [ ] Lighthouse budget for the new route
+  - [x] Title "ที่มาของข้อมูลทั้งหมด" in a plain band (no scene: a scene would be new art), the tier legend under it, then one card per tier
+  - [x] Every one of the 41 linked documents appears once, under its tier, with its name, a real link, its pamphlet pages, and links to each chapter that cites it; the 5 named-only sources and the 2 count-only pills are listed as the chapters list them, nothing invented
+  - [x] The soil-test strip at the end, as on every chapter
+  - [x] The grouping is a pure function with unit tests (counts, no duplicates, every tier known); an e2e checks the page at 1366, 834, 390 and 320 with no sideways scroll, axe clean in both themes
+  - [x] The new string in ui.json, UI_KEYS and THAI-REVIEW; no Thai in components
+  - [x] Lighthouse budget for the new route
+- **Done:**
+  - **The page:** `/th/sources`, titled "ที่มาของข้อมูลทั้งหมด" (U93, the home safety strip's button in Main.dc.html). It has the chapters' band with no badge, count or scene (its art strip takes the soft fill), then the tier legend in a bar that does not stick, then a card per tier (official, research, commercial), the soil-test strip, and the way back to the contents.
+  - **The sources:** 41 in all: the 37 linked domains with all 41 documents, and the 4 sources named without a link (a fifth, oae, is also a domain and is that domain's entry). The count-only pills read "+2" and "+3" as on the chapters. Each tier is in name order.
+  - **Pages and chapters, from the data only (`lib/all-sources.ts`):**
+    - A source's pages are those of its documents, plus the table rows that print its name (the p12–13 Source cells).
+    - Its chapters are those that show it. A chapter link lands on the source's entry when the chapter's sources list has one. Where chapter 5's crop matcher names a source its list doesn't hold, the link goes to the chapter itself.
+    - 11 sources the pamphlet cites (on pages 2–15) are shown by no chapter: they are listed with their pages and no chapter link.
+  - **Shared with the chapters:** the source item (`SourceItem` in `components/Citations.tsx`). A document's address now reads as Thai where its path is Thai (oae's on chapter 4 showed `%E0%B8…`), and is marked English only when it is all ASCII; the link itself is unchanged.
+  - **Budget:** the route is in `lib/budget.ts` (with a test, as the file scan skips `[locale]`) and in `scripts/lighthouse.mjs`, so axe also runs on it in both themes.
+- **Review (two-axis):**
+  - **Fixed:**
+    - Chapter 5's table names five sources the first version gave no pages or chapter for; they now have both.
+    - A comment wrongly said a source with no chapter link is cited only on pages no chapter covers.
+    - The list item was a copy of the chapters' (now shared), and the decoded address existed on this page only.
+    - The band's chapter, count and scene props are now typed as one set, all or none.
+    - The unit test now checks literal counts instead of repeating the code's own rule.
+  - **Left on purpose:**
+    - The closing link back to the contents, as every chapter page ends with one.
+    - The name order within a tier.
+    - The page's chapter links on the page background rather than the footer's panel fill, as they sit on a panel card.
+    - `lib/all-sources.ts` reading `RAW_TABLES` for source names and page numbers only, never a rate.
+  - **Found by the full run:** a Thai address lost its English marking with the decoding (chapter 2's raithep link). Now the address up to its first Thai letter is marked English and the Thai path is not.
+- **Verified:** typecheck, lint, 929 unit tests green; WebKit e2e 1283 passed, 0 failed (after the fix above; the run before it was 1280 passed and 3 failed, all that one test); canary 60 of 60; Lighthouse budget met: `/th/sources` performance 98, accessibility 100.
+- **Not verified:** a real iPad or phone.
 
 ### T-056: Link the home page to the all-sources page
 - Status: ready (Sonnet)
