@@ -32,6 +32,10 @@ describe("the budget covers every route", () => {
     expect(ROUTES.map((r) => r.path)).toContain("/th/ch01/deficiency");
   });
 
+  it("lists the all-sources page, which sits under the locale segment the file scan above skips", () => {
+    expect(ROUTES).toContainEqual({ path: "/th/sources", kind: "text" });
+  });
+
   it("has no duplicate or stray entries", () => {
     const paths = ROUTES.map((r) => r.path);
     expect(new Set(paths).size).toBe(paths.length);

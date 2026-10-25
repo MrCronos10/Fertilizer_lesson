@@ -156,6 +156,8 @@ export const UI_KEYS = [
   "quizUnchecked",
   "quizDeviceNote",
   "quizSourceNote",
+  /** The all-sources page's title (T-055), the words of the home safety strip's button in Main.dc.html. */
+  "allSources",
 ] as const;
 
 export type UiStrings = Readonly<Record<(typeof UI_KEYS)[number], string>>;

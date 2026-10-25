@@ -28,6 +28,8 @@ const ROUTES = [
   ...["02", "03", "04", "05", "06", "07"].map((n) => ({ path: `/th/ch${n}`, text: true })),
   // The explorer page carries the 3D plant (T-038): held to the score budgets, not to the text-route LCP budget.
   { path: "/th/ch01/deficiency", text: false },
+  // The all-sources page (T-055).
+  { path: "/th/sources", text: true },
 ];
 
 const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
