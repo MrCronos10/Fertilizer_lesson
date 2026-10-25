@@ -1,16 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 /**
- * The header's sources link (T-035). A chapter page has a sources section to jump to; the home page
- * does not, and the site has no all-sources page yet, so there the link is left out rather than left dead.
+ * The header's sources link (T-035, T-056). A chapter page has a sources section to jump to; elsewhere
+ * (the home page) the link opens the all-sources page.
  */
-export function SourcesLink({ label }: { label: string }) {
+export function SourcesLink({ label, href }: { label: string; href: string }) {
   const onChapter = /^\/[^/]+\/ch\d+\/?$/.test(usePathname());
   return onChapter ? (
     <a className="site-link" href="#sources">
       {label}
     </a>
-  ) : null;
+  ) : (
+    <Link className="site-link" href={href}>
+      {label}
+    </Link>
+  );
 }

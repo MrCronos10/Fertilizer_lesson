@@ -153,7 +153,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         </div>
       </nav>
 
-      {/* TODO(T-027): the design's all-sources link belongs here once an all-sources page exists. */}
       <aside className="safe-note">
         <p>
           <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
@@ -163,6 +162,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </svg>
           <span>{ui.homeSafeNote}</span>
         </p>
+        <Link className="safe-sources" href={`/${locale}/sources`}>
+          {ui.allSources}
+        </Link>
       </aside>
     </div>
   );
