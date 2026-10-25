@@ -1158,6 +1158,53 @@ Model: **Opus** for T-053, **Sonnet** for T-052 and T-054.
 
 ---
 
+## The Before-After artboard (read 2026-10-25): nothing to build
+
+`Before-After.dc.html` is not a screen of the site. It is the designer's presentation board: screenshots of the old home page and chapter 1, each beside the new design at iPad landscape, with a note that every Thai word and number came from the old site and the pamphlet. Both "after" screens are built (T-028 to T-033), so it needs no ticket. Taken with the owner.
+
+## All-sources page (planned 2026-10-25)
+
+The home page has no sources section, so the design's two links there have no target: the header's "ที่มาของข้อมูล" (hidden on the home page since T-035) and the safety strip's "ที่มาของข้อมูลทั้งหมด" button, drawn in `Main.dc.html` (TODO in `app/[locale]/page.tsx` since T-027). No artboard draws the page itself, so it follows the design system as chapters 2, 4, 5 and 6 do.
+
+Taken with the owner:
+- **Grouped by tier:** official, research, commercial, as the tier legend on every chapter. Each source keeps its own name and link, its pamphlet pages, and links to the chapters that cite it.
+- **Only words the site already has**, plus the page title "ที่มาของข้อมูลทั้งหมด" copied from the artboard's button (one new string, listed in THAI-REVIEW). No intro sentence (D6).
+- **The header link:** on the home page it opens the new page; on a chapter it still jumps to that chapter's own sources section.
+
+Model: **Opus** for T-055, **Sonnet** for T-056 and T-057.
+
+### T-055: All-sources page
+- Status: ready (Opus)
+- Depends on: T-054
+- Goal: A page at `/th/sources` listing every source the pamphlet cites, from `content/sources.json`, grouped by tier.
+- Acceptance criteria:
+  - [ ] Title "ที่มาของข้อมูลทั้งหมด" in a plain band (no scene: a scene would be new art), the tier legend under it, then one card per tier
+  - [ ] Every one of the 41 linked documents appears once, under its tier, with its name, a real link, its pamphlet pages, and links to each chapter that cites it; the 5 named-only sources and the 2 count-only pills are listed as the chapters list them, nothing invented
+  - [ ] The soil-test strip at the end, as on every chapter
+  - [ ] The grouping is a pure function with unit tests (counts, no duplicates, every tier known); an e2e checks the page at 1366, 834, 390 and 320 with no sideways scroll, axe clean in both themes
+  - [ ] The new string in ui.json, UI_KEYS and THAI-REVIEW; no Thai in components
+  - [ ] Lighthouse budget for the new route
+
+### T-056: Link the home page to the all-sources page
+- Status: ready (Sonnet)
+- Depends on: T-055
+- Goal: The design's two sources links on the home page work.
+- Acceptance criteria:
+  - [ ] The header's "ที่มาของข้อมูล" shows on the home page and opens `/th/sources`; on a chapter it still jumps to `#sources`
+  - [ ] The safety strip has the artboard's outlined "ที่มาของข้อมูลทั้งหมด" button, opening `/th/sources`
+  - [ ] Both are real links, 44 px, with no inline svg and no inline-flex (the WebKit load stall); both TODOs are gone
+
+### T-057: All-sources page — final checks and review
+- Status: ready (Sonnet)
+- Depends on: T-056
+- Goal: A two-axis review of T-055 and T-056, fixes, full checks, and a preview for the owner.
+- Acceptance criteria:
+  - [ ] Review findings fixed or left on purpose, each recorded
+  - [ ] Full WebKit e2e, the canary and Lighthouse (3 runs) green
+  - [ ] A preview link sent to the owner
+
+---
+
 ## Open follow-ups (created on demand, not yet scheduled)
 
 - Approved entries from `docs/content/ADDITIONS.md` become one task each (gated by T-008).
