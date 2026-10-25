@@ -1219,19 +1219,27 @@ Model: **Opus** for T-055, **Sonnet** for T-056 and T-057.
   - [x] Both are real links, 44 px, with no inline svg and no inline-flex (the WebKit load stall); both TODOs are gone
 - **Done:**
   - **Header:** "ที่มาของข้อมูล" now shows on the home page and opens `/th/sources`; on a chapter it still jumps to `#sources`. `SourcesLink` takes the page's href and renders a real `Link` off the chapters.
-  - **Safety strip:** the outlined "ที่มาของข้อมูลทั้งหมด" button (U93), a 44 px block link in the warn tokens (2px border, as the artboard's), beside the note from iPad portrait up and under it on the phone. No inline svg in it and no inline-flex.
+  - **Safety strip:** the outlined "ที่มาของข้อมูลทั้งหมด" button (U93), a 44 px block link in the warn tokens (1px border, 15px/600 and the note ink, as the artboard), beside the note from iPad portrait up and under it on the phone. No inline svg in it and no inline-flex.
   - Both TODOs are gone.
 - **Verified:** typecheck, lint, 929 unit tests green; WebKit e2e 1283 passed, 0 failed; canary 60 of 60; Lighthouse budget met (home 97/100).
 - **Not verified:** a real iPad or phone; the strip in dark mode by eye (it uses the warn tokens).
 
 ### T-057: All-sources page — final checks and review
-- Status: ready (Sonnet)
+- Status: done
 - Depends on: T-056
 - Goal: A two-axis review of T-055 and T-056, fixes, full checks, and a preview for the owner.
 - Acceptance criteria:
-  - [ ] Review findings fixed or left on purpose, each recorded
-  - [ ] Full WebKit e2e, the canary and Lighthouse (3 runs) green
-  - [ ] A preview link sent to the owner
+  - [x] Review findings fixed or left on purpose, each recorded
+  - [x] Full WebKit e2e, the canary and Lighthouse (3 runs) green
+  - [x] A preview link sent to the owner
+- **Review of T-056 (two-axis; T-055's was done in its own ticket):**
+  - **Fixed (spec):** the strip's button had a 2px border, 14px/700 and the warn colour; the artboard has 1px, 15px/600 and the note ink (`--h-note-ink`, #7a4210), padding 0 18px, gap 28px. Now copied exactly. The header link no longer points at its own page on `/th/sources`.
+  - **Added tests:** the self-link is absent on `/th/sources`; the button is 44 px with no sideways scroll at 1366, 834, 390 and 320.
+  - **Left on purpose:** the 40em block re-targeting `.safe-note` (it sits with the button's own rules); the path `/${locale}/sources` built in two places (two lines, no shared helper); the contrast pairing is now the note text's own, already tested.
+  - Standards: no hard violations.
+- **Verified:** typecheck, lint, 929 unit tests; WebKit e2e 1289 passed, 0 failed; canary 60 of 60; Lighthouse (3 runs) budget met, `/th/sources` 98/100, home 97/100.
+- **Not verified:** a real iPad or phone; dark mode by eye.
+
 
 ---
 
